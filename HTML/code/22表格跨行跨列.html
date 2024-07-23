@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>跨行跨列</title>
+        <meta charset="utf-8"/>
+    </head>
+
+    <body>
+        <!--
+            跨列操作：保留左边的td，删掉右边的td，让左边的td合并右边的td
+                使用属性colspan来合并
+            跨行操作：保留上边的tr，删掉下边的tr，让上边的td合并下边的tr
+                使用属性rowspan来合并
+        -->
+
+        <table border="1px" cellspacing="0" cellpadding="10px" align="center">
+            <caption>通讯录</caption>
+            <tr bgcolor="yellow">
+                <th>姓名</th>
+                <th colspan="2">手机号</th>
+            </tr>
+            <tr align="center" >
+                <td>张三</td>
+                <td>12518905624</td>
+                <td>13899245710</td>
+            </tr>
+            <tr>
+                <td>李四</td>
+                <td>13934682710</td>
+                <td>17141395817</td>
+            </tr>
+        </table>
+
+        <table border="1px" cellspacing="0" cellpadding="10px" align="center">
+            <caption>通讯录</caption>
+            <tr>
+                <th bgcolor="yellow">姓名</th>
+                <td align="center">张三</td>
+                <td align="center">李四</td>
+            </tr>
+            <tr align="center">
+                <th rowspan="2" bgcolor="yellow">手机号</th>
+                <td>12518905624</td>
+                <td>13899245710</td>
+            </tr>
+            <tr>
+                <td>13934682710</td>
+                <td>17141395817</td>
+            </tr>
+        </table>
+    </body>
+</html>

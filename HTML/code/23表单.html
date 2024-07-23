@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>表单</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="张文" />
+</head>
+
+<body>
+    <!--
+        表单的作用
+        1.采集信息
+
+        输入控件
+        1.文本框
+        2.密码框
+        3.文本域
+
+        选择控件
+        1.单选
+        2.复选
+        3.下拉
+
+        特殊控件
+        1.文件上传
+        2.隐藏域
+
+        按钮控件
+        1.提交按钮
+        2.普通按钮
+        3.重置按钮
+    -->
+
+
+    <form action="#" method="get">
+        <!--
+            <form>标签用于编写一个表单
+                action属性：将表单中的信息提交给的服务器的地址，#表示提交给自己（常用于测试）
+                method属性：提交方式 get/post
+                    get信息会在地址栏中显示，post只会在请求体中
+                    get请求允许提交的数据量较小，post请求允许提交的数据量较大
+                enctype属性：指定提交的数据以什么方式进行传输
+                    如果表单中有文件，应该设置其值为multipart/form-data,文件会以二进制传输
+
+            <input>用于编写一个控件
+                type属性： 
+                    "text"表示文本框 
+                    "submit"表示提交按钮，value表示按钮的名字
+                    "password"表示密码框
+                name属性：用于告诉服务器，提交的是什么信息
+                写在<input>标签前的信息是用于提示用户的提示信息
+
+            <textarea>标签用于编写一个文本域
+                name属性：用于告诉服务器，提交的是什么信息
+                cols属性：规定了文本域框框列的数量
+                rows属性：规定了行的个数
+        -->
+        用户名 <input type="text" name="username"> <br>
+        密码 <input type="password" name="password"> <br>
+        自我介绍 <textarea name="textarea" cols="10" rows="10"></textarea><br>
+        <input type="submit" value="提交数据">
+    </form>
+
+    <hr>
+
+    <form action="#" method="get">
+        <!--
+            单选控件
+            性别是给用户的提示信息
+            使用<input>标签来实现单选控件
+                name属性用来将选项绑定为一组，name属性值相同的选项被绑定为一组，一组内只能选一个选项
+                type="radio" 将输入设置为单选选项
+                value属性是给服务器提交的信息。如本例中提交1表示男，2表示女
+                checked="checked" 简写为 checked 是将该选项设置为默认选项
+        -->
+        性别：男<input name="sex" type="radio" value="1" checked>
+              女<input name="sex" type="radio" value="2"><br>
+        <input type="submit" value="提交数据">
+    </form>
+
+    <hr>
+
+    <form action="#" method="get">
+        <!--
+            复选控件
+            使用<input>标签来实现复选控件
+                name属性相同的，用来表示一组数据，一组内可以多选
+                type="checkbox" 将输入设置为复选选项
+                value 提交给服务器的信息
+                checked="checked" 简写为 checked 是将该选项设置为默认选项
+            复选控件可以单个使用，即可以只有一个选项
+        -->
+        爱好：抽烟<input type="checkbox" name="hobby" value="1" checked>
+        喝酒<input type="checkbox" name="hobby" value="2">
+        嫖娼<input type="checkbox" name="hobby" value="3"><br>
+        <input type="submit" value="提交数据">
+    </form>
+
+    <hr>
+
+    <form action="#" method="get">
+        <!--
+            下拉控件
+            使用<select>标签来实现下拉控件(单选的效果)
+                name属性:传给服务器的key
+                <option>标签：每一个option标签就是一个选项
+                    value属性:提交给服务器的值
+        -->
+        性别:<select name="sex">
+            <option value="1">男</option>
+            <option value="2">女</option>
+        </select> <br>
+        <input type="submit" value="提交数据">
+    </form>
+
+    <hr>
+
+    <form action="#" method="get">
+        <!--
+            下拉控件
+            使用select标签来实现拉控件(多选)
+                size属性：下拉菜单的一页中显示几个选项
+                multiple属性：实现多选(需要按住ctrl选择)
+        -->
+        <select name="hobby" size="3" multiple>
+            <option value="1">抽烟</option>
+            <option value="2">喝酒</option>
+            <option value="3">赌博</option>
+        </select><br>
+        <input type="submit" value="提交数据">
+    </form>
+
+    <hr>
+
+    <form action="#" method="post" enctype="multipart/form-data">
+        <!--
+            文件上传
+            使用<input>标签来实现
+                type属性值设置为file
+        -->
+        上传头像：<input type="file" name="file"><br>
+        <input type="submit" value="提交数据">
+    </form>
+
+    <hr>
+
+    <form action="#">
+        <!--
+            隐藏域
+            后台需要的信息，而用户不需要的信息，就可以放到隐藏域中
+            例如：本次的信息来源是通过点击得到的，还是用户输入的，这个信息后台需要，而用户不需要
+            使用<input>标签来实现隐藏域
+                type属性设置为hidden,name就是提交给服务器的key，value可以先给一个默认值input
+                后期可以使用js来根据用户的不同操作来修改value值
+        -->
+        搜索：<input type="text" name="key"><br>
+        <input type="hidden" name="act" value="input">
+        <input type="submit" value="提交数据">
+    </form>
+
+    <hr>
+
+    <form action="#">
+        <!--
+            按钮控件
+            使用<input>来实现
+                type值设置为submit，实现的是提交按钮，value值可以不指定，默认是"提交"
+                type值设置为reset，实现的是重置按钮，value值可以不指定，默认是"重置"
+                type值设置为button，实现的是普通按钮，没有特殊功能，需要结合js来为其绑定功能，value可以不指定，没有默认值
+        -->
+        用户名：<input type="text" name="username"><br>
+        提交:<input type="submit" value="提交按钮"><br>
+        重置：<input type="reset" value="重置按钮"><br>
+        普通按钮：<input type="button" value="普通按钮"><br>
+    </form>
+</body>
+
+</html>
