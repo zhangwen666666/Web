@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>控件禁用</title>
+</head>
+
+<body>
+    <!--
+        控件禁用：通过在控件中设置属性"disabled"来实现
+        禁用的表单项不会被提交给服务器
+        如下例中，将用户名、性别、喜欢的明星禁用
+        并为用户名设置了明文显示：value="zhangsan"
+    -->
+    <form action="#" method="get">
+        用户名：<input type="text" name="username" value="zhangsan" disabled><br>
+        密码：<input type="password" name="password"><br>
+        个性签名：<input type="textarea" name="textarea"><br>
+        性别：男<input name="sex" type="radio" value="1" checked disabled>
+        女<input name="sex" type="radio" value="2" disabled><br>
+        爱好：抽烟<input name="hobby" type="checkbox" value="1">
+              喝酒<input name="hobby" type="checkbox" value="2" checked>
+              泡妞<input name="hobby" type="checkbox" value="3"><br>
+        喜欢的明星：<select name="ouXiang" size="4" multiple disabled>
+            <option value="1">三上悠亚</option>
+            <option value="2">桥本有莱</option>
+            <option value="3">小野六花</option>
+            <option value="4">深田咏美</option>
+        </select><br>
+        <input type="submit" value="submit">
+    </form>
+
+</body>
+
+</html>
