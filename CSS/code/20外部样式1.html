@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>内部样式1</title>
+    <meta charset="utf-8" />
+    <!-- 
+        使用外部样式，将样式抽取成一个样式文件 
+        1.将样式抽取到样式文件index.css中
+        p {
+            color: red;
+        }
+        2.使用link标签引入外部文件，外部文件的样式就会作用于当前页面
+            rel指定外部文件的类型 层叠样式表stylesheet
+            href指定外部文件的地址
+    -->
+    <link rel="stylesheet" href="..\css\index.css">
+</head>
+
+<body>
+    <div>
+        <p>段落1</p>
+        <p>段落2</p>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>加载文档流</title>
+    <meta charset="utf-8" />
+
+    <style>
+        /* 
+            优先级关系
+            1.行内样式优先级大于其他
+            2.内部样式和外部样式，会根据加载顺序，加载进文档，形成文档流
+        */
+        p {
+            color: red;
+        }
+    </style>
+
+    <link rel="stylesheet" href="../css/index.css">
+
+    <style>
+        p {
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <p>段落1</p>
+</body>
+
+</html>

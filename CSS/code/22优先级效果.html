@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>优先级效果</title>
+    <meta charset="utf-8" />
+    <style>
+        /* 
+            优先级关系
+            id选择器 > 类选择器 > 标签选择器
+        */
+        p {
+            color: blue;
+        }
+
+        .oneClass {
+            color: green;
+        }
+
+        #one {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <p id="one" class="oneClass">段落1</p>
+</body>
+
+</html>

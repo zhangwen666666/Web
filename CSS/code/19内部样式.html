@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>内部样式</title>
+    <meta charset="utf-8" />
+    <style>
+        /* 
+            内部样式：在head中的style标签中通过选择器来实现
+            好处：
+            1.将样式控制抽取出来了，一个样式可以作用到多个标签上，样式可以复用
+            2.将内容和样式分开了，代码阅读更加方便
+
+            内部页面只能作用于当前页面，不能跨页面使用样式
+         */
+        p {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <p>段落1</p>
+        <p>段落1</p>
+    </div>
+</body>
+
+</html>

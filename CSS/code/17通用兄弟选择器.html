@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>邻接兄弟选择器</title>
+    <meta charset="utf-8" />
+    <style>
+        /* 选中与h1同级的所有p标签(被隔开的也会被选中) */
+        h1~p {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>标题</h1>
+        <p>段落1</p>
+        <p>段落2</p>
+        <div>块级标签</div>
+        <p>段落3</p>
+        <div><p>内部段落</p></div>
+    </div>
+</body>
+
+</html>

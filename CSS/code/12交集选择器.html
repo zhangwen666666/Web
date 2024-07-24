@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>交集选择器</title>
+    <meta charset="utf-8" />
+    <style>
+        /* 标签选择器 */
+        /* p{
+            color: red;
+        } */
+
+        /* 类选择器 */
+        /* .tag{
+            color: red;
+        } */
+
+        /* id选择器 */
+        /* #title {
+            color: red;
+        } */
+
+        /* 交集选择器：先写标签，后写类，否则.tagp会造成歧义，会将.tagp当成一个属性 */
+        p.tag {
+            color: red;
+        }
+
+        /* 使用属性选择器也可以实现上述效果 */
+        /* p[class="tag"]{
+            color: red;
+        } */
+    </style>
+</head>
+
+<body>
+    <h1 class="tag">我是标题</h1>
+    <p class="tag">我是一个p标签</p>
+    <p id="title">我是一个p标签</p>
+</body>
+
+</html>
