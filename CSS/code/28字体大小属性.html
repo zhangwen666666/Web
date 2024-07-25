@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <title>字体大小属性</title>
+    <style>
+        /* 
+            字体大小的表示方式：
+            1.使用固定的尺寸值：
+                xx-small x-small small medium(默认值) large x-large xx-large
+            2.使用像素点表示字体大小：
+                例如 20px 默认为20px
+            3.通过smaller和larger可以将字体设置为比父元素更小或者更大
+            4.通过%设置字体是父元素字体的百分之多少
+            5.也可以使用em来实现设置字体和父元素字体的比例 
+        */
+        span {
+            font-size: xx-large;
+            font-size: 80px;
+            font-size: larger;
+            font-size: smaller;
+            font-size: 70%;
+            font-size: 130%;
+            font-size: 1em;
+            font-size: 1.2em;
+        }
+
+        p {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <p>
+        段落
+        <span>行内</span>
+        段落
+    </p>
+</body>
+
+</html>

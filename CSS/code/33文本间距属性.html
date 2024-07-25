@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <title>文本间距属性</title>
+    <style>
+        /* 
+            控制字母间距的：letter-spacing
+            控制单词间距的：word-spacing
+            控制文字间距的：letter-spacing
+            中文使用word-spacing是无效的
+        */
+        #one {
+            letter-spacing:5px;
+            word-spacing: 10px;
+        }
+
+        #two{
+            letter-spacing:5px;
+            /* word-spacing: 10px; */
+        }
+    </style>
+</head>
+
+<body>
+    <p id="one">people mountain people sea</p>
+    <p id="two">人山人海</p>
+</body>
+
+</html>

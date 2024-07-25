@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <title>组合字体属性</title>
+    <style>
+        #one {
+            font-family: "微软雅黑";
+            font-style: italic;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #two{
+            /* 
+                font属性支持同时设置多种属性，但必须按照以下顺序
+                其他字体属性 字体大小 字体族 
+            */
+            font:bold italic 30px "楷体";
+        }
+    </style>
+</head>
+
+<body>
+    <p id="one">段落1</p>
+    <p id="two">段落2</p>
+</body>
+
+</html>

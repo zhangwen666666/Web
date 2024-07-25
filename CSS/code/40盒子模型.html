@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <title>盒子模型</title>
+    <style>
+        /* 
+            边距共两大类8小种
+                内边距 padding-left padding-right padding-top padding-bottom
+                外边距 margin-left margin-right margin-top margin-bottom
+        */
+        /* 给外部容器添加边框 */
+        #div1 {
+            border: 3px red solid;
+        }
+
+        #div2 {
+            border: 2px green solid;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            text-align: right;
+        }
+
+        #span1 {
+            border: 1px blue solid;
+        }
+
+        #span2 {
+            border: 1px blue solid;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="div1"> <!--外部容器-->
+        <div id="div2"> <!--中间容器-->
+            <span id="span1">span</span> <!--内部容器-->
+            <span id="span2">span</span> <!--内部容器-->
+        </div>
+    </div>
+</body>
+
+</html>
