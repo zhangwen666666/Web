@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>display属性</title>
+    <meta charset="utf-8" />
+    <style>
+        /* 
+            display属性，可以将一个元素类型转换为另一个元素类型
+            属性值
+
+            none        此元素不会被显示，不保留物理空间
+            block       此元素将会被现实为块级元素，此元素前后会带有换行符
+            inline      此元素会被显示为行内元素，元素前后没有换行符
+            inline-block    行内块元素      
+        */
+        #span1 {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="div1">
+        <div id="div2">
+            <span id="span1">span</span>
+            <span id="span2">span</span>
+        </div>
+    </div>
+</body>
+
+</html>
