@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模版语法之插值语法</title>
+    <!-- 安装Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        主要研究：{{这里可以写什么}}
+        1.在data中声明的变量或函数。用户自定义的全局变量,全局函数不可以
+        2.常量都可以
+        3.只要是合法的JavaScript表达式都可以。（语句不行，例如变量的声明，if语句等）
+        4.模版表达式都被放在沙盒中，只能访问全局变量的一个白名单，如Math和Date。
+            Infinity, undefined, NaN, isFinite, isNaN, parseFloat, parseInt, decodeURI,
+            decodeURIComponent, encodeURI, encodeURIComponent, Math, Number, Date,
+            Array, Object, Boolean, String, RegExp, Map, Set, JSON, Intl, require
+    -->
+    <!-- 准备容器 -->
+    <div id="app">
+        <!-- 这里可以看做是使用msg变量 -->
+        <h1>{{msg}}</h1>
+        <h1>{{sayHello()}}</h1>
+        <!-- <h1>{{i}}</h1>
+        <h1>{{fun()}}</h1> -->
+
+        <!-- 常量 -->
+        <h1>{{100}}</h1>
+        <h1>{{'hello world'}}</h1>
+        <h1>{{3.14}}</h1>
+
+        <!-- javascript 表达式 -->
+        <h1>{{1 + 1}}</h1>
+        <h1>{{'hello' + 'world'}}</h1>
+        <h1>{{msg + 1}}</h1>
+        <h1>{{msg.split('').reverse().join('')}}</h1>
+
+        <!-- 在白名单里的 -->
+        <h1>{{Date}}</h1>
+        <h1>{{Date.now()}}</h1>
+        <h1>{{Math}}</h1>
+        <h1>{{Math.ceil(3.14)}}</h1>
+    </div>
+
+    <!-- Vue程序 -->
+    <script>
+
+        var i = 1;
+        var fun = function sum() {
+            console.log('sum....');
+        }
+        new Vue({
+            el: '#app',
+            data: {
+                msg: 'abcdef',  //为了方便，以后把msg叫做变量。(这里就可以看做是变量的声明)
+                sayHello: function () {
+                    console.log('hello vue!!');
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
