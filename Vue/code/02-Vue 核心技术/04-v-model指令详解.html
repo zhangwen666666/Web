@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-model指令详解</title>
+    <!-- 安装Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        v-bind和v-model的区别和联系
+            1.v-bind和v-model这两个指令都可以完成数据绑定。
+            2.v-bind是单向数据绑定
+                data改变 ==> 视图改变
+            3.v-model是双向数据绑定
+                data <==> 视图
+            4.v-bind可以使用在任何HTML标签中。
+              v-model只能使用在表单类元素上，例如:input标签、select标签、textarea标签
+              为什么v-model的使用会有这个限制呢?
+                因为表单类元素才能给用户提供交互式的输入界面
+            5.v-bind和v-model都有简写方式
+                v-bind简写方式:   v-bind:参数="表达式"   简写为  :参数="表达式"
+                v-model简写方式:  v-model:value="表达式"   简写为    v-model="表达式"
+            6.v-model是专为value属性服务的
+                <input type="text" v-model:value="name2" v-model:msg="msg">
+                <input type="text" v-model:msg="msg">
+                以上这两个标签，最终被编译为<input type="text" value="msg">
+    -->
+    <!-- 准备一个容器 -->
+    <div id="app">
+        v-bind指令:<input type="text" v-bind:value="name1"><br>
+        v-model指令:<input type="text" v-model:value="name2"><br>
+
+        <!-- 以下报错了，因为v-model不能使用在这种元素上 -->
+        <!-- <a v-model:href="url">百度</a> -->
+
+        <!-- 
+            以下的两个消息1和2，当修改消息2中的视图的信息时，消息1中的视图也会发生改变
+            原因是，消息2采用v-model实现了双向绑定，当修改视图中的value值时，会影响到data中的msg
+            而当msg发生改变时，又会影响到消息1
+        -->
+        消息1:<input type="text" :value="msg"><br>
+        消息2:<input type="text" v-model="msg"><br>
+    </div>
+
+    <!-- Vue程序 -->
+    <script>
+        new Vue({
+            el:'#app',
+            data: {
+                msg:'abc',
+                name1:'zhangsan',
+                name2:'lisi',
+                url:'https://www.baidu.com',
+            },
+        })
+    </script>
+</body>
+</html>
