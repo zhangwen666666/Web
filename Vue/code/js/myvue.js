@@ -1,19 +1,22 @@
 //定义一个Vue类
-class Vue{
+class Vue {
     //定义构造函数
     //options是一个简单的纯粹的JS对象：{}
-    constructor(options){
+    constructor(options) {
         //获取所有的属性名
-        Object.keys(options.data).forEach((propertyName,index) =>{
+        Object.keys(options.data).forEach((propertyName, index) => {
             // console.log(propertyName,index);
-            Object.defineProperty(this,propertyName,{
-                get(){
-                    return options.data[propertyName];
-                },
-                set(val){
-                    options.data[propertyName] = val;
-                }
-            })
+            let firstChar = propertyName.charAt(0);
+            if (firstChar != '_' && firstChar != '$') {
+                Object.defineProperty(this, propertyName, {
+                    get() {
+                        return options.data[propertyName];
+                    },
+                    set(val) {
+                        options.data[propertyName] = val;
+                    }
+                })
+            }
         })
         // Object.defineProperty(this,'')
     }
