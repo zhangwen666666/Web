@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>反转字符串methods实现</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{msg}}</h1>
+        输入的信息：<input type="text" v-model="info"><br>
+        <!-- 在插值语法中可以调用方法，小括号不能省略，这个方法需要是Vue实例所管理的 -->
+        <!-- 
+            1.多次重复时有效率问题，因为每次都需要调用函数
+            2.使用methods解决这个问题，需要在data中定义一个属性来接收结果
+         -->
+        反转后的信息：{{reverseInfo()}} <br>
+        反转后的信息：{{reverseInfo()}} <br>
+        反转后的信息：{{reverseInfo()}} <br>
+        反转后的信息：{{reverseInfo()}} <br>
+        反转后的信息：{{reverseInfo()}} <br>
+    </div>
+
+    <script>
+        const vm =  new Vue({
+            el: '#app',
+            data: {
+                msg:'计算属性-反转字符串案例',
+                info:''
+            },
+            methods:{
+                reverseInfo(){
+                    console.log('@');
+                    return this.info.split('').reverse().join('');
+                }
+            }
+        })
+    </script>
+</body>
+</html>

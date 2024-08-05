@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>methods实现原理</title>
+    <!-- 引入我们自己的vue.js -->
+    <script src="../js/myvue.js"></script>
+</head>
+<body>
+    <!-- Vue程序 -->
+    <script>
+        const vm =  new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello Vue'
+            },
+            methods: {
+                sayHi(){
+                    alert('hi')
+                },
+                sayHello(){
+                    alert('hello');
+                }
+            }
+        })
+    </script>
+</body>
+</html>

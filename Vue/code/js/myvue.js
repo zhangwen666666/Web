@@ -19,5 +19,12 @@ class Vue {
             }
         })
         // Object.defineProperty(this,'')
+
+        //获取所有的方法名
+        Object.keys(options.methods).forEach((methodName, index) => {
+            // console.log(methodName);
+            // 给当前的Vue实例扩展一个方法
+            this[methodName] = options.methods[methodName];
+        })
     }
 }
