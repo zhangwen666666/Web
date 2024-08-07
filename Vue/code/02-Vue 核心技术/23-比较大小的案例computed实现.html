@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>比较大小的案例computed实现</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        1. computed 和 watch如果都能够完成某个功能，优先选择computed
+        2. 有一种情况下，必须使用watch，computed无法完成    (异步的情况下)
+            例如：输入两个数字之后，不希望立即显示结果，需要的等待3秒之后再显示
+                  这种情况下就必须使用watch了。
+        3. 什么时候使用箭头函数？什么时候使用普通函数?
+            看看这个函数是否属于Vue管理的。
+            是Vue管理的函数：统一写普通函数。
+            不是Vue管理的函数：统一写箭头函数。
+    -->
+    <div id="app">
+        数字1: <input type="number" v-model="number1"><br>
+        数字2: <input type="number" v-model="number2"><br>
+        比较大小: {{op}}
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                number1: 0,
+                number2: 0,
+            },
+            computed: {
+                //计算属性的简写形式
+                // op() {
+                //     if (this.number1 > this.number2) {
+                //         return this.number1 + ' > ' + this.number2;
+                //     } else if (this.number1 < this.number2) {
+                //         return this.number1 + ' < ' + this.number2;
+                //     } else {
+                //         return this.number1 + ' = ' + this.number2;
+                //     }
+                // }
+
+                // 以下的代码不能实现等待3秒之后显示比较结果
+                op() {
+                    // setTimeout(函数，延迟多少毫秒)
+                    // 这里的箭头函数是被javascript引擎去调用的，所以最终return的值也会返回给javascript引擎
+                    // 我们需要将这个返回值返回给Vue实例vm
+                    setTimeout(() => {
+                        if (this.number1 > this.number2) {
+                            return this.number1 + ' > ' + this.number2;
+                        } else if (this.number1 < this.number2) {
+                            return this.number1 + ' < ' + this.number2;
+                        } else {
+                            return this.number1 + ' = ' + this.number2;
+                        }
+                    }, 3000)
+
+                    // 以下这种也是不能实现间隔三秒的，虽然返回值返回值给了vm，但是结果是立即显示的
+                    // setTimeout(() => {} , 3000)
+                    // if (this.number1 > this.number2) {
+                    //     return this.number1 + ' > ' + this.number2;
+                    // } else if (this.number1 < this.number2) {
+                    //     return this.number1 + ' < ' + this.number2;
+                    // } else {
+                    //     return this.number1 + ' = ' + this.number2;
+                    // }
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

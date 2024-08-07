@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Style绑定</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .static {
+            border: 1px solid black;
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <!-- 静态写法 -->
+        <div class="static" style="background-color: green;">{{msg}}</div>
+        <br>
+        <!-- 动态写法：字符串形式 -->
+        <div class="static" :style="myStyle">{{msg}}</div><br>
+
+
+        <!-- 动态写法：数组形式 -->
+        <div class="static" :style="styleArray">{{msg}}</div><br>
+
+
+        <!-- 动态写法：对象形式 -->
+        <div class="static" :style="{'background-color':'green'}">{{msg}}</div><br>
+        <!-- 对象形式也可以这样，将background-color改为大驼峰命名格式，可以去掉单引号 -->
+        <div class="static" :style="{backgroundColor:'green'}">{{msg}}</div><br>
+        <!-- 或者这样 -->
+        <div class="static" :style="styleObj">{{msg}}</div><br>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'Style绑定',
+                myStyle: 'background-color: gray;',
+                styleObj: {
+                    'background-color': 'gray'
+                },
+                styleArray: [
+                    { backgroundColor: 'red' },
+                    { color: 'yellow' }
+                ]
+            }
+        })
+    </script>
+</body>
+
+</html>

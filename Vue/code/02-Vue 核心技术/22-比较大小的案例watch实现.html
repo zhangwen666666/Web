@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>比较大小的案例watch实现</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+    
+    -->
+    <div id="app">
+        数字1: <input type="number" v-model="number1"><br>
+        数字2: <input type="number" v-model="number2"><br>
+        比较大小: {{op}}
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                number1: 0,
+                number2: 0,
+                op: '',
+            },
+            watch: {
+                // number1(newValue, oldValue) {
+                //     // console.log(newValue, this.number2)
+                //     if (newValue > this.number2) {
+                //         this.op = '>';
+                //     } else if (newValue < this.number2) {
+                //         this.op = '<';
+                //     } else {
+                //         this.op = '=';
+                //     }
+                // },
+
+                // 首次不显示的
+                // number1(val) {
+                //     // console.log(newValue, this.number2)
+                //     if (val > this.number2) {
+                //         this.op = val + ' > ' + this.number2;
+                //     } else if (val < this.number2) {
+                //         this.op = val + ' < ' + this.number2;
+                //     } else {
+                //         this.op = val + ' = ' + this.number2;
+                //     }
+                // },
+
+                // number2(val) {
+                //     // console.log(newValue, this.number2)
+                //     if (this.number1 < val) {
+                //         this.op = this.number1 + ' < ' + val;
+                //     } else if (this.number1 > val) {
+                //         this.op = this.number1 + ' > ' + val;
+                //     } else {
+                //         this.op = this.number1 + ' = ' + val;
+                //     }
+                // }
+
+                // 普通的首次显示的，且立即显示的。
+                // number1: {
+                //     immediate: true,
+                //     // console.log(newValue, this.number2)
+                //     handler(val) {
+                //         if (val > this.number2) {
+                //             this.op = val + ' > ' + this.number2;
+                //         } else if (val < this.number2) {
+                //             this.op = val + ' < ' + this.number2;
+                //         } else {
+                //             this.op = val + ' = ' + this.number2;
+                //         }
+                //     }
+                // },
+
+                // number2: {
+                //     immediate: true,
+                //     handler(val) {
+                //         // console.log(newValue, this.number2)
+                //         if (this.number1 < val) {
+                //             this.op = this.number1 + ' < ' + val;
+                //         } else if (this.number1 > val) {
+                //             this.op = this.number1 + ' > ' + val;
+                //         } else {
+                //             this.op = this.number1 + ' = ' + val;
+                //         }
+                //     }
+                // }
+
+                //间隔三秒显示的
+                number1: {
+                    immediate: true,
+                    // console.log(newValue, this.number2)
+                    handler(val) {
+                        setTimeout(() => {
+                            if (val > this.number2) {
+                                this.op = val + ' > ' + this.number2;
+                            } else if (val < this.number2) {
+                                this.op = val + ' < ' + this.number2;
+                            } else {
+                                this.op = val + ' = ' + this.number2;
+                            }
+                        }, 3000)
+                    }
+                },
+
+                number2: {
+                    immediate: true,
+                    handler(val) {
+                        setTimeout(() => {
+                            //虽然这个函数是箭头函数，但是这里的this是Vue实例vm
+                            //这个箭头函数同样也不是Vue管理的。是javascript引擎管理的。
+                            //调用这个箭头函数的还是window
+                            //箭头函数没有this,只能向上一级找,上一级是number2,
+                            //number2是Vue实例的属性，所以this是Vue实例。
+                            console.log(this)
+                            if (this.number1 < val) {
+                                this.op = this.number1 + ' < ' + val;
+                            } else if (this.number1 > val) {
+                                this.op = this.number1 + ' > ' + val;
+                            } else {
+                                this.op = this.number1 + ' = ' + val;
+                            }
+                        }, 3000)
+                        // console.log(newValue, this.number2)
+
+                        // 这里虽然是普通函数，但是这个函数并不是Vue所管理的。是windows负责调用的。
+                        // 所以这个普通函数当中的this是window。
+                        setTimeout(function() {
+                            //虽然这个函数是普通函数，但是这里的this是Vue实例vm
+                            console.log(this)
+                            if (this.number1 < val) {
+                                this.op = this.number1 + ' < ' + val;
+                            } else if (this.number1 > val) {
+                                this.op = this.number1 + ' > ' + val;
+                            } else {
+                                this.op = this.number1 + ' = ' + val;
+                            }
+                        }, 3000)
+
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
