@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>列表过滤</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <input type="text" placeholder="请输入搜索关键字" v-model="keyword">
+        <table>
+            <tr>
+                <th>序号</th>
+                <th>英雄</th>
+                <th>能量值</th>
+                <th>选择</th>
+            </tr>
+            <tr>
+            <tr v-for="(hero,index) in filteredHeros " :key="hero.id">
+                <td>{{index + 1}}</td>
+                <td>{{hero.name}}</td>
+                <td>{{hero.power}}</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '列表过滤',
+                heros: [
+                    { id: '111', name: '韩信', power: 7000 },
+                    { id: '222', name: '李白', power: 8000 },
+                    { id: '333', name: '宫本', power: 9000 },
+                    { id: '444', name: '李信', power: 10000 },
+                ],
+                keyword: '',
+                filteredHeros: []
+            },
+            watch: {
+                keyword: {
+                    immediate:true,
+                    // 执行过滤规则
+                    handler(val){
+                        this.filteredHeros = this.heros.filter((hero) => {
+                            return hero.name.indexOf(val) >= 0
+                        })
+                    }
+                }
+            }
+        }) 
+
+        // 回顾filter
+        // filter不会破坏原有的数组的结构，会生成一个新的数组。
+        let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        let newArray = arr.filter((num) => {
+            // return 过滤规则
+            return num > 5
+        })
+        console.log(newArray);
+    </script>
+</body>
+
+</html>

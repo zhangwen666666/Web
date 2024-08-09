@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>列表排序</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <input type="text" placeholder="请输入搜索关键字" v-model="keyword"><br>
+        <button @click="type = 1">升序</button>
+        <button @click="type = 2">降序</button>
+        <button @click="type = 0">原序</button>
+        <table>
+            <tr>
+                <th>序号</th>
+                <th>英雄</th>
+                <th>能量值</th>
+                <th>选择</th>
+            </tr>
+            <tr>
+            <tr v-for="(hero,index) in filteredHeros " :key="hero.id">
+                <td>{{index + 1}}</td>
+                <td>{{hero.name}}</td>
+                <td>{{hero.power}}</td>
+                <td><input type="checkbox"></td>
+            </tr>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                type: 0,
+                msg: '列表排序',
+                heros: [
+                    { id: '111', name: '韩信', power: 7000 },
+                    { id: '222', name: '李白', power: 5000 },
+                    { id: '333', name: '宫本', power: 9000 },
+                    { id: '444', name: '李信', power: 10000 },
+                ],
+                keyword: '',
+            },
+            computed: {
+                filteredHeros() {
+                    // 执行过滤
+                    const arr = this.heros.filter((hero) => {
+                        return hero.name.indexOf(this.keyword) >= 0
+                    })
+                    // 排序并返回
+                    if (this.type === 1) {
+                        arr.sort((a, b) => {
+                            return a.power - b.power;
+                        })
+                    } else if (this.type === 2){
+                        arr.sort((a, b) => {
+                            return b.power - a.power;
+                        })
+                    }
+                    return arr
+                }
+            }
+        })
+
+        //回顾sort方法
+        let arr = [8, 5, 9, 4, 1, 7, 2]
+        // sort会改变原有数组的结构，不会生成新的数组
+        arr.sort((a, b) => {
+            return a - b //升序
+        })
+        console.log(arr);  
+    </script>
+</body>
+
+</html>
