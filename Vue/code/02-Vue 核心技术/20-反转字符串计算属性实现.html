@@ -74,7 +74,7 @@
             },
             computed: {
                 // 可以定义多个计算属性
-                // 计算属性当中的this也是Vue实例 (箭头函数中国的this和Vue实例不相等)
+                // 计算属性当中的this也是Vue实例 (箭头函数中的this和Vue实例不相等)
                 hehe: {
                     get() {
                         console.log('getter');
@@ -86,6 +86,8 @@
                         console.log(this === vm);
                     }
                 },
+
+                // 完整写法
                 // reverseInfo: {
                 //     get() {
                 //         console.log('getter');
@@ -102,6 +104,9 @@
                 //         this.info = val.split('').reverse().join('');
                 //     }
                 // }
+
+
+                // 简写
                 reverseInfo(){
                     return this.info.split('').reverse().join('');
                 }

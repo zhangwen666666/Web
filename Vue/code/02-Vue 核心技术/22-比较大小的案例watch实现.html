@@ -130,7 +130,7 @@
                         // 这里虽然是普通函数，但是这个函数并不是Vue所管理的。是windows负责调用的。
                         // 所以这个普通函数当中的this是window。
                         setTimeout(function() {
-                            //虽然这个函数是普通函数，但是这里的this是Vue实例vm
+                            //虽然这个函数是普通函数，但是这里的this是window
                             console.log(this)
                             if (this.number1 < val) {
                                 this.op = this.number1 + ' < ' + val;
