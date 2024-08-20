@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-once与v-pre指令</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <!-- 
+            v-once:只渲染一次，后序被视为静态内容
+        -->
+        <ul>
+            <li v-for="user,index in users" :key="index" v-once>{{user}}</li>
+        </ul>
+
+        <ul>
+            <li v-for="user,index in users" :key="index">{{user}}</li>
+        </ul>
+
+
+        <!-- 
+            v-pre指令：
+                使用该指令可以提高编译速度。带有该指令的标签将不会被编译。
+                可以在没有Vue语法规则的标签中使用可以提高效率。
+                不要将它用在带有指令语法以及插值语法的标签中。
+        -->
+        <h1 v-pre>欢迎学习Vue框架</h1>
+        <h1 v-pre>{{msg}}</h1>
+    </div>
+
+    <script>
+        const vm =  new Vue({
+            el: '#app',
+            data: {
+                msg: 'v-once与v-pre指令',
+                users: ['jack','lucy','james']
+            },
+        })
+    </script>
+</body>
+</html>

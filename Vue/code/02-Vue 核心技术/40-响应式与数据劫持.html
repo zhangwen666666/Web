@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>40-响应式与数据劫持</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        1.什么是响应式？
+            修改data后 页面自动改变/刷新。这就是响应式。
+        2.Vue会给data中的所有属性，以及属性中的属性，都会添加响应式。
+        3.使用Vue.set(目标对象, 属性名, 属性值)来给目标对象追加一个属性，这个属性会添加响应式处理
+        4.通过Vue实例的$set方法追加属性也会添加响应式处理  vm.$set(vm.a, 'email', 'jack@163.com')
+        5.不能在后期给vm，或者是data添加响应式处理，只能给data中的属性以及属性的属性添加响应式。
+          只能在声明时提前定义好
+    -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <div>姓名: {{name}}</div>
+        <div>年龄: {{age}}</div>
+        <div>数字: {{a.b.c.e}}</div>
+    </div>
+
+    <script>
+        const vm =  new Vue({
+            el: '#app',
+            data: {
+                msg: '40-响应式与数据劫持',
+                name: 'jackson',
+                age: 20,
+                a: {
+                    b: {
+                        c: {
+                            e: 1,
+                        }
+                    }
+                }
+            },
+        })
+
+
+        // 测试：后期添加的属性会添加响应式吗？
+        // 通过这种方式后期给vm追加的属性并没有添加响应式处理。
+        // vm.$data.a.email = 'jack@163.com'
+        // Vue.set(vm.$data.a,'email','jack@163.com')
+        // $data可以省略，因为a添加了数据代理，可以之间使用vm访问a属性
+        // Vue.set(vm.a,'email','jack@163.com')
+        vm.$set(vm.a,'email','jack@163.com')
+
+        // Avoid adding reactive properties to a Vue instance or its root $data at runtime 
+        // - declare it upfront in the data option.
+        // 避免在运行时向Vue实例或其根$data添加响应式
+        // Vue.set(vm, 'x', '1')
+        // Vue.set(vm.$data, 'x', '1')
+
+    </script>
+</body>
+</html>

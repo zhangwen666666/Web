@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue的其他指令</title>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+        Vue渲染的过程
+            1.加载vue.js文件，
+            2.执行script中的new Vue的那一块代码，在执行的过程中渲染到页面上
+        胡子的闪现问题
+            vue.js文件延迟加载，script中的new Vue的那一块代码延迟执行，导致页面延迟渲染
+        使用v-cloak指令配合CSS样式解决胡子闪现问题
+            当页面未渲染时，会将所有的v-cloak所在的标签隐藏，
+            当真正渲染的时候，会将c-cloak删除
+    -->
+    <div id="app">
+        <h1 v-cloak>{{msg}}</h1>
+    </div>
+
+    <script>
+        // 模拟vue.js的延迟加载
+        setTimeout(() => {
+            let scriptElt = document.createElement('script')
+            scriptElt.src='../js/vue.js'
+            document.head.append(scriptElt)
+        }, 3000)
+
+        setTimeout(() => {
+            const vm =  new Vue({
+                el: '#app',
+                data: {
+                    msg: 'Vue的其他指令'
+                },
+            })
+        },4000)
+    </script>
+</body>
+</html>

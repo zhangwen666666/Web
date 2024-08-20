@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>42-Vue的生命周期</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        1. Vue的生命周期指的是：vm对象从创建到最终销毁的整个过程
+            (1). 虚拟DOM在内存中就绪时：去调用一个a函数
+            (2). 虚拟DOM转换成真实DOM渲染到页面时：去调用一个b函数
+            (3). Vue的data发生改变时：去调用一个c函数
+            (4).            .......
+            (5). Vue实例被销毁时：去调用一个x函数
+        2. 在生命线上的函数叫做钩子函数，这些函数是不需要程序员手动调用的，
+           由Vue自动调用，程序员只需要按照自己的需求写上，到了时间点自动就会执行
+        3. Vue的生命周期可以被划分为4个阶段：初始阶段、挂载阶段、更新阶段、销毁阶段。
+            每个阶段会调用两个钩子函数。这两个钩子函数名的特点：beforeXxx(), xxxed().
+            (1) 初始阶段 虚拟DOM有了 
+                注意以下的创建前和创建后说的是数据代理和数据检测的创建，并不是vm
+                vm在执行beforeCreate()之前就已经创建好了
+                (a) beforeCreate() 创建前
+                (b) created() 创建后
+            (2) 挂载阶段 把虚拟DOM变成真实DOM，页面渲染了
+                (a) beforeMount() 挂载前
+                (b) mounted() 挂载后
+            (3) 更新阶段 数据data发生变化，页面重新渲染
+                (a) beforeUpdate() 更新前
+                (b) updated() 更新后
+            (4) 销毁阶段 必须调用vm.$destroy()方法进入销毁阶段
+                注意：这里说的销毁vm是将vm上绑定的监视器、子组件、自定义的事件监听器解绑了。
+                      (高版本的Vue会将所有的事件监听器都移除掉)
+                      并不是将vm对象干掉了，不是将vm的内存空间释放了
+                      销毁之后指令也不能使用了
+                (a) beforeDestroy() 销毁前
+                (b) destroyed() 销毁后
+        4. 8个钩子函数直接写在Vue构造函数的options对象当中。
+    -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h3>计数器：{{counter}}</h3>
+        <h3 v-text="counter"></h3>
+        <button @click="counter++">点我加1</button>
+        <button @click="destroy">点我销毁</button>
+    </div>
+
+    <script>
+        const vm =  new Vue({
+            el: '#app',
+            data: {
+                msg: '42-Vue的生命周期',
+                counter: 1
+            },
+            methods: {
+                destroy(){
+                    //销毁vm
+                    this.$destroy()
+                },
+                m(){
+                    console.log('m...')
+                }
+            },
+            /* 
+                1.初始阶段
+                    el有，template也有，最终编译template模版语句。
+                    el有，template没有，最终编译el模版语句。
+                    el没有的时候，需要手动调用 vm.$mount(el)进行手动挂载，然后流程才能继续。
+                        此时如果template也有，最终编译template模版语句。
+                        此时如果没有template，最终编译el模版语句。
+                    初始阶段不会进行渲染，只是生成了虚拟的DOM，页面还是胡子
+            */
+            beforeCreate(){
+                // 创建前指的是：数据代理和数据检测的创建前。
+                // 此时还无法访问data当中的数据。包括methods也是无法访问的。
+                console.log('beforeCreate',this.counter,this.data)
+                // 这里不能调用m()方法，报错了
+                // this.m()
+            },
+            created(){
+                // 创建后表示数据代理和数据监测创建完毕，可以访问data中的数据了。
+                console.log('created',this.counter)
+                // 可以访问methods了
+                // this.m()
+                // debugger让程序卡在这里
+                // debugger
+            },
+            // 2.挂载阶段
+            beforeMount(){
+                console.log('beforeMount')
+                // debugger
+                // 在这个阶段使用JS代码修改页面当中的DOM元素，最终不会生效
+                // 因为这个挂载前阶段一但结束，就会创建vm.$el并用它来代替el
+                // 表示把虚拟的DOM转换为真实的DOM，挂载到页面上，完成渲染
+                // $el就表示真实DOM
+            },
+            mounted(){
+                console.log('mounted')
+                // console.log(this.$el);
+                // console.log(this.$el instanceof HTMLElement);
+                // debugger
+                // 在这里操作DOM元素，最终会生效
+            },
+            // 3.更新阶段
+            beforeUpdate(){
+                // 页面没变，但数据已经变了
+                console.log('beforeUpdate')
+            },
+            updated(){
+                // 页面已经改变了，这个函数才会被调用
+                console.log('updated')
+            },
+            // 4.销毁阶段
+            beforeDestroy(){
+                console.log('beforeDestroy')
+                // 在这里vm和监视器、子组件等还绑定着
+                // 虽然监视器没解绑，但是也不能使用了
+                
+                // 这里counter在内存中已经改了，但监视器监视不到，即监视器不工作了
+                // 并且页面也不会发生变化，不会重新渲染
+                this.counter=10000
+            },
+            destroyed(){
+                console.log('destroyed')
+                // 这里vm和监视器等就已经解绑完成了
+            },
+            watch: {
+                counter(){
+                    console.log('counter被监视一次');
+                }
+            }
+        })
+    </script>
+</body>
+</html>

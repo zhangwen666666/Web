@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>过滤器</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        需求：从服务器端返回了一个商品的价格price,这个price的值可能是这几种情况：'',null,undefined,60.5
+            要求：
+                如果是'',null,undefined,则页面上显示 - 
+                如过不是以上几种,则页面上显示真实的数字即可。
+            在Vue3中，已经将过滤器废弃了
+    -->
+    <div id="app">
+        <h1>{{msg}}</h1>
+        
+        <!-- 使用计算属性实现 -->
+        <h2>商品价格：{{formatPrice}}</h2>
+        
+        <!-- 使用方法实现 -->
+        <h2>商品价格：{{formatPrice2()}}</h2>
+
+        <!-- 
+            使用过滤器实现
+            price | filterA 表示将price传给过滤器filterA
+            注意：
+                1.过滤器可以串联
+                    price | filterA | filterB 表示将 price | filterA 的结果传给过滤器 filterB
+                2.过滤器还可以传参
+                    第一个参数不用传，会自动将前面的结果做为第一个参数
+                3.过滤器只能使用在插值语法和v-bind当中        
+        -->
+        <h2>商品价格：{{price | filterA}}</h2>
+        <h2>商品价格：{{price | filterA | filterB}}</h2>
+        <h2>商品价格：{{price | filterA | filterC(3)}}</h2>
+        <input type="text" :value="price | filterA | filterC(3)">
+    </div>
+
+    <div id="app2">
+        <!-- 局部过滤器在另一个容器中无法使用 -->
+        <h2>商品价格：{{price | filterA | filterB}}</h2>
+    </div>
+
+    <script>
+        //配置全局过滤器 配置全局过滤器之后，局部过滤器就可以注释掉了
+        Vue.filter('filterA',function(val){
+            if(val === null || val === undefined || val === ''){
+                return '-'
+            }
+            return val
+        })
+
+        Vue.filter('filterB',function(val){
+            return val.toFixed(2)
+        })
+
+        Vue.filter('filterC',function(val, num){
+            return val.toFixed(num)
+        })
+
+        const vm2 =  new Vue({
+            el: '#app2',
+            data: {
+                price: 20.5
+            },
+        })
+
+        const vm =  new Vue({
+            el: '#app',
+            data: {
+                msg: '过滤器',
+                price: 30.12645,
+            },
+            computed: {
+                formatPrice(){
+                    if(this.price === '' || this.price === undefined || this.price === null){
+                        return '-'
+                    }
+                    return this.price
+                }
+            },
+            methods: {
+                formatPrice2(){
+                    if(this.price === '' || this.price === undefined || this.price === null){
+                        return '-'
+                    }
+                    return this.price
+                }
+            },
+            // filters: {
+            //     // 局部过滤器
+            //     filterA(val){
+            //         console.log('@', val);
+            //         // filterA必须有返回值
+            //         if(val === null || val === undefined || val === ''){
+            //             return '-'
+            //         }
+            //         return val
+            //     },
+            //     filterB(val){
+            //         // 这个过滤器负责确保传过来的数据保留两位小数。
+            //         return val.toFixed(2)
+            //     },
+            //     filterC(val, num){
+            //         // 这个过滤器负责确保传过来的数据保留num位小数。
+            //         return val.toFixed(num)
+            //     }
+            // }
+        })
+        
+    </script>
+</body>
+</html>
