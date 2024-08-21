@@ -1,54 +1,120 @@
 <template>
     <div>
-        <h1 ref="hh">{{msg}}</h1>
-        <!-- 
-        使用组件 
-            1. 在App这个父组件中，找到了子组件Car，然后给Car这个子组件传数据：通过属性的形式传数据
-                如果不使用v-bind指令，传过去的就是一个字符串，使用v-bind指令，传过去的就是一个数字
-            2. 在父组件中获取子组件：
-                第一步：打标记，在子组件标签中使用ref来打标记
-                第二步：获取子组件 this.$refs.car1
-                    vc.$refs (this.$refs) 可以获取页面中的所有组件，包括真实的DOM元素
-            3. 注意，在父组件中也可以通过document.getElementById()来获取子组件。
-                但是不建议在Vue中写原生DOM操作
-        -->
-        <Car brand="宝马520" color="黑色" v-bind:price="10" ref="car1"></Car>
-        <hr>
-        <Car brand="比亚迪汉" color="白色" :price="20"></Car>
-        <hr>
-        <Car :price="30"></Car>
-        <hr>
-        <button @click="printCarInfo">打印汽车信息</button>
+        <!-- <BugHeader :bugList="bugList"></BugHeader> -->
+        <BugHeader :saveBugCallback="saveBugCallback"></BugHeader>
+        <BugList :bugList="bugList"></BugList>
+        <BugFooter></BugFooter>
     </div>
 </template>
 
 <script>
-    // 导入组件
-    import Car from './components/Car.vue'
-
+    import BugHeader from './components/BugHeader.vue'
+    import BugList from './components/BugList.vue'
+    import BugFooter from './components/BugFooter.vue'
     export default {
         //注册组件
         name: 'App',
-        methods:{
-            printCarInfo(){
-                // 获取子组件
-                // console.log(this.$refs.car1);
-                console.log(this.$refs.car1.brand);
-                console.log(this.$refs.car1.price);
-                console.log(this.$refs.car1.color);
-
-                // 获取DOM元素
-                console.log(this.$refs.hh);
-                console.log(this.$refs.hh.innerText);
-            }
-        },
-        data() {
+        data(){
             return {
-                msg: '汽车信息'
+                bugList:[
+                    {id: '001', desc: 'BUG描述信息100',resovled: false},
+                    {id: '002', desc: 'BUG描述信息2',resovled: true},
+                    {id: '003', desc: 'BUG描述信息3',resovled: false},
+                ]
             }
         },
         components: {
-            Car
-        }
+            BugHeader,BugList,BugFooter,
+        },
+        methods:{
+            // 保存bug对象的回调方法
+            // 函数也是一个对象，可以传给子组件，子组件使用props接收
+            saveBugCallback(bug){
+                this.bugList.unshift(bug)
+            }
+        },
     }
 </script>
+
+
+<style>
+        /* 共享 */
+    .button{
+        display: inline-block;
+        zoom: 1;
+        padding: 6px 20px;
+        margin: 0;
+        cursor: pointer;
+        border: 1px solid #bbb;
+        overflow: visible;
+        font: bold 13px arial, helvetica, sans-serif;
+        text-decoration: none;
+        white-space: nowrap;
+        color: #555;
+        background-color: #ddd;
+        background-image: -webkit-gradient(linear, to right top, to right bottom, from(rgba(255,255,255,1)), to(rgba(255,255,255,0)));
+        background-image: -webkit-linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+        background-image: -moz-linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+        background-image: -ms-linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+        background-image: -o-linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+        background-image: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+        -webkit-transition: background-color .2s ease-out;
+        -moz-transition: background-color .2s ease-out;
+        -ms-transition: background-color .2s ease-out;
+        -o-transition: background-color .2s ease-out;
+        transition: background-color .2s ease-out;
+        background-clip: padding-box; /* Fix bleeding */
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+        -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+        -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+        text-shadow: 0 1px 0 rgba(255,255,255, .9);
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    .button:active{
+        background: #e9e9e9;
+        position: relative;
+        top: 1px;
+        text-shadow: none;
+        -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+    }
+    .button.red{
+        color: #fff;
+        text-shadow: 0 1px 0 rgba(0,0,0,.2);
+        background-image: -webkit-gradient(linear, to right top, to right bottom, from(rgba(255,255,255,.3)), to(rgba(255,255,255,0)));
+        background-image: -webkit-linear-gradient(to bottom, rgba(255,255,255,.3), rgba(255,255,255,0));
+        background-image: -moz-linear-gradient(to bottom, rgba(255,255,255,.3), rgba(255,255,255,0));
+        background-image: -ms-linear-gradient(to bottom, rgba(255,255,255,.3), rgba(255,255,255,0));
+        background-image: -o-linear-gradient(to bottom, rgba(255,255,255,.3), rgba(255,255,255,0));
+        background-image: linear-gradient(to bottom, rgba(255,255,255,.3), rgba(255,255,255,0));
+    }
+    .button.red{
+        background-color: #ca3535;
+        border-color: #c43c35;
+    }
+    .button.red:hover{
+        background-color: #ee5f5b;
+    }
+    .button.red:active{
+        background: #c43c35;
+    }
+    .button.green{
+        background-color: #57a957;
+        border-color: #57a957;
+    }
+    .button.green:hover{
+        background-color: #62c462;
+    }
+    .button.green:active{
+        background: #57a957;
+    }
+</style>
