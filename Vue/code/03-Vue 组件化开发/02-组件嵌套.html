@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02-组件嵌套</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script>
+        // 创建x1组件
+        const x1 = {
+            template:`
+                <div>
+                    <h3>X1组件</h3>    
+                </div>
+            `
+        }
+
+        // 创建y1组件
+        const y1 = {
+            template:`
+                <div>
+                    <h3>Y1组件</h3>    
+                </div>
+            `
+        }
+
+        // 创建y组件
+        const y = {
+            template: `
+                <div>
+                    <h2>Y组件</h2>  
+                    <y1></y1>  
+                </div>
+            `,
+            components: {
+                // y1: y1,
+                y1
+            }
+        }
+
+        // 创建x组件
+        const x = {
+            // x1组件注册在x组件下，因此只能在x下使用
+            template: `
+                <div>
+                    <h2>X组件</h2>  
+                    <x1></x1>  
+                </div>
+            `,
+            // 注册组件
+            components: {
+                // x1: x1,
+                x1
+            }
+        }
+
+        // 创建app组件
+        const app = {
+            // x组件注册在app组件下，因此只能在app下使用
+            // 在app的template中使用组件x
+            template: `
+                <div>
+                    <h1>App组件</h1>
+                    <x></x>
+                    <y></y>
+                </div>
+            `,
+            //注册组件
+            components: {
+                // x: x,
+                // y: y,
+                x,y
+            }
+        }
+
+        const vm =  new Vue({
+            el: '#root',
+            template: `
+                <app></app>
+            `,
+            // 注册app组件 (组件在哪注册就在哪使用)
+            // app组件在vm里注册，app接管的是root，所以app只能在root里使用
+            components: {
+                // 对象当中key和value同名，冒号和后面的value可以省略
+                // app : app,
+                app
+            }
+        })
+    </script>
+</body>
+</html>
