@@ -2,31 +2,20 @@
     <div>
         <!-- 绑定事件 -->
         <BugHeader @saveBugCallback="saveBugCallback"></BugHeader>
-        <BugList :bugList="bugList" @selectAllCallback="selectAllCallback"></BugList>
+        <BugList :bugList="bugList" :modifyResolvedCallback="modifyResolvedCallback" 
+        :deleteByIdCallback="deleteByIdCallback" :selectAllCallback="selectAllCallback" 
+        :updateDescCallback="updateDescCallback"></BugList>
         <BugFooter :bugList="bugList" @clearResolvedCallback="clearResolvedCallback"></BugFooter>
     </div>
 </template>
 
 <script>
-    import pubsub from 'pubsub-js'
     import BugHeader from './components/BugHeader.vue'
     import BugList from './components/BugList.vue'
     import BugFooter from './components/BugFooter.vue'
     export default {
         //注册组件
         name: 'App',
-        mounted(){
-            // 订阅消息
-            this.pid1 = pubsub.subscribe('modifyResolvedCallback', this.modifyResolvedCallback)
-            this.pid2 = pubsub.subscribe('deleteByIdCallback', this.deleteByIdCallback)
-            this.pid3 = pubsub.subscribe('updateDescCallback',this.updateDescCallback)
-        },
-        // 取消订阅
-        beforeDestroy(){
-            pubsub.unsubscribe(pid1)
-            pubsub.unsubscribe(pid2)
-            pubsub.unsubscribe(pid3)
-        },
         data(){
             return {
                 bugList:[
@@ -46,7 +35,7 @@
             },
 
             // 修改某个bug对象的resolved值
-            modifyResolvedCallback(messageName, id){
+            modifyResolvedCallback(id){
                 this.bugList.forEach((bug) => {
                     if(bug.id === id){
                         bug.resolved = !bug.resolved
@@ -56,7 +45,7 @@
             },
 
             // 根据id删除某个bug对象
-            deleteByIdCallback(messageName, id){
+            deleteByIdCallback(id){
                 // filter方法返回的是一个全新的数组。
                 this.bugList = this.bugList.filter((bug) => {
                     // 过滤条件，满足条件的被保留
@@ -79,10 +68,10 @@
             },
 
             // 更新描述信息
-            updateDescCallback(messageName, bugObj){
+            updateDescCallback(bugId, newDesc){
                 this.bugList.forEach((bug) => {
-                    if(bug.id === bugObj.id){
-                        bug.desc = bugObj.desc
+                    if(bug.id === bugId){
+                        bug.desc = newDesc
                         return
                     }
                 })

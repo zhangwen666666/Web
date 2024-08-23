@@ -4,10 +4,12 @@
         <button @click="unbinding">解绑事件</button>
         <button @click="triggerEvent2">触发event2事件</button>
         <button @click="goodbye">再见</button>
+        <Vip></Vip>
     </div>
 </template>
 
 <script>
+    import Vip from './Vip.vue'
     export default {
         name:'App',
         data(){
@@ -17,6 +19,7 @@
                 gender: '男',
             }
         },
+        components:{Vip},
         methods:{
             triggerEvent1(){
                 // 编写触发事件event1的事件
