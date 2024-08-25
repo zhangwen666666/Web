@@ -10,6 +10,8 @@ Vue.config.productionTip = false
 import VueRouter from 'vue-router'
 
 // 导入路由器对象
+// import router from './router/index'
+// 可以简写为
 import router from './router'
 
 // 使用vue-router插件
@@ -17,6 +19,8 @@ Vue.use(VueRouter)
 
 const vm = new Vue({
   el: '#app',
+  // 一但使用了vue-router插件，那么new Vue的时候就可以直接传递一个配置项:router
+  // router配置项用来接收一个路由器对象
   router: router,
   render: h => h(App),
 })
