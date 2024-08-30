@@ -1,16 +1,17 @@
 <template>
-	<h1>欢迎大家学习Vue3</h1>
-	<HelloWorld/>
+	<h2>计数器：{{counter}}</h2>
+	<button @click="counter++">plus one</button>
+	<h2>计数器2: {{counter2}}</h2>
+	<button @click="counter2++">plus one</button>
 </template>
 
 <script>
-	import HelloWorld from './components/HelloWorld.vue'
+	import { reactive, watch } from 'vue'
 	export default {
 		name: 'App',
-		components:{HelloWorld}
+		// vue3中的监视属性 组合式API：watch
+		setup(){
+
+		}
 	}
 </script>
-
-<style>
-
-</style>
