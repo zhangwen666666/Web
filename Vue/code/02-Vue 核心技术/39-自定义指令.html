@@ -11,7 +11,7 @@
         <h1>{{msg}}</h1>
         <h1 v-text="msg"></h1>
 
-        <!-- 使用自定义指令v-text-danger，将指令内容做为标签体内容，并将字体设置为红色 -->
+        <!-- 使用自定义指令v-text-danger，将指令内容做为标签体内容，并将字体设置为黄色 -->
         <div v-text-danger="msg"></div>
 
         用户名: <input type="text" v-bind:value="username">
@@ -41,12 +41,14 @@
         // 对象式
         Vue.directive('bind-blue',{
             bind(element, binding){
+                // console.log(binding);
                 element.setAttribute(binding.arg, binding.value)
             },
             inserted(element, binding){
                 element.parentNode.style.backgroundColor= 'skyblue'
             },
             update(element, binding){
+                console.log(666);
                 element.setAttribute(binding.arg, binding.value)
             }
         })
@@ -70,7 +72,7 @@
                 //指令2
                 //...
                 //关于指令的名字：1.v-不需要写。2.Vue官方建议指令的名字要全部小写。如果是多个单词的话，使用-进行衔接。
-                //这个回调函数的执行实际包括两个：1.标签和指令第一次绑定的时候。2.模版被重新解析的时候。
+                //这个回调函数的执行时机包括两个：1.标签和指令第一次绑定的时候。2.模版被重新解析的时候。
                 //这个回调参数有两个参数：1.真实的dom元素。2.标签与指令之间绑定关系的对象
                 'text-danger' : function(element, binding){
                     // console.log(element);
@@ -78,7 +80,7 @@
                     // 这里的this是window
                     // console.log(this)
                     element.innerText = binding.value
-                    element.style.color = 'red'
+                    element.style.color = 'yellow'
                 },
 
                 // 函数式

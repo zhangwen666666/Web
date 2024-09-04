@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>复习列表相关操作</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>{{msg}}</h1>
+        <h2>会员总数: {{vips.length}}</h2>
+        <h2>符合筛选条件的总数: {{vipsShow.length}}</h2>
+        <h2>符合筛选条件且被选中的总数: {{vipsShowSelectCount}}</h2>
+        <hr>
+            <h2>筛选关键字: <input type="text" v-model="keywords" placeholder="点击输入关键字"></h2>
+            <button @click="orderType=0">默认排序</button>
+            <button @click="orderType=1">升序排序</button>
+            <button @click="orderType=2">降序排序</button>
+        <hr>
+        <table>
+            <tr>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th>性别</th>
+                <th>职业</th>
+                <th>是否选中</th>
+            </tr>
+
+            <tr v-for="vip in vipsShow" :key="vip.id">
+                <td>{{vip.name}}</td>
+                <td>{{vip.age}}</td>
+                <td>{{vip.gender}}</td>
+                <td>{{vip.occu}}</td>
+                <td><input type="checkbox" v-model="vip.isSelect">{{vip.isSelect}}</td>
+            </tr>
+        </table>
+        <br>
+        <button @click="isShow=true">添加会员</button><br><br>
+        <div v-show="isShow">
+            姓名: <input type="text" placeholder="请输入姓名" v-model.lazy="newVip.name"><br>
+            年龄: <input type="number" v-model.number="newVip.age"><br>
+            性别: 
+                男<input type="radio" name="gender" value="1" v-model="newVip.gender">
+                女<input type="radio" name="gender" value="2" v-model="newVip.gender"><br>
+            职业:
+                刺客<input type="checkbox" v-model="newVip.occu" value="刺客">
+                法师<input type="checkbox" v-model="newVip.occu" value="法师">
+                辅助<input type="checkbox" v-model="newVip.occu" value="辅助">
+                射手<input type="checkbox" v-model="newVip.occu" value="射手">
+                战士<input type="checkbox" v-model="newVip.occu" value="战士">
+        </div>
+        <button @click="add" v-show="isShow">确认添加</button>
+    </div>
+
+    <script>
+        const vm =  new Vue({
+            el: '#app',
+            data: {
+                msg: '复习列表相关操作',
+                orderType: 0,
+                keywords:'',
+                vips: [
+                    {id: '001', name: '李白', gender: '男', age: 20, occu:'刺客',isSelect:false},
+                    {id: '002', name: '韩信', gender: '男', age: 30, occu:'刺客',isSelect:false},
+                    {id: '003', name: '孙尚香', gender: '女', age: 26, occu:'射手',isSelect:false},
+                    {id: '004', name: '李信', gender: '男', age: 34, occu: '战士, 刺客',isSelect:false},
+                    {id: '005', name: '孙悟空', gender: '男', age: 200, occu: '刺客, 战士',isSelect:false},
+                    {id: '006', name: '露娜', gender: '女', age: 18, occu: '法师, 战士',isSelect:false},
+                ],
+                isShow: false,
+                newVip:{name:'', gender:'',age:0 ,occu:[]}
+            },
+            methods:{
+                add(){
+                    id = Date.now()
+                    name = this.newVip.name
+                    age = this.newVip.age
+                    gender = this.newVip.gender === '1'?'男':'女'
+                    occu = ''
+                    this.newVip.occu.forEach(element => {
+                        occu = occu + element + ', '
+                    });
+                    occu = occu.slice(0,-2)
+                    // console.log(occu);
+                    this.isShow = false
+                    this.vips.unshift({id, name, gender, age, occu, isSelect:false})
+                }
+            },
+            computed:{
+                vipsShow(){
+                    const arr =  this.vips.filter((vip) => {
+                        return vip.name.indexOf(this.keywords) >= 0
+                    })
+                    if(this.orderType === 1){
+                        arr.sort((a, b) => {
+                            return a.age - b.age
+                        })
+                    }else if(this.orderType === 2){
+                        arr.sort((a, b) => {    
+                            return b.age - a.age
+                        })
+                    }
+                    return arr
+                },
+                vipsShowSelectCount(){
+                    return this.vipsShow.filter((vip) => {
+                        return vip.isSelect === true
+                    }).length
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -23,6 +23,7 @@
     -->
     <div id="app">
         <h1 v-cloak>{{msg}}</h1>
+        <h1>{{msg}}</h1>
     </div>
 
     <script>
@@ -33,6 +34,7 @@
             document.head.append(scriptElt)
         }, 3000)
 
+        // 模拟创建Vue实例时的延迟
         setTimeout(() => {
             const vm =  new Vue({
                 el: '#app',

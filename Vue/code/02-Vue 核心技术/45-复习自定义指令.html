@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>复习自定义指令</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .blue{
+            background-color: blue;
+        }
+        .red{
+            padding-top: 5px;
+            padding-bottom: 5px;
+            background-color: red;
+        }
+        .yellow{
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1 v-text-danger="msg"></h1>
+        <div>
+            <h1 v-bind-blue:class="color"></h1>
+        </div>
+        <input type="text" v-model="color">
+    </div>
+
+    <script>
+        const vm =  new Vue({
+            el: '#app',
+            data: {
+                msg: '复习自定义指令',
+                color: 'blue',
+            },
+            directives:{
+                // 函数式
+                'text-danger':function(element, binding){
+                    element.innerText = binding.value
+                    element.style.color = 'red'
+                },
+
+                // 对象式
+                'bind-blue': {
+                    bind(element, binding){
+                        // console.log(binding.arg, binding.value);
+                        element.setAttribute(binding.arg, binding.value)
+                        element.innerText = binding.value
+                    },
+                    inserted(element, binding){
+                        // console.log(element.parentNode);
+                        element.parentNode.setAttribute(binding.arg, 'red')
+                    },
+                    updated(element, binding){
+                        console.log(binding.arg, binding.value);
+                        element.setAttribute(binding.arg, binding.value)
+                        element.innerText = binding.value
+                    },
+                }
+            }
+        })
+    </script>
+</body>
+</html>

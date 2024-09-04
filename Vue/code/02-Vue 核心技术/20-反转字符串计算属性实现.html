@@ -88,28 +88,28 @@
                 },
 
                 // 完整写法
-                // reverseInfo: {
-                //     get() {
-                //         console.log('getter');
-                //         return this.info.split('').reverse().join('');
-                //     },
-                //     set(val) {
-                //         console.log('setter方法');
-                //         // 不能这么做，这样做就递归了
-                //         //this.reverseInfo = val;
-                //         // 怎么修改计算属性呢？
-                //         // 原理：计算属性的值变还是不变，取决于计算属性关联的Vue原始属性的值。
-                //         // 也就是说：reverseInfo变还是不变，取决于info属性的值变不变。
-                //         // 本质上：修改计算属性，实际上就是通过修改Vue的原始属性来了实现的。
-                //         this.info = val.split('').reverse().join('');
-                //     }
-                // }
+                reverseInfo: {
+                    get() {
+                        console.log('getter');
+                        return this.info.split('').reverse().join('');
+                    },
+                    set(val) {
+                        console.log('setter方法');
+                        // 不能这么做，这样做就递归了
+                        //this.reverseInfo = val;
+                        // 怎么修改计算属性呢？
+                        // 原理：计算属性的值变还是不变，取决于计算属性关联的Vue原始属性的值。
+                        // 也就是说：reverseInfo变还是不变，取决于info属性的值变不变。
+                        // 本质上：修改计算属性，实际上就是通过修改Vue的原始属性来了实现的。
+                        this.info = val.split('').reverse().join('');
+                    }
+                }
 
 
                 // 简写
-                reverseInfo(){
-                    return this.info.split('').reverse().join('');
-                }
+                // reverseInfo(){
+                //     return this.info.split('').reverse().join('');
+                // }
             }
         })
     </script>
