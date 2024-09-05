@@ -9,10 +9,6 @@
 </template>
 
 <script>
-    // 局部混入
-    // import {mix1} from '../mixin.js'
-    // import {mix2} from '../mixin.js'
-    // import {mix3} from '../mixin.js'
     export default {
         name: 'User',
         data(){
@@ -25,20 +21,5 @@
         mounted(){
             console.log('user mounted...');
         },
-        // methods:{
-        //     printInfo(){
-        //         console.log(this.name, ',', this.age);
-        //     }
-        // }
-        
-        // 混入不是覆盖
-        // 这里本身有一个a方法，又混入了一个a方法，会走本身的a方法
-        // 如果本身没有a方法，才会走混入的a方法
-        // methods: {
-        //     a(){
-        //         console.log('user a ...');
-        //     }
-        // },
-        // mixins: [mix1,mix2,mix3],
     }
 </script>

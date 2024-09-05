@@ -9,8 +9,6 @@
 </template>
 
 <script>
-    // import {mix1} from '../mixin.js'
-    // import {mix2} from '../mixin.js'
     
     export default {
         name: 'Vip',
@@ -21,12 +19,6 @@
                 age: 30,
             }
         },
-        // methods:{
-        //     printInfo(){
-        //         console.log(this.name, ',', this.age);
-        //     }
-        // }
-        // mixins :[mix1, mix2],
         methods: {
             a(){
                 console.log('vip a ...');
