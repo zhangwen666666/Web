@@ -1,51 +1,91 @@
-// 导入vue-router插件
-import VueRouter from "vue-router";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
 
-// 导入组件
-// 一般路由组件会放在一个pages文件夹下
+import ShanXi from '../pages/ShanXi'
 import HeBei from '../pages/HeBei'
-import HeNan from '../pages/HeNan'
+// import TaiYuan from '../pages/TaiYuan'
+// import DaTong from '../pages/DaTong'
 import City from '../pages/City'
 
-const router = new VueRouter({
-    mode : 'hash',
-    routes: [
+const router =  new VueRouter({
+    routes:[
         {
-            name: 'bei',
-            path : '/hebei',
-            component: HeBei,
-            meta:{title: '河北省'},
-            children: [
+            path:'/shanxi',
+            component: ShanXi,
+            children:[
+                // {
+                //     name:'ty',
+                //     path: 'taiyuan',
+                //     component:TaiYuan
+                // },
+                // {
+                //     name:'dt',
+                //     path:'datong',
+                //     component: DaTong
+                // }
+                // {
+                //     name:'city',
+                //     path: 'city',
+                //     component:City
+                // },
+                
                 {
-                    name: 'shi',
-                    path: 'sjz/:a1/:a2/:a3',
-                    component: City,
-                    props: true,
-                    // 带有这个属性的，并且值是true，表示该路由是需要鉴权的。
-                    meta:{
-                        isAuth: true,
-                        title: '石家庄'
-                    },
+                    name:'dt',
+                    path:'datong',
+                    component:City
                 },
                 {
-                    name:'han',
-                    path: 'hd/:a1/:a2/:a3',
-                    component: City,
-                    props: true,
-                    meta:{
-                        isAuth: true,
-                        title: '邯郸'
-                    }
+                    name:'ty',
+                    path:'taiyuan',
+                    component: City
+                },
+
+                {
+                    name:'lin',
+                    path:'linfen/:a1/:a2/:a3',
+                    component: City
+                },
+
+                {
+                    name:'yc',
+                    path:'yuncheng/:a1/:a2/:a3',
+                    component:City,
+                    // props:{
+                    //     a:'运城1区',
+                    //     b:'运城2区'
+                    // }
+
+                    // props($route){
+                    //     return {
+                    //         a:$route.params.a1,
+                    //         b:$route.params.a2,
+                    //         // a3:$route.params[2],
+                    //     }
+                    // }
+
+                    props:true
                 }
             ]
         },
         {
-            name:'nan',
-            path : '/henan',
-            component: HeNan,
-            meta:{title: '河南省'}
+            path:'/hebei',
+            component: HeBei
         }
     ]
+})
+
+router.beforeEach((to, from, next) => {
+    let username = 'zshang'
+    if(to.name === "lin"||to.name === 'yc'){
+        if(username === 'admin'){
+            next()
+        }else{
+            alert('无权限查看')
+        }
+    }else{
+        next()
+    }
 })
 
 export default router

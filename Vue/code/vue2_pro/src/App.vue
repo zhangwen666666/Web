@@ -1,22 +1,15 @@
 <template>
     <div>
         <MyHeader/>
-        <div>
-            <h1>省份</h1>
-            <button @click="forward">前进</button>
-            <button @click="back">后退</button>
-            <button @click="forwardTwo">前进两步</button>
-            <button @click="backTwo">后退两步</button>
-            <ul>
-                <li><router-link to="/hebei" active-class="selected">河北省</router-link></li>
-                <li><router-link to="/henan" active-class="selected">河南省</router-link></li>
-            </ul>
-        </div>
+        <router-link to="/shanxi" active-class="selected">山西省</router-link><br>
+        <router-link to="/hebei" active-class="selected">河北省</router-link><br>
 
-        <keep-alive :include="['HeBei','HeNan']">
-            <router-view></router-view>
-        </keep-alive> 
-        <!-- <router-view></router-view> -->
+        <button @click="forward">前进一步</button>
+        <button @click="forwardTwo">前进两步</button>
+        <button @click="back">后退一步</button>
+        <button @click="backTwo">后退两步</button>
+
+        <router-view></router-view>
     </div>
 </template>
 
@@ -25,35 +18,31 @@
     export default {
         name: 'App',
         components: {MyHeader},
-        methods: {
-            // 前进
+        methods:{
             forward(){
                 this.$router.forward()
             },
-            // 后退
-            back(){
-                this.$router.back()
-            },
-            // 前进两步
             forwardTwo(){
                 this.$router.go(2)
             },
-            // 后退两步
+            back(){
+                this.$router.back()
+            },
             backTwo(){
                 this.$router.go(-2)
-            },
+            }
         }
     }
 </script>
 
-<style lang="css">
+<style>
     .s1{
-        margin-left: 100px;
-    }
-    .s2{
-        margin-left: 100px;
+        margin-left: 50px;
     }
     .selected{
         background-color: aqua;
+    }
+    .s2{
+        margin-left: 100px;
     }
 </style>

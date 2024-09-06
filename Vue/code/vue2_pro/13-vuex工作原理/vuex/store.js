@@ -23,7 +23,7 @@ const actions = {
         value = value + 1
         // 调用其他的action这个回调函数
         context.dispatch('otherAction', value)
-        // 业务逻辑处理完成之后，继续向下一个换节奏，就轮到了数据的更新
+        // 业务逻辑处理完成之后，继续向下一个环节走，就轮到了数据的更新
         // 提交上下文环境
         context.commit('PLUS_ONE', value)
     },

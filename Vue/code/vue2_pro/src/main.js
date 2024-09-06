@@ -6,17 +6,12 @@ import App from './App.vue'
 // 关闭生产提示信息
 Vue.config.productionTip = false
 
-// 导入vue-router插件
-import VueRouter from 'vue-router'
 
-// 导入路由器对象
-import router from './router'
+import router from './router/index'
 
-// 使用vue-router插件
-Vue.use(VueRouter)
 
-const vm = new Vue({
+new Vue({
   el: '#app',
-  router: router,
+  router,
   render: h => h(App),
 })
