@@ -20,7 +20,7 @@
 				// 自定义的ref这个函数体当中的代码不能随便写，必须符合ref规范。
 				// 通过调用customRef函数来获取一个自定义的ref对象。
 				// 注意：调用customRef函数的时候必须给该函数传递一个回调：这个回调可以叫做factory
-				// 对于这个回调函数来说，有两个非常重要的参数：track是追踪，trigger是出发
+				// 对于这个回调函数来说，有两个非常重要的参数：track是追踪，trigger是触发
 				const x = customRef((track, trigger) => {
 					// 对于factory这个回调来说，必须返回一个对象，并且对象中要有get
 					return {

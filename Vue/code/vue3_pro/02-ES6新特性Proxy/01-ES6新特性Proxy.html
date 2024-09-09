@@ -44,7 +44,7 @@
                 console.log('删除了');
                 // return delete target[propertyName]
                 // 使用反射机制来删除属性
-                return Reflect.defineProperty(target, propertyName)
+                return Reflect.deleteProperty(target, propertyName)
             }
         })
 
