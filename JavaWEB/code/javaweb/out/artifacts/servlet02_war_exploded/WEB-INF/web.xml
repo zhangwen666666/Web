@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+    
+    <servlet>
+        <servlet-name>aservlet</servlet-name>
+        <servlet-class>com.javaweb.servlet.AServlet</servlet-class>
+<!--        <load-on-startup>1</load-on-startup>-->
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>aservlet</servlet-name>
+        <url-pattern>/a</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>bservlet</servlet-name>
+        <servlet-class>com.javaweb.servlet.BServlet</servlet-class>
+<!--        <load-on-startup>0</load-on-startup>-->
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>bservlet</servlet-name>
+        <url-pattern>/b</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>loginservlet</servlet-name>
+        <servlet-class>com.javaweb.servlet.LoginServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>loginservlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>vipservlet</servlet-name>
+        <servlet-class>com.javaweb.servlet.VipServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>vipservlet</servlet-name>
+        <url-pattern>/vip</url-pattern>
+    </servlet-mapping>
+</web-app>

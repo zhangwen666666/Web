@@ -580,19 +580,22 @@ public void service(ServletRequest request, ServletResponse response){
 - 思考：我们自己new的Servlet对象受WEB容器的管理吗？
 
   - 我们自己new的Servlet对象是不受WEB容器管理的。
+
   - WEB容器创建的Servlet对象，这些Servlet对象都会被放到一个集合当中（HashMap），只有放到这个HashMap集合中的Servlet才能够被WEB容器管理，自己new的Servlet对象不会被WEB容器管理。（自己new的Servlet对象不在容器当中）
+
   - web容器底层应该有一个HashMap这样的集合，在这个集合当中存储了Servlet对象和请求路径之间的关系
-  - ![WEB容器中的Map集合](D:\course\01-Servlet\文档\WEB容器中的Map集合.png)
+
+    ![WEB容器中的Map集合](F:\JavaCode\Web\JavaWEB\document\WEB容器中的Map集合.png)
 
 - 研究：服务器在启动的Servlet对象有没有被创建出来（默认情况下）？
 
   - 在Servlet中提供一个无参数的构造方法，启动服务器的时候看看构造方法是否执行。
-  - 经过测试得出结论：默认情况下，服务器在启动的时候Servlet对象并不会被实例化。
+  - 经过测试得出结论：**默认情况下，服务器在启动的时候Servlet对象并不会被实例化**。
   - 这个设计是合理的。用户没有发送请求之前，如果提前创建出来所有的Servlet对象，必然是耗费内存的，并且创建出来的Servlet如果一直没有用户访问，显然这个Servlet对象是一个废物，没必要先创建。
 
 - 怎么让服务器启动的时候创建Servlet对象呢？
 
-  - 在servlet标签中添加<load-on-startup>子标签，在该子标签中填写整数，越小的整数优先级越高。
+  - 在servlet标签中添加<load-on-startup>子标签，在该子标签中填写正整数，越小的整数优先级越高。(实测填负数时不会创建)
 
   - ```xml
     <servlet>
@@ -632,9 +635,9 @@ public void service(ServletRequest request, ServletResponse response){
 
   - 根据以上输出结果得知，用户在发送第二次，或者第三次，或者第四次请求的时候，Servlet对象并没有新建，还是使用之前创建好的Servlet对象，直接调用该Servlet对象的service方法，这说明：
 
-    - 第一：Servlet对象是单例的（单实例的。但是要注意：Servlet对象是单实例的，但是Servlet类并不符合单例模式。我们称之为假单例。之所以单例是因为Servlet对象的创建我们javaweb程序员管不着，这个对象的创建只能是Tomcat来说了算，Tomcat只创建了一个，所以导致了单例，但是属于假单例。真单例模式，构造方法是私有化的。）
-    - 第二：无参数构造方法、init方法只在第一次用户发送请求的时候执行。也就是说无参数构造方法只执行一次。init方法也只被Tomcat服务器调用一次。
-    - 第三：只要用户发送一次请求：service方法必然会被Tomcat服务器调用一次。发送100次请求，service方法会被调用100次。
+    - 第一：**Servlet对象是单例的**（单实例的。但是要注意：Servlet对象是单实例的，但是Servlet类并不符合单例模式。我们称之为**假单例**。之所以单例是因为Servlet对象的创建我们javaweb程序员管不着，这个对象的创建只能是Tomcat来说了算，Tomcat只创建了一个，所以导致了单例，但是属于假单例。真单例模式，构造方法是私有化的。）
+    - 第二：无参数构造方法、init方法只在第一次用户发送请求的时候执行。也就是说无参数构造方法只执行一次。init方法也只被Tomcat服务器调用一次。**init方法通常是完成初始化操作的**
+    - 第三：只要用户发送一次请求：service方法必然会被Tomcat服务器调用一次。发送100次请求，service方法会被调用100次。**service方法是专门处理用户请求的核心方法**
 
   - 关闭服务器的时候，控制台输出了以下内容：
 
@@ -683,13 +686,13 @@ public void service(ServletRequest request, ServletResponse response){
 
   - init、service、destroy方法中使用最多的是哪个方法？
 
-    - 使用最多就是service方法，service方法是一定要实现的，因为service方法是处理用户请求的核心方法。
+    - 使用最多就是service方法，service方法是一定要实现的，因为**service方法是处理用户请求的核心方法**。
     - 什么时候使用init方法呢？
       - init方法很少用。
-      - 通常在init方法当中做初始化操作，并且这个初始化操作只需要执行一次。例如：初始化数据库连接池，初始化线程池....
+      - 通常**在init方法当中做初始化操作**，并且这个初始化操作只需要执行一次。例如：初始化数据库连接池，初始化线程池....
     - 什么时候使用destroy方法呢？
       - destroy方法也很少用。
-      - 通常在destroy方法当中，进行资源的关闭。马上对象要被销毁了，还有什么没有关闭的，抓紧时间关闭资源。还有什么资源没保存的，抓紧时间保存一下。
+      - **通常在destroy方法当中，进行资源的关闭**。马上对象要被销毁了，还有什么没有关闭的，抓紧时间关闭资源。还有什么资源没保存的，抓紧时间保存一下。
 
 
 ## GenericServlet
