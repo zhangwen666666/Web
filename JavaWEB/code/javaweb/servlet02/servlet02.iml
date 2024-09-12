@@ -25,7 +25,19 @@
           <root url="jar://C:/apache-tomcat-10.1.28/lib/servlet-api.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="file://C:/apache-tomcat-10.1.28/lib" />
+          <root url="jar://C:/apache-tomcat-10.1.28/lib/servlet-api.jar!/" />
+          <root url="file://C:/apache-tomcat-10.1.28/webapps/docs/appdev/sample/src" />
+          <root url="file://C:/apache-tomcat-10.1.28/webapps/examples/WEB-INF/classes" />
+          <root url="file://C:/apache-tomcat-10.1.28/webapps/docs/appdev/sample/src" />
+          <root url="file://C:/apache-tomcat-10.1.28/webapps/examples/WEB-INF/classes" />
+          <root url="jar://C:/apache-tomcat-10.1.28/lib/servlet-api.jar!/" />
+          <root url="file://C:/apache-tomcat-10.1.28/lib" />
+          <root url="jar://C:/apache-tomcat-10.1.28/lib/servlet-api.jar!/jakarta/servlet" />
+          <root url="jar://D:/谷歌浏览器下载/apache-tomcat-10.1.29.zip!/apache-tomcat-10.1.29/webapps/docs/appdev/sample/src" />
+          <root url="jar://D:/谷歌浏览器下载/apache-tomcat-10.1.29.zip!/apache-tomcat-10.1.29/webapps/examples/WEB-INF/classes" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">

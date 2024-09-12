@@ -565,8 +565,8 @@ public void service(ServletRequest request, ServletResponse response){
 
 - 什么是Servlet对象生命周期？
 
-  - Servlet对象什么时候被创建。
-  - Servlet对象什么时候被销毁。
+  - Servlet对象什么时候被创建。默认情况下，在用户第一次发送请求的时候被创建
+  - Servlet对象什么时候被销毁。在服务器关闭之前销毁
   - Servlet对象创建了几个？
   - Servlet对象的生命周期表示：一个Servlet对象从出生在最后的死亡，整个过程是怎样的。
 
@@ -695,7 +695,7 @@ public void service(ServletRequest request, ServletResponse response){
       - **通常在destroy方法当中，进行资源的关闭**。马上对象要被销毁了，还有什么没有关闭的，抓紧时间关闭资源。还有什么资源没保存的，抓紧时间保存一下。
 
 
-## GenericServlet
+## GenericServlet(适配器设计模式)
 
 - 我们编写一个Servlet类直接实现Servlet接口有什么缺点？
 
@@ -715,7 +715,7 @@ public void service(ServletRequest request, ServletResponse response){
 
   - 思考第一个问题：我提供了一个GenericServlet之后，init方法还会执行吗？
 
-    - 还会执行。会执行GenericServlet类中的init方法。
+    - 还会执行。会执行GenericServlet类中的init方法。(子类没有会执行父类的)
 
   - 思考第二个问题：init方法是谁调用的？
 
@@ -754,6 +754,117 @@ public void service(ServletRequest request, ServletResponse response){
           }
       }
       ```
+    
+  - GenericServlet(我们自己写的继承Servlet的一个抽象类)
+  
+    ```java
+    package com.javaweb.servlet;
+    
+    import jakarta.servlet.*;
+    
+    import java.io.IOException;
+    
+    
+    /**
+     * 编写一个标准通用的Servlet，起名GenericServlet
+     * 以后所有的Servlet类都不要直接继承Servlet接口了
+     * 以后所有的Servlet类都要继承GenericServlet类。
+     * GenericServlet 就是一个适配器
+     */
+    public abstract class GenericServlet implements Servlet {
+        private ServletConfig config;
+    
+        /**
+         * init方法中的ServletConfig对象是小猫咪创建好的。
+         * 这个ServletConfig对象目前在init方法的参数上，属于局部变量
+         * 那么ServletConfig对象肯定以后要在service方法中使用，怎么才能保证ServletConfig对象在service方法中能够使用呢？
+         * 给一个成员变量config, 并在init方法中为该成员变量赋值
+         * getServletConfig方法就可以返回这个config成员变量了
+         */
+        @Override
+        public final void init(ServletConfig servletConfig) throws ServletException {
+            System.out.println("小猫咪创建的: " + servletConfig);
+            this.config = servletConfig;
+            this.init();
+        }
+    
+        // 给子类提供的可以重写的init方法
+        public void init(){
+    
+        }
+    
+        @Override
+        public ServletConfig getServletConfig() {
+            return config;
+        }
+    
+        /**
+         * 抽象方法：这个方法最常用，所以要求子类必须实现service方法
+         * @param servletRequest
+         * @param servletResponse
+         * @throws ServletException
+         * @throws IOException
+         */
+        public abstract void service(ServletRequest servletRequest, ServletResponse servletResponse)
+                throws ServletException, IOException;
+    
+        @Override
+        public String getServletInfo() {
+            return null;
+        }
+    
+        @Override
+        public void destroy() {
+    
+        }
+    }
+    ```
+  
+  - 子类LoginServlet继承了GenericServlet这个抽象类
+  
+    ```java
+    package com.javaweb.servlet;
+    
+    import jakarta.servlet.ServletConfig;
+    import jakarta.servlet.ServletException;
+    import jakarta.servlet.ServletRequest;
+    import jakarta.servlet.ServletResponse;
+    
+    import java.io.IOException;
+    
+    public class LoginServlet extends GenericServlet{
+    
+        // 有没有一种可能，需要在这个子类中重写init方法，
+        // 重写了init方法可能会导致父类中的成员变量config为null
+        // 不希望子类重写该方法，则在父类中init方法添加final关键字
+        /*@Override
+        public void init(ServletConfig servletConfig) throws ServletException {
+            System.out.println("重写自己的规则");
+        }*/
+    
+        // 父类中将原始的init方法添加final修饰了，子类没有办法重写这个init方法了。
+        // 如果这个时候还是希望重写init方法怎么办
+        // 可以在父类中定义一个新的init方法，让子类重写这个新的init方法，并且在父类原始的init方法中调用这个init方法
+    
+    
+        @Override
+        public void init() {
+            System.out.println("LoginServlet init method execute");
+        }
+    
+        @Override
+        public void service(ServletRequest servletRequest, ServletResponse servletResponse)
+                throws ServletException, IOException {
+            System.out.println("您正在登录，请稍后。。。。。。");
+            // 想在子类中使用ServletConfig对象怎么办?
+            ServletConfig config = this.getServletConfig();
+            System.out.println("service方法中拿到的config对象：" + config);
+        }
+    }
+    
+    ```
+  
+    
 
 
 
@@ -782,6 +893,110 @@ public void service(ServletRequest request, ServletResponse response){
     ```
 
   - 以上方法在Servlet类当中，都可以使用this去调用。因为GenericServlet实现了ServletConfig接口。
+  
+  ```java
+  package com.javaweb.servlet;
+  
+  import jakarta.servlet.*;
+  import jakarta.servlet.GenericServlet;
+  import jakarta.servlet.ServletContext;
+  import jakarta.servlet.ServletException;
+  import jakarta.servlet.ServletRequest;
+  import jakarta.servlet.ServletResponse;
+  
+  import java.io.IOException;
+  import java.io.PrintWriter;
+  import java.util.Enumeration;
+  
+  /**
+   * ServletConfig
+   *   1. ServletConfig是什么?
+   *      jakarta.servlet.ServletConfig
+   *      显然ServletConfig是Servlet规范中的一员。
+   *      ServletConfig是一个接口。
+   *   2. 谁去实现了这个接口呢? WEB服务器
+   *      public class org.apache.catalina.core.StandardWrapperFacade implements ServletConfig {}
+   *      结论：Tomcat服务器实现了ServletConfig接口
+   *      如果将Tomcat服务器换为jetty服务器，输出ServletConfig对象的时候，就不一定是这个结果了
+   *      包名类名可能和Tomcat不一样，但是他们都是实现了ServletConfig这个规范
+   *   3. 一个Servlet对象中有一个ServletConfig对象。(Servlet对象和ServletConfig对象是一对一)
+   *   4. ServletConfig对象是Tomcat服务器(WEB服务器)创建的。在创建Servlet对象的时候，同时创建了ServletConfig对象
+   *   5. ServletConfig接口到底是干啥的？有什么用？
+   *      ServletConfig对象是Servlet对象的配置信息对象。
+   *   6. ServletConfig对象中到底包装了什么信息呢？
+   *          <servlet>
+   *              <servlet-name>configservlet</servlet-name>
+   *              <servlet-class>com.javaweb.servlet.ConfigTestServlet</servlet-class>
+   *          </servlet>
+   *      ServletConfig对象中包装的信息就是：web.xml文件中<servlet></servlet>标签的配置信息。
+   *      Tomcat解析web.xml文件，将web.xml文件中<servlet></servlet>标签的配置信息自动包装到ServletConfig对象中。
+   *   7.ServletConfig对象有什么方法？
+   *         <servlet>
+   *             <servlet-name>configservlet</servlet-name>
+   *             <servlet-class>com.javaweb.servlet.ConfigTestServlet</servlet-class>
+   *             <!-- 这里可以配置一个Servlet对象的初始化信息 -->
+   *             <init-param>
+   *                 <param-name>driver</param-name>
+   *                 <param-value>com.mysql.cj.jdbc.driver</param-value>
+   *             </init-param>
+   *             <init-param>
+   *                 <param-name>url</param-name>
+   *                 <param-value>jdbc:mysql:://localhost:3306/exam</param-value>
+   *             </init-param>
+   *             <init-param>
+   *                 <param-name>user</param-name>
+   *                 <param-value>root</param-value>
+   *             </init-param>
+   *             <init-param>
+   *                 <param-name>password</param-name>
+   *                 <param-value>1234</param-value>
+   *             </init-param>
+   *         </servlet>
+   *     以上<servlet></servlet>标签中的<init-param></init-param>是初始化参数。这个初始化参数信息会自动被小猫咪
+   *     封装到ServletConfig对象当中
+   */
+  public class ConfigTestServlet extends GenericServlet {
+      @Override
+      public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException {
+          servletResponse.setContentType("text/html");
+          PrintWriter writer = servletResponse.getWriter();
+          // 获取ServletConfig对象
+          jakarta.servlet.ServletConfig config = this.getServletConfig();
+          // 输出该对象
+          writer.print("ServletConfig对象是：" + config);//org.apache.catalina.core.StandardWrapperFacade@5493877a
+          // 获取<servlet-name>
+          String servletName = config.getServletName();
+          writer.print("<br><hr><servlet-name>" + servletName + "</servlet-name>");//configservlet
+          // 通过ServletConfig对象中的两个方法可以获取到web.xml文件中的初始化参数配置信息。
+          Enumeration<String> initParameterNames = config.getInitParameterNames();
+          // 遍历集合
+          while(initParameterNames.hasMoreElements()){
+              String parameterName = initParameterNames.nextElement();
+              // 通过参数名获取参数值
+              String parameterValue = config.getInitParameter(parameterName);
+              writer.print("<br>" + parameterName + "=" + parameterValue);
+          }
+  
+          // 通过this也可以调用config对象中的方法
+          Enumeration<String> parameterNames = this.getInitParameterNames();
+          while(parameterNames.hasMoreElements()){
+              String parameterName = parameterNames.nextElement();
+              String parameterValue = this.getInitParameter(parameterName);
+              writer.print("<br>" + parameterName + "=" + parameterValue);
+          }
+  
+          // 怎么获取ServletContext对象？
+          // 通过ServletConfig对象获取ServletContext对象。
+          // 通过this也可以获取到ServletContext对象。
+          ServletContext application = config.getServletContext();
+          // 输出
+          writer.print("<br>" + application);//org.apache.catalina.core.ApplicationContextFacade@6e67a31e
+          writer.print("<br>" + this.getServletContext());
+      }
+  }
+  ```
+  
+  
 
 ## ServletContext
 
@@ -789,7 +1004,7 @@ public void service(ServletRequest request, ServletResponse response){
 
 - 只要在同一个webapp当中，只要在同一个应用当中，所有的Servlet对象都是共享同一个ServletContext对象的。
 
-- ServletContext对象在服务器启动阶段创建，在服务器关闭的时候销毁。这就是ServletContext对象的生命周期。ServletContext对象是应用级对象。
+- ServletContext对象在服务器启动阶段创建，在服务器关闭的时候销毁。这就是ServletContext对象的生命周期。**ServletContext对象是应用级对象**。
 
 - Tomcat服务器中有一个webapps，这个webapps下可以存放webapp，可以存放多个webapp，假设有100个webapp，那么就有100个ServletContext对象。但是，总之，一个应用，一个webapp肯定是只有一个ServletContext对象。
 
@@ -841,8 +1056,10 @@ public void service(ServletRequest request, ServletResponse response){
   - ```java
     // 通过ServletContext对象也是可以记录日志的
     public void log(String message);
-    public void log(String message, Throwable t);
-    // 这些日志信息记录到哪里了？
+    public void log(String message, Throwable t);// 可以记录一个异常信息
+    // 这些日志信息记录到哪里了？ CATALINA_HOME/logs目录下
+    // 如果使用文本编辑器开发的话，就在Tomcat软件的logs目录下
+    // 如果使用Idea开发，会有一个Tomcat服务器的一个副本
     // localhost.2021-11-05.log
     
     // Tomcat服务器的logs目录下都有哪些日志文件？
@@ -850,7 +1067,7 @@ public void service(ServletRequest request, ServletResponse response){
     //localhost.2021-11-05.log ServletContext对象的log方法记录的日志信息存储到这个文件中。
     //localhost_access_log.2021-11-05.txt 访问日志
     ```
-
+    
   - ```java
     // ServletContext对象还有另一个名字：应用域（后面还有其他域，例如：请求域、会话域）
     

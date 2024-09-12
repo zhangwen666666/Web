@@ -1,9 +1,14 @@
 package com.javaweb.servlet;
 import jakarta.servlet.*;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 
 import java.io.IOException;
 
-public class AServlet implements Servlet{
+public class AServlet implements Servlet {
     public AServlet() {
         System.out.println("AServlet 无参数构造方法执行了");
     }
