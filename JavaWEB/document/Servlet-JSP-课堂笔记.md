@@ -1092,7 +1092,7 @@ public void service(ServletRequest request, ServletResponse response){
     
     ```
 
-- 注意：以后我们编写Servlet类的时候，实际上是不会去直接继承GenericServlet类的，因为我们是B/S结构的系统，这种系统是基于HTTP超文本传输协议的，在Servlet规范当中，提供了一个类叫做HttpServlet，它是专门为HTTP协议准备的一个Servlet类。我们编写的Servlet类要继承HttpServlet。（HttpServlet是HTTP协议专用的。）使用HttpServlet处理HTTP协议更便捷。但是你需要直到它的继承结构：
+- 注意：**以后我们编写Servlet类的时候，实际上是不会去直接继承GenericServlet类的，因为我们是B/S结构的系统，这种系统是基于HTTP超文本传输协议的，在Servlet规范当中，提供了一个类叫做HttpServlet，它是专门为HTTP协议准备的一个Servlet类。我们编写的Servlet类要继承HttpServlet**。（HttpServlet是HTTP协议专用的。）使用HttpServlet处理HTTP协议更便捷。但是你需要直到它的继承结构：
 
   - ```
     jakarta.servlet.Servlet（接口）【爷爷】
@@ -1340,13 +1340,13 @@ public void service(ServletRequest request, ServletResponse response){
     - http://localhost:8080/servlet05/getServlet?username=zhangsan&userpwd=1111
   - post请求发送数据的时候，在请求体当中发送。不会回显到浏览器的地址栏上。也就是说post发送的数据，在浏览器地址栏上看不到。（post在“请求体”当中发送数据）
   - get请求只能发送普通的字符串。并且发送的字符串长度有限制，不同的浏览器限制不同。这个没有明确的规范。
-  - get请求无法发送大数据量。
+  - **get请求无法发送大数据量。**
   - post请求可以发送任何类型的数据，包括普通字符串，流媒体等信息：视频、声音、图片。
-  - post请求可以发送大数据量，理论上没有长度限制。
-  - get请求在W3C中是这样说的：get请求比较适合从服务器端获取数据。
-  - post请求在W3C中是这样说的：post请求比较适合向服务器端传送数据。
-  - get请求是安全的。get请求是绝对安全的。为什么？因为get请求只是为了从服务器上获取数据。不会对服务器造成威胁。（get本身是安全的，你不要用错了。用错了之后又冤枉人家get不安全，你这样不好（太坏了），那是你自己的问题，不是get请求的问题。）
-  - post请求是危险的。为什么？因为post请求是向服务器提交数据，如果这些数据通过后门的方式进入到服务器当中，服务器是很危险的。另外post是为了提交数据，所以一般情况下拦截请求的时候，大部分会选择拦截（监听）post请求。
+  - **post请求可以发送大数据量**，理论上没有长度限制。
+  - get请求在W3C中是这样说的：**get请求比较适合从服务器端获取数据。**
+  - post请求在W3C中是这样说的：**post请求比较适合向服务器端传送数据。**
+  - **get请求是安全的**。get请求是绝对安全的。为什么？因为get请求只是为了从服务器上获取数据。不会对服务器造成威胁。（get本身是安全的，你不要用错了。用错了之后又冤枉人家get不安全，你这样不好（太坏了），那是你自己的问题，不是get请求的问题。）
+  - **post请求是危险的**。为什么？因为post请求是向服务器提交数据，如果这些数据通过后门的方式进入到服务器当中，服务器是很危险的。另外post是为了提交数据，所以一般情况下拦截请求的时候，大部分会选择拦截（监听）post请求。
   - get请求支持缓存。
     - https://n.sinaimg.cn/finance/590/w240h350/20211101/b40c-b425eb67cabc342ff5b9dc018b4b00cc.jpg
     - 任何一个get请求最终的“响应结果”都会被浏览器缓存起来。在浏览器缓存当中：
@@ -1372,7 +1372,7 @@ public void service(ServletRequest request, ServletResponse response){
   - 做文件上传，一定是post请求。要传的数据不是普通文本。
   - 其他情况都可以使用get请求。
 
-- 不管你是get请求还是post请求，发送的请求数据格式是完全相同的，只不过位置不同，格式都是统一的：
+- **不管你是get请求还是post请求，发送的请求数据格式是完全相同的，只不过位置不同，格式都是统一的**：
 
   - name=value&name=value&name=value&name=value
   - name是什么？
@@ -1384,6 +1384,7 @@ public void service(ServletRequest request, ServletResponse response){
 
 - 什么是设计模式？
   - 某个问题的固定的解决方案。(可以被重复使用。)
+  
 - 你知道哪些设计模式？
   - GoF设计模式：
     - 通常我们所说的23种设计模式。（Gang of Four：4人组提出的设计模式）
@@ -1403,36 +1404,112 @@ public void service(ServletRequest request, ServletResponse response){
     - pojo
     - ....
   - ....
+  
 - 什么是模板方法设计模式？
   - 在模板类的模板方法当中定义核心算法骨架，具体的实现步骤可以延迟到子类当中完成。
+  
 - 模板类通常是一个抽象类，模板类当中的模板方法定义核心算法，这个方法通常是final的（但也可以不是final的）
+
 - 模板类当中的抽象方法就是不确定实现的方法，这个不确定怎么实现的事儿交给子类去做。
+
+  - 模版类
+
+    ```java
+    public abstract class Person {
+        // 模板方法
+        // 添加了final之后，这个方法无法被覆盖，这样核心的算法也可以得到保护
+        // 模版方法定义核心的算法骨架，但具体的实现步骤可以延迟到子类中去实现
+        // 模版算法得到保护，不能被改变，且算法得到了重复使用
+        public final void day(){
+            getUp();    // 起床
+            freshenUp();    // 洗漱
+            haveBreakfast();    // 吃早饭
+            doSome();    // 做工作
+            haveDinner();   // 吃晚餐
+            sleep();    // 睡觉
+        }
+    
+        void getUp(){
+            System.out.println("起床");
+        };
+    
+        void freshenUp(){
+            System.out.println("洗漱");
+        };
+    
+        void haveBreakfast(){
+            System.out.println("吃早餐");
+        };
+    
+        // 这一步骤具体怎么做，交给子类去完成
+        abstract void doSome();
+    
+        void haveDinner(){
+            System.out.println("吃晚餐");
+        };
+    
+        void sleep(){
+            System.out.println("睡觉");
+        };
+    }
+    ```
+
+  - 子类Teacher
+
+    ```java
+    public class Teacher extends Person{
+        @Override
+        void doSome() {
+            System.out.println("老师教授知识");
+        }
+    }
+    ```
+
+  - 子类Student
+
+    ```java
+    public class Student extends Person{
+        @Override
+        void doSome() {
+            System.out.println("学生学习知识");
+        }
+    }
+    ```
+
+    
+
 
 
 
 ## HttpServlet源码分析
 
 - HttpServlet类是专门为HTTP协议准备的。比GenericServlet更加适合HTTP协议下的开发。
+
 - HttpServlet在哪个包下？
   - jakarta.servlet.http.HttpServlet
+  
 - 到目前为止我们接触了servlet规范中哪些接口？
-  - jakarta.servlet.Servlet  核心接口（接口）
-  - jakarta.servlet.ServletConfig Servlet配置信息接口（接口）
-  - jakarta.servlet.ServletContext Servlet上下文接口（接口）
-  - jakarta.servlet.ServletRequest Servlet请求接口（接口）
-  - jakarta.servlet.ServletResponse Servlet响应接口（接口）
-  - jakarta.servlet.ServletException Servlet异常（类）
-  - jakarta.servlet.GenericServlet 标准通用的Servlet类（抽象类）
+  - jakarta.servlet.Servlet                                                   核心接口（接口）
+  - jakarta.servlet.ServletConfig                                        Servlet 配置信息接口（接口）
+  - jakarta.servlet.ServletContext                                     Servlet上下文接口（接口）
+  - jakarta.servlet.ServletRequest                                     Servlet请求接口（接口）
+  - jakarta.servlet.ServletResponse                                  Servlet响应接口（接口）
+  - jakarta.servlet.ServletException                                  Servlet异常（类）
+  - jakarta.servlet.GenericServlet                                     标准通用的Servlet类（抽象类）
+  
 - http包下都有哪些类和接口呢？jakarta.servlet.http.*;
-  - jakarta.servlet.http.HttpServlet （HTTP协议专用的Servlet类，抽象类）
-  - jakarta.servlet.http.HttpServletRequest （HTTP协议专用的请求对象）
-  - jakarta.servlet.http.HttpServletResponse （HTTP协议专用的响应对象）
+  - jakarta.servlet.http.HttpServlet                                （HTTP协议专用的Servlet类，抽象类）
+  - jakarta.servlet.http.HttpServletRequest                 （HTTP协议专用的请求对象）
+  - jakarta.servlet.http.HttpServletResponse              （HTTP协议专用的响应对象）
+  
 - HttpServletRequest对象中封装了什么信息？
   - HttpServletRequest，简称request对象。
   - HttpServletRequest中封装了请求协议的全部内容。
   - Tomcat服务器（WEB服务器）将“请求协议”中的数据全部解析出来，然后将这些数据全部封装到request对象当中了。
   - 也就是说，我们只要面向HttpServletRequest，就可以获取请求协议中的数据。
+  
 - HttpServletResponse对象是专门用来响应HTTP协议到浏览器的。
+
 - 回忆Servlet生命周期？
   - 用户第一次请求
     - Tomcat服务器通过反射机制，调用无参数构造方法。创建Servlet对象。(web.xml文件中配置的Servlet类对应的对象。)
@@ -1447,170 +1524,186 @@ public void service(ServletRequest request, ServletResponse response){
   - 服务器关闭
     - Tomcat服务器调用Servlet对象的destroy方法，做销毁之前的准备工作。
     - Tomcat服务器销毁Servlet对象。
+  
 - HttpServlet源码分析：
 
-```java
-public class HelloServlet extends HttpServlet {
-	// 用户第一次请求，创建HelloServlet对象的时候，会执行这个无参数构造方法。
-	public HelloServlet() {
-    }
-    
-    //override 重写 doGet方法
-    //override 重写 doPost方法
-}
+  - HelloServlet类
 
-public abstract class GenericServlet implements Servlet, ServletConfig,
-        java.io.Serializable {
-           
-	// 用户第一次请求的时候，HelloServlet对象第一次被创建之后，这个init方法会执行。
-    public void init(ServletConfig config) throws ServletException {
-        this.config = config;
-        this.init();
-    }
-	// 用户第一次请求的时候，带有参数的init(ServletConfig config)执行之后，会执行这个没有参数的init()
-	public void init() throws ServletException {
-        // NOOP by default
-    }
-}
-
-// HttpServlet模板类。
-public abstract class HttpServlet extends GenericServlet {
-    // 用户发送第一次请求的时候这个service会执行
-    // 用户发送第N次请求的时候，这个service方法还是会执行。
-    // 用户只要发送一次请求，这个service方法就会执行一次。
-    @Override
-    public void service(ServletRequest req, ServletResponse res)
-        throws ServletException, IOException {
-
-        HttpServletRequest  request;
-        HttpServletResponse response;
-
-        try {
-            // 将ServletRequest和ServletResponse向下转型为带有Http的HttpServletRequest和HttpServletResponse
-            request = (HttpServletRequest) req;
-            response = (HttpServletResponse) res;
-        } catch (ClassCastException e) {
-            throw new ServletException(lStrings.getString("http.non_http"));
+    ```java
+    public class HelloServlet extends HttpServlet {
+    	// 用户第一次请求，创建HelloServlet对象的时候，会执行这个无参数构造方法。
+    	public HelloServlet() {
         }
-        // 调用重载的service方法。
-        service(request, response);
+        
+        // 无参数构造方法执行结束之后，就会执行init方法
+        // 没有提供init方法，必然执行父类HttpServlet的init方法
+        // HttpServlet类中也没有init方法，会继续执行GenericServlet类中的init方法
+        
+        // init方法执行结束之后，会执行service方法
+        // 没有提供service方法，那么必然执行父类HttpServlet类的service方法
+        
+        //override 重写 doGet方法
+        //override 重写 doPost方法
     }
-    
-    // 这个service方法的两个参数都是带有Http的。
-    // 这个service是一个模板方法。
-    // 在该方法中定义核心算法骨架，具体的实现步骤延迟到子类中去完成。
-    protected void service(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
-        // 获取请求方式
-        // 这个请求方式最终可能是：""
-        // 注意：request.getMethod()方法获取的是请求方式，可能是七种之一：
-        // GET POST PUT DELETE HEAD OPTIONS TRACE
-        String method = req.getMethod();
+    ```
 
-        // 如果请求方式是GET请求，则执行doGet方法。
-        if (method.equals(METHOD_GET)) {
-            long lastModified = getLastModified(req);
-            if (lastModified == -1) {
-                // servlet doesn't support if-modified-since, no reason
-                // to go through further expensive logic
-                doGet(req, resp);
-            } else {
-                long ifModifiedSince;
-                try {
-                    ifModifiedSince = req.getDateHeader(HEADER_IFMODSINCE);
-                } catch (IllegalArgumentException iae) {
-                    // Invalid date header - proceed as if none was set
-                    ifModifiedSince = -1;
-                }
-                if (ifModifiedSince < (lastModified / 1000 * 1000)) {
-                    // If the servlet mod time is later, call doGet()
-                    // Round down to the nearest second for a proper compare
-                    // A ifModifiedSince of -1 will always be less
-                    maybeSetLastModified(resp, lastModified);
+  - HttpServlet抽象类
+
+    ```java
+    // HttpServlet模板类。
+    public abstract class HttpServlet extends GenericServlet {
+        // 用户发送第一次请求的时候这个service会执行
+        // 用户发送第N次请求的时候，这个service方法还是会执行。
+        // 用户只要发送一次请求，这个service方法就会执行一次。
+        @Override
+        public void service(ServletRequest req, ServletResponse res)
+            throws ServletException, IOException {
+    
+            HttpServletRequest  request;
+            HttpServletResponse response;
+    
+            try {
+                // 将ServletRequest和ServletResponse向下转型为带有Http的HttpServletRequest和HttpServletResponse
+                request = (HttpServletRequest) req;
+                response = (HttpServletResponse) res;
+            } catch (ClassCastException e) {
+                throw new ServletException(lStrings.getString("http.non_http"));
+            }
+            // 调用重载的service方法。
+            service(request, response);
+        }
+        
+        // 这个service方法的两个参数都是带有Http的。
+        // 这个service是一个模板方法。
+        // 在该方法中定义核心算法骨架，具体的实现步骤延迟到子类中去完成。
+        protected void service(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+            // 获取请求方式
+            // 这个请求方式最终可能是：""
+            // 注意：request.getMethod()方法获取的是请求方式，可能是七种之一：
+            // GET POST PUT DELETE HEAD OPTIONS TRACE
+            String method = req.getMethod();
+    
+            // 如果请求方式是GET请求，则执行doGet方法。
+            if (method.equals(METHOD_GET)) {
+                long lastModified = getLastModified(req);
+                if (lastModified == -1) {
+                    // servlet doesn't support if-modified-since, no reason
+                    // to go through further expensive logic
                     doGet(req, resp);
                 } else {
-                    resp.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                    long ifModifiedSince;
+                    try {
+                        ifModifiedSince = req.getDateHeader(HEADER_IFMODSINCE);
+                    } catch (IllegalArgumentException iae) {
+                        // Invalid date header - proceed as if none was set
+                        ifModifiedSince = -1;
+                    }
+                    if (ifModifiedSince < (lastModified / 1000 * 1000)) {
+                        // If the servlet mod time is later, call doGet()
+                        // Round down to the nearest second for a proper compare
+                        // A ifModifiedSince of -1 will always be less
+                        maybeSetLastModified(resp, lastModified);
+                        doGet(req, resp);
+                    } else {
+                        resp.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                    }
                 }
+    
+            } else if (method.equals(METHOD_HEAD)) {
+                long lastModified = getLastModified(req);
+                maybeSetLastModified(resp, lastModified);
+                doHead(req, resp);
+    
+            } else if (method.equals(METHOD_POST)) {
+                // 如果请求方式是POST请求，则执行doPost方法。
+                doPost(req, resp);
+    
+            } else if (method.equals(METHOD_PUT)) {
+                doPut(req, resp);
+    
+            } else if (method.equals(METHOD_DELETE)) {
+                doDelete(req, resp);
+    
+            } else if (method.equals(METHOD_OPTIONS)) {
+                doOptions(req,resp);
+    
+            } else if (method.equals(METHOD_TRACE)) {
+                doTrace(req,resp);
+    
+            } else {
+                //
+                // Note that this means NO servlet supports whatever
+                // method was requested, anywhere on this server.
+                //
+    
+                String errMsg = lStrings.getString("http.method_not_implemented");
+                Object[] errArgs = new Object[1];
+                errArgs[0] = method;
+                errMsg = MessageFormat.format(errMsg, errArgs);
+    
+                resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED, errMsg);
             }
+        }
+         
+        protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException{
+            // 报405错误
+            String msg = lStrings.getString("http.method_get_not_supported");
+            sendMethodNotAllowed(req, resp, msg);
+        }
+        
+        protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+            // 报405错误
+            String msg = lStrings.getString("http.method_post_not_supported");
+            sendMethodNotAllowed(req, resp, msg);
+        }  
+    }
+    ```
 
-        } else if (method.equals(METHOD_HEAD)) {
-            long lastModified = getLastModified(req);
-            maybeSetLastModified(resp, lastModified);
-            doHead(req, resp);
+  - GenericServlet抽象类
 
-        } else if (method.equals(METHOD_POST)) {
-            // 如果请求方式是POST请求，则执行doPost方法。
-            doPost(req, resp);
-
-        } else if (method.equals(METHOD_PUT)) {
-            doPut(req, resp);
-
-        } else if (method.equals(METHOD_DELETE)) {
-            doDelete(req, resp);
-
-        } else if (method.equals(METHOD_OPTIONS)) {
-            doOptions(req,resp);
-
-        } else if (method.equals(METHOD_TRACE)) {
-            doTrace(req,resp);
-
-        } else {
-            //
-            // Note that this means NO servlet supports whatever
-            // method was requested, anywhere on this server.
-            //
-
-            String errMsg = lStrings.getString("http.method_not_implemented");
-            Object[] errArgs = new Object[1];
-            errArgs[0] = method;
-            errMsg = MessageFormat.format(errMsg, errArgs);
-
-            resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED, errMsg);
+    ```java
+    public abstract class GenericServlet implements Servlet, ServletConfig,
+            java.io.Serializable {
+               
+    	// 用户第一次请求的时候，HelloServlet对象第一次被创建之后，这个init方法会执行。
+        public void init(ServletConfig config) throws ServletException {
+            this.config = config;
+            this.init();
+        }
+    	// 用户第一次请求的时候，带有参数的init(ServletConfig config)执行之后，会执行这个没有参数的init()
+    	public void init() throws ServletException {
+            // NOOP by default
         }
     }
-    
-    
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException{
-        // 报405错误
-        String msg = lStrings.getString("http.method_get_not_supported");
-        sendMethodNotAllowed(req, resp, msg);
-    }
-    
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
-        // 报405错误
-        String msg = lStrings.getString("http.method_post_not_supported");
-        sendMethodNotAllowed(req, resp, msg);
-    }
-    
-}
+    ```
 
-/*
-通过以上源代码分析：
-	假设前端发送的请求是get请求，后端程序员重写的方法是doPost
-	假设前端发送的请求是post请求，后端程序员重写的方法是doGet
-	会发生什么呢？
-		发生405这样的一个错误。
-		405表示前端的错误，发送的请求方式不对。和服务器不一致。不是服务器需要的请求方式。
-	
-	通过以上源代码可以知道：只要HttpServlet类中的doGet方法或doPost方法执行了，必然405.
-
-怎么避免405的错误呢？
-	后端重写了doGet方法，前端一定要发get请求。
-	后端重写了doPost方法，前端一定要发post请求。
-	这样可以避免405错误。
-	
-	这种前端到底需要发什么样的请求，其实应该后端说了算。后端让发什么方式，前端就得发什么方式。
-	
-有的人，你会看到为了避免405错误，在Servlet类当中，将doGet和doPost方法都进行了重写。
-这样，确实可以避免405的发生，但是不建议，405错误还是有用的。该报错的时候就应该让他报错。
-如果你要是同时重写了doGet和doPost，那还不如你直接重写service方法好了。这样代码还能
-少写一点。
-*/
-
-
-```
+  ```java
+  /*
+  通过以上源代码分析：
+  	假设前端发送的请求是get请求，后端程序员重写的方法是doPost
+  	假设前端发送的请求是post请求，后端程序员重写的方法是doGet
+  	会发生什么呢？
+  		发生405这样的一个错误。
+  		405表示前端的错误，发送的请求方式不对。和服务器不一致。不是服务器需要的请求方式。
+  	
+  	通过以上源代码可以知道：只要HttpServlet类中的doGet方法或doPost方法执行了，必然405.
+  
+  怎么避免405的错误呢？
+  	后端重写了doGet方法，前端一定要发get请求。
+  	后端重写了doPost方法，前端一定要发post请求。
+  	这样可以避免405错误。
+  	
+  	这种前端到底需要发什么样的请求，其实应该后端说了算。后端让发什么方式，前端就得发什么方式。
+  	
+  有的人，你会看到为了避免405错误，在Servlet类当中，将doGet和doPost方法都进行了重写。
+  这样，确实可以避免405的发生，但是不建议，405错误还是有用的。该报错的时候就应该让他报错。
+  如果你要是同时重写了doGet和doPost，那还不如你直接重写service方法好了。这样代码还能
+  少写一点。
+  */
+  ```
 
 - 我们编写的HelloServlet直接继承HttpServlet，直接重写HttpServlet类中的service()方法行吗？
   - 可以，只不过你享受不到405错误。享受不到HTTP协议专属的东西。
@@ -1835,7 +1928,7 @@ public abstract class HttpServlet extends GenericServlet {
               aihao			{"s","d","tt"}
           ```
 
-      - 注意：前端表单提交数据的时候，假设提交了120这样的“数字”，其实是以字符串"120"的方式提交的，所以服务器端获取到的一定是一个字符串的"120"，而不是一个数字。（前端永远提交的是字符串，后端获取的也永远是字符串。）
+      - 注意：前端表单提交数据的时候，假设提交了120这样的“数字”，其实是以字符串"120"的方式提交的，所以服务器端获取到的一定是一个字符串的"120"，而不是一个数字。（**前端永远提交的是字符串，后端获取的也永远是字符串**。）
     
   - 手工开发一个webapp。测试HttpServletRequest接口中的相关方法。
 
@@ -1908,16 +2001,51 @@ public abstract class HttpServlet extends GenericServlet {
       
         - 转发（一次请求）
       
-          - ```java
-            // 第一步：获取请求转发器对象
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/b");
-            // 第二步：调用转发器的forward方法完成跳转/转发
-            dispatcher.forward(request,response);
-            
-            // 第一步和第二步代码可以联合在一起。
-            request.getRequestDispatcher("/b").forward(request,response);
-            
-            ```
+          ```java
+          public class AServlet extends HttpServlet {
+              @Override
+              protected void doGet(HttpServletRequest request, HttpServletResponse response)
+                      throws ServletException, IOException {
+                  // 向request域中绑定数据。
+                  request.setAttribute("sysTime", new Date());
+          
+                  // 从request域中取出数据
+                  Object obj = request.getAttribute("sysTime");
+                  response.setContentType("text/html");
+                  PrintWriter out = response.getWriter();
+                  out.print("A中request域中获取的系统当前时间: " + obj + "<br>");
+          
+                  // 在AServlet中new一个BServlet对象，然后调用BServlet对象的doGet方法，把request对象传过去
+                  // 这种方式虽然可以实现在A中请求域的对象在B中能访问，
+                  // 但是这种方式是不可取的，因为我们自己new的Servlet对象不受Tomcat服务器所管理
+                  /* BServlet bServlet = new BServlet();
+                  bServlet.doGet(request, response);*/
+          
+                  // 资源跳转
+                  // 第一步：获取请求转发器对象。（参数是BServlet在app中的路径）
+                  // 相当于把"/b"这个路径包装到请求转发器当中，实际上是把下一个跳转的资源的路径告知给Tomcat服务器了。
+                  RequestDispatcher dispatcher = request.getRequestDispatcher("/b");
+                  
+                  // 第二步：调用请求转发器的forward方法，进行转发。
+                  dispatcher.forward(request, response);
+              }
+          }
+          ```
+          
+          ```java
+          public class BServlet extends HttpServlet {
+              @Override
+              protected void doGet(HttpServletRequest request, HttpServletResponse response)
+                      throws ServletException, IOException {
+                  Object obj = request.getAttribute("sysTime");
+                  response.setContentType("text/html");
+                  PrintWriter out = response.getWriter();
+                  out.print("B中request域中获取的系统当前时间: " + obj + "<br>");
+              }
+          }
+          ```
+          
+          
       
       - 两个Servlet怎么共享数据？
       
@@ -1932,7 +2060,6 @@ public abstract class HttpServlet extends GenericServlet {
       - 关于request对象中两个非常容易混淆的方法：
       
         - ```java
-          
           // uri?username=zhangsan&userpwd=123&sex=1
           String username = request.getParameter("username");
           
@@ -1943,7 +2070,7 @@ public abstract class HttpServlet extends GenericServlet {
           // 第一个方法：获取的是用户在浏览器上提交的数据。
           // 第二个方法：获取的是请求域当中绑定的数据。
           ```
-      
+        
       - HttpServletRequest接口的其他常用方法：
       
         - ```java
