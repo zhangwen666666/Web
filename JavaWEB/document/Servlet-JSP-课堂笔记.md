@@ -2104,10 +2104,10 @@ public void service(ServletRequest request, ServletResponse response){
           // 获取请求方式
           String method = request.getMethod();
           
-          // 获取请求的URI
+          // 获取请求的URI(带项目名)
           String uri = request.getRequestURI();  // /aaa/testRequest
           
-          // 获取servlet path
+          // 获取servlet path(不带项目名 )
           String servletPath = request.getServletPath(); //   /testRequest
           
           ```
@@ -2254,7 +2254,7 @@ public void service(ServletRequest request, ServletResponse response){
 
         - 详情  是需要连接数据库的，所以这个超链接点击之后也是需要执行一段java代码的。所以要将这个超链接的路径修改一下。
 
-        - 注意：修改路径之后，这个路径是需要加项目名的。"/oa/dept/detail"
+        - 注意：修改路径之后，这个路径是需要加项目名的(**前端发送请求，必须加项目名**)。"/oa/dept/detail"
 
       - 技巧：
 
@@ -2314,6 +2314,11 @@ public void service(ServletRequest request, ServletResponse response){
         <script type="text/javascript">
         	function del(dno){
         		if(window.confirm("亲，删了不可恢复哦！")){
+                    // 在JS中向服务器发送请求
+                    // document.location.href = "请求路径"
+                    // document.location = "请求路径"
+                    // window.location.href = "请求路径"
+                    // window.location = "请求路径"
         			document.location.href = "/oa/dept/delete?deptno=" + dno;
         		}
         	}
@@ -2372,9 +2377,13 @@ public void service(ServletRequest request, ServletResponse response){
               //仍然跳转到部门列表页面
               //部门列表页面的显示需要执行另一个Servlet。怎么办？转发。
               request.getRequestDispatcher("/dept/list").forward(request, response);
+              // 或者弹窗提示，然后跳转
+              // out.print("<script>alert('删除成功'); window.location.href='/oa/dept/list';</script>");
           }else{
               // 删除失败
               request.getRequestDispatcher("/error.html").forward(request, response);
+              // 弹窗提示，然后跳转
+              // out.print("<script>alert('删除失败'); window.location.href='/error.html';</script>");
           }
           ```
   

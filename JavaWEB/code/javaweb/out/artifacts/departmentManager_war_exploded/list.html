@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>部门列表页面</title>
+</head>
+<body>
+    <script type="text/javascript">
+        function del(dno){
+            if(window.confirm('亲，删除了之后不可恢复哦!!!')) {
+                document.location.href='oa/dept/delete?deptno=' + dno
+            }
+        }   
+    </script>
+    <h1 align='center'>部门列表</h1>
+    <hr>
+    <table border='1px' align='center' width='50%' >
+        <tr>
+            <th>序号</th>
+            <th>部门编号</th>
+            <th>部门名称</th>
+            <th>操作</th>
+        </tr>
+        <tr align='center'>
+            <td>1</td>
+            <td>10</td>
+            <td>销售部</td>
+            <td>
+                <a href='javascript:void(0)' onclick="del(10)">删除</a>
+                <a href='edit.html'>修改</a>
+                <a href='detail.html'>详情</a>
+            </td>
+        </tr>
+        <tr align='center'>
+            <td>2</td>
+            <td>20</td>
+            <td>研发部</td>
+            <td>
+                <a href=''>删除</a>
+                <a href='edit.html'>修改</a>
+                <a href='detail.html'>详情</a>
+            </td>
+        </tr>
+        <tr align='center'>
+            <td>3</td>
+            <td>30</td>
+            <td>运营部</td>
+            <td>
+                <a href=''>删除</a>
+                <a href='edit.html'>修改</a>
+                <a href='detail.html'>详情</a>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+    <h4><a href='add.html'>点击新增部门</a></h4>
+</body>
+</html>
