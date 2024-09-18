@@ -2425,6 +2425,7 @@ public void service(ServletRequest request, ServletResponse response){
         // 转发的时候是一次请求，不管你转发了多少次。都是一次请求。
         // AServlet转发到BServlet，再转发到CServlet，再转发到DServlet，不管转发了多少次，都在同一个request当中。
         // 这是因为调用forward方法的时候，会将当前的request和response对象传递给下一个Servlet。
+        // 请求域是同一个，因此是一次请求
         ```
 
     - 重定向
@@ -2507,7 +2508,7 @@ public void service(ServletRequest request, ServletResponse response){
     - name属性：用来指定Servlet的名字。等同于：<servlet-name>
     - urlPatterns属性：用来指定Servlet的映射路径。可以指定多个字符串。<url-pattern>
     - loadOnStartUp属性：用来指定在服务器启动阶段是否加载该Servlet。等同于：<load-on-startup>
-    - value属性：当注解的属性名是value的时候，使用注解的时候，value属性名是可以省略的。
+    - value属性：当注解的属性名是value的时候，使用注解的时候，value属性名是可以省略的。(value属性和urlPatterns属性的功能是一样的)
     - 注意：不是必须将所有属性都写上，只需要提供需要的。（需要什么用什么。）
     - 注意：属性是一个数组，如果数组中只有一个元素，使用该注解的时候，属性值的大括号可以省略。
 

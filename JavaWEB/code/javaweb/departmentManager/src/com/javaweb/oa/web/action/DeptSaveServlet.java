@@ -20,7 +20,7 @@ public class DeptSaveServlet extends HttpServlet {
         String deptno = request.getParameter("deptno");
         String dname = request.getParameter("dname");
         String loc = request.getParameter("loc");
-        System.out.println(deptno + dname + loc);
+//        System.out.println(deptno + dname + loc);
         // 连接数据库执行sql语句
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -35,9 +35,14 @@ public class DeptSaveServlet extends HttpServlet {
             int count = preparedStatement.executeUpdate();
             connection.commit();
             if (count == 1) {
-                request.getRequestDispatcher("/dept/list").forward(request, response);
+                // 这里转发之后需要使用Post请求
+                // request.getRequestDispatcher("/dept/list").forward(request, response);
+                // 最好使用重定向
+                response.sendRedirect(request.getContextPath() + "/dept/list");
             } else {
-                request.getRequestDispatcher("/error.html").forward(request, response);
+                // request.getRequestDispatcher("/error.html").forward(request, response);
+                // 重定向
+                response.sendRedirect(request.getContextPath() + "/error.html");
             }
         } catch (SQLException e) {
             if (connection != null) {

@@ -37,10 +37,13 @@ public class DeptDeleteServlet extends HttpServlet {
             connection.commit();
             if (count == 1) {
                 // out.print("<script>alert('删除成功'); window.location.href='/oa/dept/list';</script>");
-                 request.getRequestDispatcher("/dept/list").forward(request, response);
+                // request.getRequestDispatcher("/dept/list").forward(request, response);
+                // 重定向
+                response.sendRedirect(request.getContextPath() + "/dept/list");
             } else {
                 // out.print("<script>alert('删除失败'); window.location.href='/oa/error.html';</script>");
                  request.getRequestDispatcher("/error.html").forward(request,response);
+                 response.sendRedirect(request.getContextPath() + "/error.html");
             }
             // 提交事务
         } catch (SQLException e) {

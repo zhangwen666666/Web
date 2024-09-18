@@ -2,6 +2,7 @@ package com.javaweb.oa.web.action;
 
 import com.javaweb.oa.utils.DBUtil;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,9 +36,11 @@ public class DeptModifyServlet extends HttpServlet {
             statement.setInt(3, Integer.parseInt(deptno));
             int count = statement.executeUpdate();
             if (count == 1) {
-                out.print("<script>alert('更新成功'); window.location.href='/oa/dept/list';</script>");
+                // out.print("<script>alert('更新成功'); window.location.href='/oa/dept/list';</script>");
+                response.sendRedirect(request.getContextPath() + "/dept/list");
             } else {
-                out.print("<script>alert('更新失败'); window.location.href='/oa/dept/list';</script>");
+                // out.print("<script>alert('更新失败'); window.location.href='/oa/dept/list';</script>");
+                response.sendRedirect(request.getContextPath() + "/dept/list");
             }
         } catch (SQLException e) {
             e.printStackTrace();
