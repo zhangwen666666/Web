@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/departmentManager/departmentManager.iml" filepath="$PROJECT_DIR$/departmentManager/departmentManager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/departmentManager02/departmentManager02.iml" filepath="$PROJECT_DIR$/departmentManager02/departmentManager02.iml" />
+      <module fileurl="file://$PROJECT_DIR$/departmentManager03/departmentManager03.iml" filepath="$PROJECT_DIR$/departmentManager03/departmentManager03.iml" />
       <module fileurl="file://$PROJECT_DIR$/javaweb.iml" filepath="$PROJECT_DIR$/javaweb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jsp/jsp.iml" filepath="$PROJECT_DIR$/jsp/jsp.iml" />
       <module fileurl="file://$PROJECT_DIR$/servlet01/servlet01.iml" filepath="$PROJECT_DIR$/servlet01/servlet01.iml" />
       <module fileurl="file://$PROJECT_DIR$/servlet02/servlet02.iml" filepath="$PROJECT_DIR$/servlet02/servlet02.iml" />
       <module fileurl="file://$PROJECT_DIR$/servlet03/servlet03.iml" filepath="$PROJECT_DIR$/servlet03/servlet03.iml" />

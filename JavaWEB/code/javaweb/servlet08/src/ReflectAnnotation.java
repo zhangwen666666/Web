@@ -9,6 +9,11 @@ public class ReflectAnnotation {
             for (String value : values) {
                 System.out.println(value);
             }
+            String[] urlPatterns = webServletAnnotation.urlPatterns();
+            for (String urlPattern : urlPatterns) {
+                System.out.println(urlPattern);
+            }
+            System.out.println("**********************************************");
         }
     }
 }

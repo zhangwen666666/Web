@@ -2508,7 +2508,7 @@ public void service(ServletRequest request, ServletResponse response){
     - name属性：用来指定Servlet的名字。等同于：<servlet-name>
     - urlPatterns属性：用来指定Servlet的映射路径。可以指定多个字符串。<url-pattern>
     - loadOnStartUp属性：用来指定在服务器启动阶段是否加载该Servlet。等同于：<load-on-startup>
-    - value属性：当注解的属性名是value的时候，使用注解的时候，value属性名是可以省略的。(value属性和urlPatterns属性的功能是一样的)
+    - value属性：当注解的属性名是value的时候，使用注解的时候，value属性名是可以省略的。(value属性和urlPatterns属性的功能是一样的，都是用来指定映射路径的)。
     - 注意：不是必须将所有属性都写上，只需要提供需要的。（需要什么用什么。）
     - 注意：属性是一个数组，如果数组中只有一个元素，使用该注解的时候，属性值的大括号可以省略。
 
@@ -2519,12 +2519,65 @@ public void service(ServletRequest request, ServletResponse response){
 ## 使用模板方法设计模式优化oa项目
 
 - 上面的注解解决了配置文件的问题。但是现在的oa项目仍然存在一个比较臃肿的问题。
-  - 一个单标的CRUD，就写了6个Servlet。如果一个复杂的业务系统，这种开发方式，显然会导致类爆炸。（类的数量太大。）
+  - 一个单表 的CRUD，就写了6个Servlet。如果一个复杂的业务系统，这种开发方式，显然会导致类爆炸。（类的数量太大。）
   - 怎么解决这个类爆炸问题？可以使用模板方法设计模式。
+  
 - 怎么解决类爆炸问题？
   - 以前的设计是一个请求一个Servlet类。1000个请求对应1000个Servlet类。导致类爆炸。
   - 可以这样做：一个请求对应一个方法。一个业务对应一个Servlet类。
   - 处理部门相关业务的对应一个DeptServlet。处理用户相关业务的对应一个UserServlet。处理银行卡卡片业务对应一个CardServlet。
+  
+  ```java
+  // @WebServlet({"/dept/list", "/dept/detail", "/dept/modify", "/dept/delete", "/dept/edit", "/dept/save"})
+  // 模糊匹配，只要请求路径是以"/dept"开始的，都走这个servlet
+  @WebServlet("/dept/*")
+  public class DeptServlet extends HttpServlet {
+      @Override
+      protected void service(HttpServletRequest request, HttpServletResponse response)
+              throws ServletException, IOException {
+          String servletPath = request.getServletPath();
+          if ("/dept/list".equals(servletPath)) {
+              doList(request, response);
+          } else if ("dept/save".equals(servletPath)) {
+              doSave(request, response);
+          } else if ("/dept/detail".equals(servletPath)) {
+              doDetail(request, response);
+          } else if ("/dept/modify".equals(servletPath)) {
+              doModify(request, response);
+          } else if ("/dept/delete".equals(servletPath)) {
+              doDel(request, response);
+          } else if ("/dept/edit".equals(servletPath)) {
+              doEdit(request, response);
+          }
+      }
+  
+      private void doSave(HttpServletRequest request, HttpServletResponse response)
+              throws ServletException, IOException {
+      }
+  
+      private void doList(HttpServletRequest request, HttpServletResponse response)
+              throws ServletException, IOException {
+      }
+  
+      private void doDetail(HttpServletRequest request, HttpServletResponse response)
+              throws ServletException, IOException {
+      }
+  
+      private void doModify(HttpServletRequest request, HttpServletResponse response)
+              throws ServletException, IOException {
+      }
+  
+      private void doDel(HttpServletRequest request, HttpServletResponse response)
+              throws ServletException, IOException {
+      }
+  
+      private void doEdit(HttpServletRequest request, HttpServletResponse response)
+              throws ServletException, IOException {
+      }
+  }
+  ```
+  
+  
 
 ## 分析使用纯粹Servlet开发web应用的缺陷
 
