@@ -15,6 +15,8 @@
       <module fileurl="file://$PROJECT_DIR$/servlet06/servlet06.iml" filepath="$PROJECT_DIR$/servlet06/servlet06.iml" />
       <module fileurl="file://$PROJECT_DIR$/servlet07/servlet07.iml" filepath="$PROJECT_DIR$/servlet07/servlet07.iml" />
       <module fileurl="file://$PROJECT_DIR$/servlet08/servlet08.iml" filepath="$PROJECT_DIR$/servlet08/servlet08.iml" />
+      <module fileurl="file://$PROJECT_DIR$/servlet09/servlet09.iml" filepath="$PROJECT_DIR$/servlet09/servlet09.iml" />
+      <module fileurl="file://$PROJECT_DIR$/servlet10/servlet10.iml" filepath="$PROJECT_DIR$/servlet10/servlet10.iml" />
       <module fileurl="file://$PROJECT_DIR$/template/template.iml" filepath="$PROJECT_DIR$/template/template.iml" />
     </modules>
   </component>

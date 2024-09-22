@@ -16,6 +16,10 @@
             }
         }   
     </script>
+
+    <h1>欢迎<%=session.getAttribute("username")%>登录</h1>
+    <a href="<%=request.getContextPath()%>/user/exit">[退出系统]</a>
+
     <h1 align="center">部门列表</h1>
     <hr>
     <table border="1px" align="center" width="50%" >

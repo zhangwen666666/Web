@@ -2598,6 +2598,7 @@ public void service(ServletRequest request, ServletResponse response){
   - 用户打开浏览器，进行一系列操作，然后最终将浏览器关闭，这个整个过程叫做：一次会话。会话在服务器端也有一个对应的java对象，这个java对象叫做：session。
   - 什么是一次请求：用户在浏览器上点击了一下，然后到页面停下来，可以粗略认为是一次请求。请求对应的服务器端的java对象是：request。
   - 一个会话当中包含多次请求。（一次会话对应N次请求。）
+  - **session对象是存储在服务器端的，一个session对象对应一个回话，一次会话中包含多次请求。**
   
 - 在java的servlet规范当中，session对应的类名：HttpSession（jarkata.servlet.http.HttpSession）
 
@@ -2624,16 +2625,34 @@ public void service(ServletRequest request, ServletResponse response){
   - request < session < application
   
 - 思考一下：session对象的实现原理。
-  - HttpSession session = request.getSession();
+  - **HttpSession session = request.getSession()**;从服务器端获取当前的session对象，如果获取不到，则新建
+  - **HttpSession session = request.getSession(false)**; 从服务器中获取当前的session对象，如果获取不到session，则不会新建，返回一个null
   - 这行代码很神奇。张三访问的时候获取的session对象就是张三的。李四访问的时候获取的session对象就是李四的。
   
 - session的实现原理：
 
   - JSESSIONID=xxxxxx  这个是以Cookie的形式保存在浏览器的内存中的。浏览器只要关闭。这个cookie就没有了。
+
   - session列表是一个Map，map的key是sessionid，map的value是session对象。
+
   - 用户第一次请求，服务器生成session对象，同时生成id，将id发送给浏览器。
+
   - 用户第二次请求，自动将浏览器内存中的id发送给服务器，服务器根据id查找session对象。
-  - 关闭浏览器，内存消失，cookie消失，sessionid消失，会话等同于结束。
+
+  - **关闭浏览器，内存消失，cookie消失，sessionid消失，session对象找不到会话等同于结束。**下次重新打开浏览器之后，浏览器缓存中没有这个sessionid，自然找不到服务器当中的session对象。
+
+  - **session对象什么时候被销毁？一种销毁是超时销毁，另一种销毁是手动销毁(有的网页有安全退出按钮)。HTTP协议是一种无状态协议，服务器不知道浏览器什么时候关闭，所以有了超时销毁机制。所以有可能你没有关闭浏览器，但是session超时了，会话也会结束。**
+
+  - **所以并不是浏览器关闭，会话就会结束，而是由于浏览器关闭，缓存没有了，sessionid找不到了，等同于回话结束。因此有可能关闭浏览器，会话还没有结束；也有可能没有关闭浏览器，但会话结束了。一般情况下，浏览器关闭，缓存就会清理，就等同于会话结束了。**
+
+  - 在web.xml文件中可以配置session超时的时长。
+
+    ```html
+    <!--session的超时时长是30分钟-->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+    ```
 
 - Cookie禁用了，session还能找到吗？
 
@@ -2663,6 +2682,12 @@ public void service(ServletRequest request, ServletResponse response){
 - session掌握之后，我们怎么解决oa项目中的登录问题，怎么能让登录起作用。
 
   - 登录成功之后，可以将用户的登录信息存储到session当中。也就是说session中如果有用户的信息就代表用户登录成功了。session中没有用户信息，表示用户没有登录过。则跳转到登录页面。
+
+  - 注意：JSP也是一个Servlet，并且JSP有一个内置的session对象，因此在访问JSP时就会获取一个session对象，可以在jsp页面中使用page指令来设置访问jsp的时候不生产session对象。
+
+    ```jsp
+    <%@page session="false" %>
+    ```
 
 - 销毁session对象：
 
@@ -2716,18 +2741,25 @@ public void service(ServletRequest request, ServletResponse response){
 - 在java的servlet中，对cookie提供了哪些支持呢？
 
   - 提供了一个Cookie类来专门表示cookie数据。jakarta.servlet.http.Cookie;
+
   - java程序怎么把cookie数据发送给浏览器呢？response.addCookie(cookie);
+
+    ```java
+    
+    ```
+
+    
 
 - 在HTTP协议中是这样规定的：当浏览器发送请求的时候，会自动携带该path下的cookie数据给服务器。（URL。）
 
-- 关于cookie的有效时间
+- **关于cookie的有效时间**
 
   - 怎么用java设置cookie的有效时间
     - cookie.setMaxAge(60 * 60); 设置cookie在一小时之后失效。
   - 没有设置有效时间：默认保存在浏览器的运行内存中，浏览器关闭则cookie消失。
   - 只要设置cookie的有效时间 > 0，这个cookie一定会存储到硬盘文件当中。
   - 设置cookie的有效时间 = 0 呢？
-    - cookie被删除，同名cookie被删除。
+    - cookie被删除，主要应用在删除浏览器上的同名cookie。
   - 设置cookie的有效时间 < 0 呢？
     - 保存在运行内存中。和不设置一样。
 

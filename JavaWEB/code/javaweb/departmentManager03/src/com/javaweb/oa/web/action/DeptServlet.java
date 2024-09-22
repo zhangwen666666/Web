@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,33 +19,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet({"/dept/list", "/dept/detail", "/dept/delete", "/dept/save",
-       // "/dept/edit"
+        // "/dept/edit"
         "/dept/modify",
 })
 public class DeptServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String servletPath = request.getServletPath();
-        switch (servletPath) {
-            case "/dept/list" -> {
-                doList(request, response);
-            }
-            case "/dept/detail" -> {
-                doDetail(request, response);
-            }
-            case "/dept/delete" -> {
-                doDel(request, response);
-            }
-            case "/dept/save" -> {
-                doSave(request, response);
-            }
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("username") != null) {
+            String servletPath = request.getServletPath();
+            switch (servletPath) {
+                case "/dept/list" -> {
+                    doList(request, response);
+                }
+                case "/dept/detail" -> {
+                    doDetail(request, response);
+                }
+                case "/dept/delete" -> {
+                    doDel(request, response);
+                }
+                case "/dept/save" -> {
+                    doSave(request, response);
+                }
 //            case "/dept/edit" -> {
 //                doEdit(request, response);
 //            }
-            case "/dept/modify" -> {
-                doModify(request, response);
+                case "/dept/modify" -> {
+                    doModify(request, response);
+                }
             }
+        } else {
+            response.sendRedirect(request.getContextPath() + "/welcome");
         }
     }
 
@@ -230,10 +236,10 @@ public class DeptServlet extends HttpServlet {
             // request.getRequestDispatcher("/detail.jsp").forward(request, response);
             // 实现修改和详情公用同一个页面
             String f = request.getParameter("f");
-            if("m".equals(f)){
+            if ("m".equals(f)) {
                 // 转发到修改页面
                 request.getRequestDispatcher("/edit.jsp").forward(request, response);
-            }else if("d".equals(f)) {
+            } else if ("d".equals(f)) {
                 // 转发到详情页面
                 request.getRequestDispatcher("/detail.jsp").forward(request, response);
             }
