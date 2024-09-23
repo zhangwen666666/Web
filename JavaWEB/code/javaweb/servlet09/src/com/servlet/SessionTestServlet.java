@@ -1,4 +1,4 @@
-package com.servelt;
+package com.servlet;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;

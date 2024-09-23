@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/JSTL/JSTL.iml" filepath="$PROJECT_DIR$/JSTL/JSTL.iml" />
       <module fileurl="file://$PROJECT_DIR$/departmentManager/departmentManager.iml" filepath="$PROJECT_DIR$/departmentManager/departmentManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/departmentManager02/departmentManager02.iml" filepath="$PROJECT_DIR$/departmentManager02/departmentManager02.iml" />
       <module fileurl="file://$PROJECT_DIR$/departmentManager03/departmentManager03.iml" filepath="$PROJECT_DIR$/departmentManager03/departmentManager03.iml" />
+      <module fileurl="file://$PROJECT_DIR$/departmentManager04/departmentManager04.iml" filepath="$PROJECT_DIR$/departmentManager04/departmentManager04.iml" />
       <module fileurl="file://$PROJECT_DIR$/javaweb.iml" filepath="$PROJECT_DIR$/javaweb.iml" />
       <module fileurl="file://$PROJECT_DIR$/jsp/jsp.iml" filepath="$PROJECT_DIR$/jsp/jsp.iml" />
       <module fileurl="file://$PROJECT_DIR$/servlet01/servlet01.iml" filepath="$PROJECT_DIR$/servlet01/servlet01.iml" />
@@ -17,6 +19,8 @@
       <module fileurl="file://$PROJECT_DIR$/servlet08/servlet08.iml" filepath="$PROJECT_DIR$/servlet08/servlet08.iml" />
       <module fileurl="file://$PROJECT_DIR$/servlet09/servlet09.iml" filepath="$PROJECT_DIR$/servlet09/servlet09.iml" />
       <module fileurl="file://$PROJECT_DIR$/servlet10/servlet10.iml" filepath="$PROJECT_DIR$/servlet10/servlet10.iml" />
+      <module fileurl="file://$PROJECT_DIR$/servlet11/servlet11.iml" filepath="$PROJECT_DIR$/servlet11/servlet11.iml" />
+      <module fileurl="file://$PROJECT_DIR$/servlet12/servlet12.iml" filepath="$PROJECT_DIR$/servlet12/servlet12.iml" />
       <module fileurl="file://$PROJECT_DIR$/template/template.iml" filepath="$PROJECT_DIR$/template/template.iml" />
     </modules>
   </component>
