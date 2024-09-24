@@ -2741,14 +2741,7 @@ public void service(ServletRequest request, ServletResponse response){
 - 在java的servlet中，对cookie提供了哪些支持呢？
 
   - 提供了一个Cookie类来专门表示cookie数据。jakarta.servlet.http.Cookie;
-
   - java程序怎么把cookie数据发送给浏览器呢？response.addCookie(cookie);
-
-    ```java
-    
-    ```
-
-    
 
 - 在HTTP协议中是这样规定的：当浏览器发送请求的时候，会自动携带该path下的cookie数据给服务器。（URL。）
 
@@ -2769,12 +2762,12 @@ public void service(ServletRequest request, ServletResponse response){
     - 默认的path是：http://localhost:8080/servlet13/cookie 以及它的子路径。
     - 也就是说，以后只要浏览器的请求路径是http://localhost:8080/servlet13/cookie 这个路径以及这个路径下的子路径，cookie都会被发送到服务器。
   - 手动设置cookie的path
-    - cookie.setPath(“/servlet13”); 表示只要是这个servlet13项目的请求路径，都会提交这个cookie给服务器。
+    - cookie.setPath(“/servlet13”); 表示只要是这个servlet13项目的请求路径(/servlet/*这样的路径)，都会提交这个cookie给服务器。
 
 - 浏览器发送cookie给服务器了，服务器中的java程序怎么接收？
 
   - ```java
-    Cookie[] cookies = request.getCookies(); // 这个方法可能返回null
+    Cookie[] cookies = request.getCookies(); // 这个方法可能返回null，如果浏览器没有提交cookie，这个方法返回值是null，并不是返回一个长度为0的数组。
     if(cookies != null){
         for(Cookie cookie : cookies){
             // 获取cookie的name
@@ -2783,9 +2776,8 @@ public void service(ServletRequest request, ServletResponse response){
             String value = cookie.getValue();
         }
     }
-    
     ```
-
+  
 - 使用cookie实现一下十天内免登录功能。
 
   - 先实现登录功能
@@ -2983,7 +2975,7 @@ public void service(ServletRequest request, ServletResponse response){
   - 指令包括哪些呢？
 
     - include指令：包含指令，在JSP中完成静态包含，很少用了。（这里不讲）
-    - taglib指令：引入标签库的指令。这个到JJSTL标签库的时候再学习。现在先不管。
+    - taglib指令：引入标签库的指令。这个到JSTL标签库的时候再学习。现在先不管。
     - page指令：目前重点学习一个page指令。
 
   - 指令的使用语法是什么？
@@ -2992,41 +2984,42 @@ public void service(ServletRequest request, ServletResponse response){
 
   - 关于page指令当中都有哪些常用的属性呢？
 
-    - ```
+    - ```jsp
       <%@page session="true|false" %>
       true表示启用JSP的内置对象session，表示一定启动session对象。没有session对象会创建。
       如果没有设置，默认值就是session="true"
       session="false" 表示不启动内置对象session。当前JSP页面中无法使用内置对象session。
       ```
 
-    - ```
+    - ```jsp
       <%@page contentType="text/json" %>
       contentType属性用来设置响应的内容类型
       但同时也可以设置字符集。
       <%@page contentType="text/json;charset=UTF-8" %>
       ```
 
-    - ```
+    - ```jsp
       <%@page pageEncoding="UTF-8" %>
       pageEncoding="UTF-8" 表示设置响应时采用的字符集。
       ```
 
-    - ```
+    - ```jsp
       <%@page import="java.util.List, java.util.Date, java.util.ArrayList" %>
       <%@page import="java.util.*" %>
       import语句，导包。
       ```
 
-    - ```
+    - ```jsp
       <%@page errorPage="/error.jsp" %>
       当前页面出现异常之后，跳转到error.jsp页面。
       errorPage属性用来指定出错之后的跳转位置。
       ```
 
-    - ```
+    - ```jsp
       <%@page isErrorPage="true" %>
       表示启用JSP九大内置对象之一：exception
       默认值是false。
+      用在errorPage所指定的跳转页面，可以打印异常堆栈信息
       ```
 
 - JSP的九大内置对象
@@ -3053,7 +3046,7 @@ public void service(ServletRequest request, ServletResponse response){
 - EL表达式是干什么用的？
   - Expression Language（表达式语言）
   - EL表达式可以代替JSP中的java代码，让JSP文件中的程序看起来更加整洁，美观。
-  - JSP中夹杂着各种java代码，例如<% java代码 %>、<%=%>等，导致JSP文件很混乱，不好看，不好维护。所以才有了后期的EL表达式。
+  - JSP中夹杂着各种java代码，例如<% java代码 %>、<%=%>、<%!%>等，导致JSP文件很混乱，不好看，不好维护。所以才有了后期的EL表达式。
   - EL表达式可以算是JSP语法的一部分。EL表达式归属于JSP。
   
 - EL表达式出现在JSP中主要是：
@@ -3107,46 +3100,101 @@ public void service(ServletRequest request, ServletResponse response){
     ${userObj.age} 使用这个语法的前提是：User对象有getAge()方法。
     ${userObj.email} 使用这个语法的前提是：User对象有getEmail()方法。
     EL表达式中的. 这个语法，实际上调用了底层的getXxx()方法。
-    注意：如果没有对应的get方法，则出现异常。报500错误。
+    注意：
+    	1.如果没有对应的get或is方法，则出现异常。报500错误。
+    	2.如果某个布尔类型的属性，例如sex属性，既有isSex方法，也有getSex方法，会优先执行isSex方法，如果没有isSex方法，则会执行getSex方法，如果两个方法都没有，会报错。
+    	3.对于非布尔类型的变量，则一定要有get方法
     
     ${userObj.addr222.zipcode}
     以上EL表达式对应的java代码：
     user.getAddr222().getZipcode()
     ```
-
+    
   - EL表达式优先从小范围中读取数据。
-
+  
     - pageContext < request < session < application
-
-  - EL表达式中有四个隐含的隐式的范围：
-
+  
+  - EL表达式中有四个隐含的隐式的范围：(可以指定范围来读取数据)
+  
     - pageScope 对应的是 pageContext范围。
     - requestScope 对应的是 request范围。
     - sessionScope 对应的是 session范围。
     - applicationScope 对应的是 application范围。
+  
+    ```jsp
+    <%
+      // 向四个域中存储数据，name都相同
+      session.setAttribute("data", "session");
+      request.setAttribute("data", "request");
+      application.setAttribute("data", "application");
+      pageContext.setAttribute("data", "pageContext");
+    %>
+    
+    ${sessionScope.data}<br>
+    ${requestScope.data}<br>
+    ${pageScope.data}<br>
+    ${applicationScope.data}
+    ```
+  
+  - EL表达式对null进行了预处理。如果是null，则向浏览器输出一个空字符串。(数据名写错了，输出的是空字符串)
 
-  - EL表达式对null进行了预处理。如果是null，则向浏览器输出一个空字符串。
-
+    ```jsp
+    <%
+      request.setAttribute("username","zhangsan");
+    %>
+    <%=request.getAttribute("usernam")%><br><%--浏览器上显示null--%>
+    EL表达式:${usernam}<%--浏览器上什么也不现实，输出一个空字符串--%>
+    上边的EL表达式等同于这样一段java代码：<%=request.getAttribute("usernam") == null? "" : request.getAttribute("usernam")%>
+    ```
+  
   - EL表达式取数据的时候有两种形式：
-
+  
     - 第一种：.  （大部分使用这种方式）
     - 第二种：[ ] （如果存储到域的时候，这个name中含有特殊字符，可以使用 [ ]）
-      - request.setAttribute("abc.def", "zhangsan");
-      - ${requestScope.abc.def} 这样是无法取值的。
-      - 应该这样：${requestScope["abc.def"]}
-
+      
+      ```jsp
+      <% request.setAttribute("abc.def", "zhangsan");%>
+      ${requestScope.abc.def} 这样是无法取值的。
+      应该这样：${requestScope["abc.def"]}
+      ```
+  
   - 掌握使用EL表达式，怎么从Map集合中取数据：
-
+  
     - ${map.key}
-
-  - 掌握使用EL表达式，怎么从数组和List集合中取数据：
-
+  
+    ```jsp
+    <%
+      Map<String, String> map = new HashMap<>();
+      map.put("user.name", "zhangsan");
+      map.put("password", "1234");
+      request.setAttribute("map", map);
+    %>
+    ${map["user.name"]};<br>
+    ${map.password}
+    ```
+  
+  - 掌握使用EL表达式，怎么从数组和List集合中取数据：（set集合没有下标，不能使用[ ]的方式取数据）
+  
     - ${数组[0]}
+  
     - ${数组[1]}
+  
+      ```jsp
+      <%
+          String[] usernames = {"zhangsan","lisi", "wangwu"};
+          request.setAttribute("usernames", usernames);
+      %>
+      ${usernames}
+      ${usernames[0]}
+      ${usernames[1]}
+      ${usernames[2]}
+      最后一个${usernames[100]} <%--不会出现越界异常，浏览器上输出一个空字符串--%>
+      ```
+  
     - ${list[0]}
-
+  
   - page指令当中，有一个属性，可以忽略EL表达式
-
+  
     - ```
       <%@page contentType="text/html;charset=UTF-8" isELIgnored="true" %>
       isELIgnored="true" 表示忽略EL表达式
@@ -3156,31 +3204,63 @@ public void service(ServletRequest request, ServletResponse response){
       
       可以使用反斜杠进行局部控制：\${username} 这样也可以忽略EL表达式。
       ```
-
+  
   - 通过EL表达式获取应用的根：
-
+  
     - ${pageContext.request.contextPath}
-
+  
   - EL表达式中其他的隐式对象：
-
+  
     - pageContext
-    - param
+    - param 可以获取请求参数一维数组中的第一个元素
     - paramValues
     - initParam
+  
+    ```jsp
+    应用的根路径: ${pageContext.request.contextPath}<br>
+    
+    <%--用户在浏览器上提交数据:http://localhost:8080/jsp/7.jsp?username=zhangsan--%>
+    用户名: <%=request.getParameter("username")%><br> <%--获取到的是zhangsan--%>
+    用户名: ${param.username}<br>  <%--获取到的是zhangsan--%>
+    
+    <%--用户在浏览器上提交数据:http://localhost:8080/jsp/7.jsp?hobby=smoke&hobby=drink&hobby=tangtou--%>
+    <%--以上提交的数据显然是采用checkbox进行提交的，同一组的checkbox的name是一样的--%>
+    爱好: <%=request.getParameter("hobby")%><br>  <%--获取到的是smoke--%>
+    爱好: ${param.hobby}<br>  <%--获取到的是smoke--%>
+    <hr>
+    爱好: <%=request.getParameterValues("hobby")%><br>    <%--爱好: [Ljava.lang.String;@73b88f33--%>
+    爱好: ${paramValues.hobby}<br>    <%--爱好: [Ljava.lang.String;@7d7f6f34--%>
+    爱好: ${paramValues.hobby[0]}, ${paramValues.hobby[1]}, ${paramValues.hobby[2]}<br>
+    <%--爱好: smoke, drink, tangtou--%>
+    <hr>
+    
+    <%--initParam获取的是web.xml文件中Servlet上下文的初始化参数(context-param标签)--%>
+    <%--在java程序中需要使用ServletContext对象来获取  对应JSP的九大内置对象之一：application--%>
+    pageSize: <%=request.getServletContext().getInitParameter("pageSize")%><br>
+    pageNum: <%=request.getServletContext().getInitParameter("pageNum")%><br>
+    pageSize: <%=application.getInitParameter("pageSize")%><br>
+    pageNum: <%=application.getInitParameter("pageNum")%><br>
+    pageSize: ${initParam.pageSize}<br>
+    pageNum: ${initParam.pageNum}
+    ```
   
   - EL表达式的运算符
   
     - 算术运算符
       - +、-、*、/、%
+      - 注意：在EL表达式中"+"只能做求和运算，不会进行字符串拼接操作, "+"两边不是数字的时候，一定会转成数字，转不成数字就会报错。
     - 关系运算符
-      - [ ] == eq != > >= < <= 
+      - ==、!=、>、>=、<、<=、eq
+      - **使用双等号==判断两个java对象是否相等时会调用equals方法**。
+      - 使用双等号和eq都会调用equals方法。
+      - != 也会调用equals方法
     - 逻辑运算符
-      - [ ] !  && ||  not and or
-    - 条件运算符
-      - [ ] ? : 
+      - !、&&、||、not、and、or
+    - 条件运算符(三目运算符)
+      - ? :
     - 取值运算符
       - [ ]和.
-    - empty运算符
+    - empty运算符(如果为空，返回true)
       - [ ] empty运算符的结果是boolean类型
       - [ ] ${empty param.username}
       - [ ] ${not empty param.username}
@@ -3258,14 +3338,72 @@ public void service(ServletRequest request, ServletResponse response){
   
       - <c:if test="boolean类型，支持EL表达式"></c: if>
   
+      ```jsp
+      <%--没有else--%>
+      <c:if test="${empty param.username}">
+          <h1>用户名不能为空</h1>
+      </c:if>
+      <%--if标签的test标签是必须的--%>
+      <%--if标签还有var属性，保存的是test属性的布尔类型的值，不是必须的--%>
+      <%--scope属性，用来指定var的存储域，也不是必须的--%>
+      <%--scope有四个值可选：page(pageContext域), request(request域), session(session域), application(application域)--%>
+      <c:if test="${not empty param.username}" var="v" scope="request">
+          <h1>欢迎${param.username}登录</h1>
+      </c:if>
+      
+      <hr>
+      <%--通过EL表达式将request域当中的v取出--%>
+      ${v} 
+      ```
+    
     - c:forEach
-  
+    
       - <c:forEach items="集合，支持EL表达式" var="集合中的元素" varStatus="元素状态对象"> ${元素状态对象.count} </c: forEach>
       - <c:forEach var="i" begin="1" end="10" step="2"> ${i} </c: forEach>
-  
+    
+      ```jsp
+      <%--引入标签库--%>
+      <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+      
+      <%
+          List<Student> stuList = new ArrayList<>();
+          Student s1 = new Student("111", "警察");
+          Student s2 = new Student("222", "小偷");
+          Student s3 = new Student("333", "美女");
+          stuList.add(s1);
+          stuList.add(s2);
+          stuList.add(s3);
+          request.setAttribute("stuList", stuList);
+      %>
+      
+      <%--使用java代码遍历集合--%>
+      <%
+          List<Student> stuList1 = (List<Student>) request.getAttribute("stuList");
+          for (Student student: stuList1){
+      %>
+              id:<%=student.getId()%>, name:<%=student.getName()%><br>
+      <%
+          }
+      %>
+      
+      <%--使用core标签库中的forEach标签，对List集合进行遍历--%>
+      <%--varStatus这个属性表示var的状态对象，这是一个java对象，这个java对象代表了var的状态--%>
+      <%--varStatus这个状态属性有count属性，可以直接使用，count从1开始，以1递增，主要用于编号--%>
+      <c:forEach items="${stuList}" var="stu" varStatus="stuStatus">
+          编号: ${stuStatus.count}, id: ${stu.id}, name: ${stu.name} <br>
+      </c:forEach>
+      
+      <%--var用来指定循环中的变量--%>
+      <%--begin开始，end结束，step步长--%>
+      <%--i可以使用EL表达式，说明i变量被放到了某个域当中(存储在了pageContext域中)--%>
+      <c:forEach var="i" begin="1" end="10" step="1">
+          ${i}<br>
+      </c:forEach>
+      ```
+    
     - c:choose c:when c:otherwise
-  
-      - ```
+    
+      - ```jsp
         <c:choose>
             <c:when test="${param.age < 18}">
                 青少年
@@ -3290,7 +3428,7 @@ public void service(ServletRequest request, ServletResponse response){
 
 - 在前端HTML代码中，有一个标签，叫做base标签，这个标签可以设置整个网页的基础路径。
 
-  - 这是Java的语法，也不是JSP的语法。是HTML中的一个语法。HTML中的一个标签。通常出现在head标签中。
+  - 这不是Java的语法，也不是JSP的语法。是HTML中的一个语法。HTML中的一个标签。通常出现在head标签中。
 
   - < base href="http://localhost:8080/oa/">
 
@@ -3318,11 +3456,11 @@ public void service(ServletRequest request, ServletResponse response){
   
 - 一个过滤器怎么写呢？
 
-  - 第一步：编写一个Java类实现一个接口：jarkata.servlet.Filter。并且实现这个接口当中所有的方法。
+  - 第一步：编写一个Java类实现一个接口：jakarta.servlet.Filter。并且实现这个接口当中所有的方法。
 
-    - init方法：在Filter对象第一次被创建之后调用，并且只调用一次。
-    - doFilter方法：只要用户发送一次请求，则执行一次。发送N次请求，则执行N次。在这个方法中编写过滤规则。
-    - destroy方法：在Filter对象被释放/销毁之前调用，并且只调用一次。
+    - init方法：**在Filter对象第一次被创建之后调用，并且只调用一次。**
+    - doFilter方法：只要用户发送一次请求，则执行一次。发送N次请求，则执行N次。**在这个方法中编写过滤规则。**
+    - destroy方法：**在Filter对象被释放/销毁之前调用，并且只调用一次。**
 
   - 第二步：在web.xml文件中对Filter进行配置。这个配置和Servlet很像。
 
@@ -3350,13 +3488,25 @@ public void service(ServletRequest request, ServletResponse response){
   - 第一：在过滤器当中是否编写了：chain.doFilter(request, response); 代码。
   - 第二：用户发送的请求路径是否和Servlet的请求路径一致。
 
-- chain.doFilter(request, response); 这行代码的作用：
+- **chain.doFilter(request, response); 这行代码的作用：**
 
   - 执行下一个过滤器，如果下面没有过滤器了，执行最终的Servlet。
 
 - 注意：Filter的优先级，天生的就比Servlet优先级高。
 
   - /a.do 对应一个Filter，也对应一个Servlet。那么一定是先执行Filter，然后再执行Servlet。
+
+  ```java
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+          throws IOException, ServletException {
+      // 在请求的时候添加过滤规则
+      System.out.println("doFilter方法开始执行");
+      // 执行下一个过滤器，如果下一个不是过滤器了，则执行目标程序Servlet
+      chain.doFilter(request, response);
+      // 在响应的时候添加过滤规则
+      System.out.println("doFilter方法执行结束");
+  }
+  ```
 
 - 关于Filter的配置路径：
 
@@ -3408,20 +3558,65 @@ public void service(ServletRequest request, ServletResponse response){
 
   - jakarta.servlet包下：
     - ServletContextListener
+    
+      ```java
+      @WebListener
+      public class MyServletContextListener implements ServletContextListener {
+          @Override
+          public void contextInitialized(ServletContextEvent sce) {
+              // 这个方法是在ServletContext对象被创建的时候调用。(服务器启动时)
+              System.out.println("ServletContext对象创建了");
+          }
+      
+          @Override
+          public void contextDestroyed(ServletContextEvent sce) {
+              // 这个方法是在ServletContext对象被销毁的时候调用。(服务器关闭时)
+              System.out.println("ServletContext对象销毁了");
+          }
+      }
+      ```
+    
     - ServletContextAttributeListener
+    
     - ServletRequestListener
+    
     - ServletRequestAttributeListener
+    
   - jakarta.servlet.http包下：
     - HttpSessionListener
+    
     - HttpSessionAttributeListener
       - 该监听器需要使用@WebListener注解进行标注。
       - 该监听器监听的是什么？是session域中数据的变化。只要数据变化，则执行相应的方法。主要监测点在session域对象上。
+      
+      ```java
+      @WebListener
+      public class MyHttpSessionAttributeListener implements HttpSessionAttributeListener {
+          @Override
+          public void attributeAdded(HttpSessionBindingEvent se) {
+              System.out.println("session data add");
+          }
+      
+          @Override
+          public void attributeRemoved(HttpSessionBindingEvent se) {
+              System.out.println("session data remove");
+          }
+      
+          @Override
+          public void attributeReplaced(HttpSessionBindingEvent se) {
+              System.out.println("session data replace");
+          }
+      }
+      ```
+      
     - HttpSessionBindingListener
       - 该监听器不需要使用@WebListener进行标注。
       - 假设User类实现了该监听器，那么User对象在被放入session的时候触发bind事件，User对象从session中删除的时候，触发unbind事件。
       - 假设Customer类没有实现该监听器，那么Customer对象放入session或者从session删除的时候，不会触发bind和unbind事件。
+      
     - HttpSessionIdListener
-      - session的id发生改变的时候，监听器中的唯一一个方法就会被调用。
+      - session的id发生改变的时候，监听器中的唯一的一个方法就会被调用。(这个接口只有一个方法)
+      
     - HttpSessionActivationListener
       - 监听session对象的钝化和活化的。
       - 钝化：session对象从内存存储到硬盘文件。

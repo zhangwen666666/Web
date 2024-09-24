@@ -1,5 +1,6 @@
 package com.javaweb.oa.web.action;
 
+import com.javaweb.oa.bean.User;
 import com.javaweb.oa.utils.DBUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -35,6 +36,7 @@ public class UserServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         // 销毁session
         if (session != null) {
+            session.removeAttribute("user");
             session.invalidate();
             Cookie[] cookies = request.getCookies();
             if(cookies != null){
@@ -80,7 +82,8 @@ public class UserServlet extends HttpServlet {
         if (success) {
             // 获取session对象
             HttpSession session = request.getSession();
-            session.setAttribute("username", username);
+            // session.setAttribute("username", username);
+            session.setAttribute("user",new User(username, password));
 
             // 登录成功
             // 如果用户选择了"十天内免登录"，则创建cookie

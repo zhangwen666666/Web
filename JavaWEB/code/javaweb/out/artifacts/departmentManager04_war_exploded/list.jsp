@@ -19,7 +19,8 @@
         }   
     </script>
 
-    <h3>欢迎${username}登录</h3>
+    <h3>欢迎${user.username}登录</h3>
+    <h3>当前在线人数：${count}</h3>
     <a href="user/exit">[退出系统]</a>
 
     <h1 align="center">部门列表</h1>

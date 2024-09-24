@@ -23,7 +23,7 @@ public class LoginCheckFilter implements Filter {
         // 获取请求路径
         String servletPath = request.getServletPath();
         HttpSession session = request.getSession(false);
-        if ((session != null && session.getAttribute("username") != null)
+        if ((session != null && session.getAttribute("user") != null)
                 || "/welcome".equals(servletPath) || "/index.jsp".equals(servletPath)
                 || "/user/login".equals(servletPath) || "/user/exit".equals(servletPath)) {
             chain.doFilter(request,response);
