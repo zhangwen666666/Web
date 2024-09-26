@@ -3,6 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/JSTL/JSTL.iml" filepath="$PROJECT_DIR$/JSTL/JSTL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/actorManager/actorManager.iml" filepath="$PROJECT_DIR$/actorManager/actorManager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/actorManager_EL_JSTL/actorManager_EL_JSTL.iml" filepath="$PROJECT_DIR$/actorManager_EL_JSTL/actorManager_EL_JSTL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/actorManager_JSP/actorManager_JSP.iml" filepath="$PROJECT_DIR$/actorManager_JSP/actorManager_JSP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/actorManager_Servlet/actorManager_Servlet.iml" filepath="$PROJECT_DIR$/actorManager_Servlet/actorManager_Servlet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/actorManager_Session/actorManager_Session.iml" filepath="$PROJECT_DIR$/actorManager_Session/actorManager_Session.iml" />
       <module fileurl="file://$PROJECT_DIR$/departmentManager/departmentManager.iml" filepath="$PROJECT_DIR$/departmentManager/departmentManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/departmentManager02/departmentManager02.iml" filepath="$PROJECT_DIR$/departmentManager02/departmentManager02.iml" />
       <module fileurl="file://$PROJECT_DIR$/departmentManager03/departmentManager03.iml" filepath="$PROJECT_DIR$/departmentManager03/departmentManager03.iml" />

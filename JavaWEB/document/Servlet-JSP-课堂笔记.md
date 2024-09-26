@@ -400,8 +400,6 @@
       
       ```
 
-      
-
   - 第十步：启动Tomcat服务器
 
   - 第十一步：打开浏览器，在浏览器地址栏上输入一个url，这个URL必须是：
@@ -409,7 +407,7 @@
     - http://127.0.0.1:8080/crm/fdsa/fd/saf/d/sa/fd/sa/fd   
     - 非常重要的一件事：浏览器上的请求路径不能随便写，这个请求路径必须和web.xml文件中的url-pattern一致。
     - 注意：浏览器上的请求路径和web.xml文件中的url-pattern的唯一区别就是：浏览器上的请求路径带项目名：/crm
-
+  
   - 浏览器上编写的路径太复杂，可以使用超链接。（**非常重要：html页面只能放到WEB-INF目录外面。**）
 
   - 以后不需要我们编写main方法了。tomcat服务器负责调用main方法，Tomcat服务器启动的时候执行的就是main方法。我们javaweb程序员只需要编写Servlet接口的实现类，然后将其注册到web.xml文件中，即可。
@@ -428,7 +426,7 @@
          |------image
          ....
     ```
-
+  
   - 浏览器发送请求，到最终服务器调用Servlet中的方法，是怎样的一个过程？（以下这个过程描述的很粗糙。其中还有很多步骤我省略了。）
 
     - 用户输入URL，或者直接点击超链接：http://127.0.0.1:8080/crm/fdsa/fd/saf/d/sa/fd/sa/fd  
@@ -520,8 +518,6 @@ public void service(ServletRequest request, ServletResponse response){
   </web-app>
   ```
 
-  
-
   - 第九步：给一个html页面，在HTML页面中编写一个超链接，用户点击这个超链接，发送请求，Tomcat执行后台的StudentServlet。
 
     - student.html
@@ -531,7 +527,7 @@ public void service(ServletRequest request, ServletResponse response){
     - student.html文件的内容
 
     - ```html
-      <!DOCTYPE html>
+    <!DOCTYPE html>
       <html lang="en">
       <head>
           <meta charset="UTF-8">
@@ -543,23 +539,21 @@ public void service(ServletRequest request, ServletResponse response){
       </body>
       </html>
       ```
-
-      
-
+  
   - 第十步：让IDEA工具去关联Tomcat服务器。关联的过程当中将webapp部署到Tomcat服务器当中。
 
     - IDEA工具右上角，绿色小锤子右边有一个：Add Configuration
-    - 左上角加号，点击Tomcat Server --> local
+  - 左上角加号，点击Tomcat Server --> local
     - 在弹出的界面中设置服务器Server的参数（基本上不用动）
-    - 在当前窗口中有一个Deployment（点击这个用来部署webapp），继续点击加号，部署即可。
+  - 在当前窗口中有一个Deployment（点击这个用来部署webapp），继续点击加号，部署即可。
     - 修改 Application context为：/xmm
-
+  
   - 第十一步：启动Tomcat服务器
-
+  
     - 在右上角有绿色的箭头，或者绿色的小虫子，点击这个绿色的小虫子，可以采用debug的模式启动Tomcat服务器。
-    - 我们开发中建议适用debug模式启动Tomcat
-
-  - 第十二步：打开浏览器，在浏览器地址栏上输入：http://localhost:8080/xmm/student.html
+  - 我们开发中建议适用debug模式启动Tomcat
+  
+- 第十二步：打开浏览器，在浏览器地址栏上输入：http://localhost:8080/xmm/student.html
 
 ## Servlet对象的生命周期
 
@@ -805,8 +799,7 @@ public void service(ServletRequest request, ServletResponse response){
          * @throws ServletException
          * @throws IOException
          */
-        public abstract void service(ServletRequest servletRequest, ServletResponse servletResponse)
-                throws ServletException, IOException;
+        public abstract void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException;
     
         @Override
         public String getServletInfo() {
@@ -819,7 +812,7 @@ public void service(ServletRequest request, ServletResponse response){
         }
     }
     ```
-  
+    
   - 子类LoginServlet继承了GenericServlet这个抽象类
   
     ```java
@@ -861,12 +854,9 @@ public void service(ServletRequest request, ServletResponse response){
             System.out.println("service方法中拿到的config对象：" + config);
         }
     }
-    
     ```
-  
     
-
-
+  
 
 ## ServletConfig
 
@@ -1326,7 +1316,7 @@ public void service(ServletRequest request, ServletResponse response){
 
 - 怎么向服务器发送GET请求，怎么向服务器发送POST请求？
 
-  - 到目前为止，只有一种情况可以发送POST请求：使用form表单，并且form标签中的method属性值为：method="post"。
+  - **到目前为止，只有一种情况可以发送POST请求：使用form表单，并且form标签中的method属性值为：method="post"。**
   - 其他所有情况一律都是get请求：
     - 在浏览器地址栏上直接输入URL，敲回车，属于get请求。
     - 在浏览器上直接点击超链接，属于get请求。
@@ -1738,7 +1728,7 @@ public void service(ServletRequest request, ServletResponse response){
           </welcome-file-list>
       ```
 
-    - 注意：设置欢迎页面的时候，这个路径不需要以“/”开始。并且这个路径默认是从webapp的根下开始查找。
+    - 注意：**设置欢迎页面的时候，这个路径不需要以“/”开始。并且这个路径默认是从webapp的根下开始查找。**
 
   - 第三步：启动服务器，浏览器地址栏输入地址
 
@@ -1762,7 +1752,7 @@ public void service(ServletRequest request, ServletResponse response){
 
     - 注意：路径不需要以“/”开始，并且路径默认从webapp的根下开始找。
 
-- 一个webapp是可以设置多个欢迎页面的
+- **一个webapp是可以设置多个欢迎页面的**
 
   - ```xml
     <welcome-file-list>
@@ -1820,36 +1810,34 @@ public void service(ServletRequest request, ServletResponse response){
         }
         ```
 
-        
-
     - 第二步：在web.xml文件中配置servlet
 
       - ```xml
-            <servlet>
-                <servlet-name>welcomeServlet</servlet-name>
-                <servlet-class>com.bjpowernode.javaweb.servlet.WelcomeServlet</servlet-class>
-            </servlet>
-            <servlet-mapping>
-                <servlet-name>welcomeServlet</servlet-name>
-                <url-pattern>/fdsa/fds/a/fds/af/ds/af/dsafdsafdsa</url-pattern>
-            </servlet-mapping>
+        <servlet>
+            <servlet-name>welcomeServlet</servlet-name>
+            <servlet-class>com.bjpowernode.javaweb.servlet.WelcomeServlet</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>welcomeServlet</servlet-name>
+            <url-pattern>/fdsa/fds/a/fds/af/ds/af/dsafdsafdsa</url-pattern>
+        </servlet-mapping>
         ```
-
+    
     - 第三步：在web.xml文件中配置欢迎页
 
       - ```xml
-            <welcome-file-list>
-                <welcome-file>fdsa/fds/a/fds/af/ds/af/dsafdsafdsa</welcome-file>
-            </welcome-file-list>
+        <welcome-file-list>
+            <welcome-file>fdsa/fds/a/fds/af/ds/af/dsafdsafdsa</welcome-file>
+        </welcome-file-list>
         ```
-
+    
         
 
 ## 关于WEB-INF目录
 
 - 在WEB-INF目录下新建了一个文件：welcome.html
 - 打开浏览器访问：http://localhost:8080/servlet07/WEB-INF/welcome.html 出现了404错误。
-- 注意：放在WEB-INF目录下的资源是受保护的。在浏览器上不能够通过路径直接访问。所以像HTML、CSS、JS、image等静态资源一定要放到WEB-INF目录之外。
+- 注意：**放在WEB-INF目录下的资源是受保护的。在浏览器上不能够通过路径直接访问**。所以像HTML、CSS、JS、image等静态资源一定要放到WEB-INF目录之外。
 
 ## HttpServletRequest接口详解
 
@@ -1941,8 +1929,6 @@ public void service(ServletRequest request, ServletResponse response){
         	String value = request.getParameter("name");
         ```
 
-        
-
     - request对象实际上又称为“请求域”对象。
 
       - 应用域对象是什么？
@@ -1956,7 +1942,7 @@ public void service(ServletRequest request, ServletResponse response){
           - 第三：这个共享的数据很少的修改操作。
           - 在以上三个条件都满足的情况下，使用这个应用域对象，可以大大提高我们程序执行效率。
           - 实际上向应用域当中绑定数据，就相当于把数据放到了缓存（Cache）当中，然后用户访问的时候直接从缓存中取，减少IO的操作，大大提升系统的性能，所以缓存技术是提高系统性能的重要手段。
-
+    
         - 你见过哪些缓存技术呢？
 
           - 字符串常量池
@@ -1964,7 +1950,7 @@ public void service(ServletRequest request, ServletResponse response){
           - 数据库连接池（提前创建好N个连接对象，将连接对象放到集合当中，使用连接对象的时候，直接从缓存中拿。省去了连接对象的创建过程。效率提升。）
           - 线程池（Tomcat服务器就是支持多线程的。所谓的线程池就是提前先创建好N个线程对象，将线程对象存储到集合中，然后用户请求过来之后，直接从线程池中获取线程对象，直接拿来用。提升系统性能）
           - 后期你还会学习更多的缓存技术，例如：redis、mongoDB.....
-
+    
         - ServletContext当中有三个操作域的方法：
 
           - ```java
@@ -1978,7 +1964,7 @@ public void service(ServletRequest request, ServletResponse response){
             Object obj = map.get("name"); // 通过map集合的key获取value
             map.remove("name"); // 通过Map集合的key删除key和value这个键值对。
             ```
-
+    
       - “请求域”对象
 
         - “请求域”对象要比“应用域”对象范围小很多。生命周期短很多。请求域只在一次请求内有效。
@@ -1992,7 +1978,7 @@ public void service(ServletRequest request, ServletResponse response){
             Object getAttribute(String name); // 从域当中根据name获取数据。
             void removeAttribute(String name); // 将域当中绑定的数据移除
             ```
-
+    
         - 请求域和应用域的选用原则？
 
           - 尽量使用小的域对象，因为小的域对象占用的资源较少。
@@ -2515,6 +2501,11 @@ public void service(ServletRequest request, ServletResponse response){
 - 注解对象的使用格式：
 
   - @注解名称(属性名=属性值, 属性名=属性值, 属性名=属性值....)
+  
+  ```java
+  @WebServlet(name = "welcomeServlet", urlPatterns = {"/welcome", "/welcome01"},
+          initParams = {@WebInitParam(name = "user", value = "root"), @WebInitParam(name = "password", value = "1234")})
+  ```
 
 ## 使用模板方法设计模式优化oa项目
 
@@ -2576,7 +2567,6 @@ public void service(ServletRequest request, ServletResponse response){
       }
   }
   ```
-  
   
 
 ## 分析使用纯粹Servlet开发web应用的缺陷
@@ -2673,7 +2663,7 @@ public void service(ServletRequest request, ServletResponse response){
     - 应用域（项目级别的，所有用户共享的。）
   - 这三个域对象的大小关系
     - request < session < application
-  - 他们三个域对象都有以下三个公共的方法：
+  - **他们三个域对象都有以下三个公共的方法：**
     - setAttribute（向域当中绑定数据）
     - getAttribute（从域当中获取数据）
     - removeAttribute（删除域当中的数据）
@@ -2752,7 +2742,7 @@ public void service(ServletRequest request, ServletResponse response){
   - 没有设置有效时间：默认保存在浏览器的运行内存中，浏览器关闭则cookie消失。
   - 只要设置cookie的有效时间 > 0，这个cookie一定会存储到硬盘文件当中。
   - 设置cookie的有效时间 = 0 呢？
-    - cookie被删除，主要应用在删除浏览器上的同名cookie。
+    - cookie被删除，主要应用在删除浏览器上的同名cookie。(删除cookie时也需要使用setPath指定路径，指定与手动设置的cookie路径相同)
   - 设置cookie的有效时间 < 0 呢？
     - 保存在运行内存中。和不设置一样。
 
@@ -2763,6 +2753,22 @@ public void service(ServletRequest request, ServletResponse response){
     - 也就是说，以后只要浏览器的请求路径是http://localhost:8080/servlet13/cookie 这个路径以及这个路径下的子路径，cookie都会被发送到服务器。
   - 手动设置cookie的path
     - cookie.setPath(“/servlet13”); 表示只要是这个servlet13项目的请求路径(/servlet/*这样的路径)，都会提交这个cookie给服务器。
+
+- cookie的使用
+
+  ```java
+  Cookie cookie = new Cookie("productid", "123889789223471");
+  Cookie cookie1 = new Cookie("zhangsan", "123456");
+  // 设置cookie在一小时之后失效
+  // cookie.setMaxAge(60 * 60);
+  cookie.setMaxAge(-1);
+  cookie1.setMaxAge(-1);
+  cookie.setPath(request.getContextPath());
+  cookie1.setPath(request.getContextPath());
+  // 将cookie对象响应到浏览器
+  response.addCookie(cookie);
+  response.addCookie(cookie1);
+  ```
 
 - 浏览器发送cookie给服务器了，服务器中的java程序怎么接收？
 

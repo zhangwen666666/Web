@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>演员列表页面</title>
+</head>
+<body>
+    <script>
+        function del(actorId){
+            if(window.confirm('亲, 删了不可恢复哦!!!')){
+                window.location.href='delete.html?actorId='+actorId
+            }
+        }
+    </script>
+    <h1 align='center'>演员列表</h1>
+    <hr>
+    <table border='1px' width='50%' align='center'>
+        <tr align='center'>
+            <th>序号</th>
+            <th>演员编号</th>
+            <th>姓名</th>
+            <th>操作</th>
+        </tr>
+        <tr align='center'>
+            <td>1</td>
+            <td>10</td>
+            <td>黄晓明</td>
+            <td>
+                <a href='javascript:void(0)' onclick='del(10)'>删除</a>
+                <a href='edit.html'>修改</a>
+                <a href='detail.html'>详情</a>
+            </td>
+        </tr>
+        <tr align='center'>
+            <td>2</td>
+            <td>20</td>
+            <td>周润发</td>
+            <td>
+                <a href='javascript:void(0)' onclick='del(20)'>删除</a>
+                <a href='edit.html'>修改</a>
+                <a href='detail.html'>详情</a>
+            </td>
+        </tr>
+    </table>
+    <hr>
+    <h3>
+        <a href='add.html'>点击新增演员</a>
+    </h3>
+</body>
+</html>
