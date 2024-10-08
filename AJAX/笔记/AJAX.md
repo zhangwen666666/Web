@@ -294,10 +294,20 @@
 - 在WEB前端中，如何将一个json格式的字符串转换成json对象
 
   ```javascript
-  var jsonStr = "{\"username\" : \"zhangsan\", \"password\" : \"1233344\"}"
-  var jsonObj = JSON.parse(jsonStr)
+  // 从服务器返回的是一个json格式的字符串
+  var jsonStr = "{\"username\": \"zhangsan\",\"password\": \"123456\"}"
+  
+  // 将json格式的字符串转换成json对象
+  // 方式1：eval函数 (eval函数具有较高的安全风险,也不推荐在生产环境中使用)
+  var jsonObj = eval('(' + jsonStr + ')')
+  console.log(jsonObj)
   console.log(jsonObj.username)
   console.log(jsonObj.password)
+  // 方式2：使用javascript语言中的内置对象JSON的一个方法parse
+  var jsonObj2 = JSON.parse(jsonStr);
+  console.log(jsonObj2)
+  console.log(jsonObj2.username)
+  console.log(jsonObj2.password)
   ```
 
 - 在后端拼接JSON格式的字符串，响应给前端的浏览器
