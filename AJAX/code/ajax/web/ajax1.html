@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax get请求</title>
+</head>
+<body>
+
+<script type="text/javascript">
+    window.onload = function () {
+        var helloBtn = document.getElementById("helloBtn");
+        helloBtn.onclick = function () {
+            //console.log("发送ajax get请求")
+
+            // 1. 创建AJAX核心对象XMLHttpRequest
+            var xhr = new XMLHttpRequest();
+
+            // 2. 注册回调函数
+            //    这是一个回调函数，这个函数在XMLHttpRequest对象的readyState状态值发生改变的时候被调用
+            xhr.onreadystatechange = function () {
+                // 这里的回调函数会被调用多次。 0 --> 1被调用一次，1 --> 2被调用一次....
+                // console.log(xhr.readyState)
+                // 当XMLHttpRequest对象的readyState的状态码是4的时候，表示响应结束了。
+                if(this.readyState === 4){
+                    // console.log("响应结束")
+                    // 获取HTTP状态码
+                    // console.log(this.status)
+                    if (this.status === 404){
+                        alert("对不起，您访问的资源不存在，请检查请求路径")
+                    } else if(this.status === 500){
+                        alert("对不起，服务器发生了严重的错误，请联系服务器管理员解决")
+                    } else if(this.status === 200){
+                        // alert("响应成功")
+                        // 200表示完全响应结束，通过XMLHttpRequest对象的responseText属性获取响应的信息。
+                        // alert(this.responseText)
+                        // 把响应信息放到div当中，渲染
+                        document.getElementById("mydiv").innerHTML = this.responseText
+                    }
+                }
+            }
+
+            // 3. 开启通道 (只是打开通道，不会发送请求)
+            // XMLHttpRequest对象的open方法
+            // open(method, url, async, user, psw)
+            // method: 请求的方式，可以是GET，也可以是POST，也可以是其他请求方式
+            // url：请求的路径
+            // async：只能是true或者false，true表示此ajax请求是一个异步请求，false表示此ajax请求是一个同步请求。
+            // user: 用户名   pwd：密码
+            // (用户名和密码是进行身份认证的，说明要想访问这个服务器上的资源，可能需要提供一些口令才能访问)
+            xhr.open("GET", "/ajax/ajaxrequest1", true)
+
+            // 4. 发送请求
+            xhr.send()
+        }
+    }
+</script>
+
+<!--给一个按钮，用户点击按钮的时候发送ajax请求-->
+<input type="button" value="hello ajax" id="helloBtn">
+
+<!--给一个div图层，ajax接受了响应的数据之后，在div中进行渲染-->
+<div id="mydiv"></div>
+</body>
+</html>

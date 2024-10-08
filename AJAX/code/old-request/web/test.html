@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+</head>
+<body>
+
+<script type="text/javascript">
+    function sayHello(){
+        alert("hello javascript")
+    }
+</script>
+
+    <!--点击按钮，执行一段JS代码-->
+    <input type="button" value="hello" onclick="sayHello()">
+
+    <!--通过JS代码给按钮绑定事件-->
+    <input type="button" value="hello2" id="helloBtn">
+
+<script type="text/javascript">
+    // 页面加载完毕之后，给id="helloBtn"的元素绑定鼠标单击事件
+    // 这个function就是一个回调函数，这个回调函数什么时候执行？
+    // 当load事件发生之后，这个回调函数才会执行
+    // 页面元素加载完毕之后，load事件发生
+    window.onload = function (){
+        // 获取id="helloBtn"的对象
+        var helloBtn = document.getElementById("helloBtn");
+        // 给id="helloBtn"元素绑定click事件
+        // 这个function也是一个回调函数，这个回调函数当这个按钮被鼠标单击的时候会被执行
+        helloBtn.onclick = function(){
+            //alert("hello JavaScript！！！！")
+            // 这里的this就是发生这个事件的事件源对象 object HTMLInputElement
+            // 是这个按钮发生了鼠标单击，那么这个this代表的就是这个按钮对象
+            //alert(this)
+            alert(this.value)
+        }
+    }
+</script>
+
+</body>
+</html>

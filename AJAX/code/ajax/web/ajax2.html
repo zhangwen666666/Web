@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发送ajax get请求</title>
+</head>
+<body>
+<script type="text/javascript">
+    window.onload = function () {
+        document.getElementById("btn").onclick = function () {
+            // 1. 创建AJAX核心对象
+            var xhr = new XMLHttpRequest();
+            // 2. 注册回调函数
+            xhr.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    if (this.status === 200) {
+                        document.getElementById("mydiv").innerHTML = this.responseText
+                    }
+                }
+            }
+            // 3. 打开通道
+            // 获取用户填写的数据
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            xhr.open("GET", "/ajax/ajaxrequest2?username=" + username + "&password=" + password, true)
+            // 4. 发送请求
+            xhr.send()
+        }
+    }
+</script>
+
+username: <input type="text" id="username"><br>
+password: <input type="password" id="password"><br>
+<input type="button" value="ajax2" id="btn">
+<div id="mydiv"></div>
+</body>
+</html>

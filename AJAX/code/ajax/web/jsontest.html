@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>json在js中的使用</title>
+</head>
+<body>
+<script>
+    <!--定义json格式的数据-->
+    // 另一个json对象
+    var address = {
+        "city": "北京",
+        "street": "北京大兴区",
+        "zipCode": "123456"
+    }
+    var user = {
+        "usercode": 111,
+        "username": "zhangsan",
+        "sex": true,
+        "age": 20,
+        "hobbies": ["抽烟", "喝酒", "泡妞"],
+        "addr":address
+    }
+
+    // 访问json对象的属性
+    // 方式1
+    console.log(user.usercode)
+    console.log(user.username)
+    console.log(user.sex)
+    console.log(user.age)
+    for (var i = 0; i < user.hobbies.length; i++) {
+        console.log(user.hobbies[i])
+    }
+    console.log(user.addr.city)
+
+    // 方式2
+    console.log(user["usercode"])
+    console.log(user["username"])
+    console.log(user["sex"])
+    console.log(user["age"])
+</script>
+</body>
+</html>

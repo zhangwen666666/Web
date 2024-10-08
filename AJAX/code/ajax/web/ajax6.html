@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发送AJAX请求，显示学生列表</title>
+</head>
+<body>
+
+<script type="text/javascript">
+    window.onload = function () {
+        document.getElementById("btn").onclick = function () {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        // document.getElementById("stubody").innerHTML = this.responseText
+                        // 将json格式的字符串转换成json对象
+                        var stuList = JSON.parse(this.responseText); // 是一个数组
+                        var html = ""
+                        for (var i = 0; i < stuList.length; i++) {
+                            var stu = stuList[i];
+                            html += "<tr>"
+                            html += "    <td>" + (i + 1) + "</td>"
+                            html += "    <td>" + stu.name + "</td>"
+                            html += "    <td>" + stu.age + "</td>"
+                            html += "    <td>" + stu.addr + "</td>"
+                            html += "</tr>"
+                        }
+                        document.getElementById("stubody").innerHTML = html
+                    } else {
+                        alert(this.status)
+                    }
+                }
+            }
+            xhr.open("GET", "/ajax/ajaxrequest5", true)
+            xhr.send()
+        }
+    }
+</script>
+<input type="button" value="显示学员列表" id="btn">
+
+<table width="50%" border="1px">
+    <tr>
+        <th>序号</th>
+        <th>姓名</th>
+        <th>年龄</th>
+        <th>住址</th>
+    </tr>
+    <tbody id="stubody">
+        <!--<tr>
+            <td>1</td>
+            <td>张三</td>
+            <td>20</td>
+            <td>北京大兴区</td>
+        </tr>-->
+    </tbody>
+</table>
+</body>
+</html>
