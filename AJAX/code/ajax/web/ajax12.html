@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>省市联动</title>
+</head>
+<body>
+<script type="text/javascript" src="/ajax/js/jQuery-1.0.0.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        // 发送ajax请求获取省份(pcode是null)
+        $.ajax({
+            type: "get",
+            url: "/ajax/listArea",
+            data: "t=" + new Date().getTime(),
+            async: true,
+            success: function (json) {
+                // [{"code": "001","name": "河北省"},{"code": "002","name": "河南省"}]
+                // 以上格式的json是我们自己设计出来的，我们希望服务器给我们返回这样的一个json格式的字符串
+                var html = "<option value=''>请选择省份</option>"
+                for (var i = 0; i < json.length; i++) {
+                    var province = json[i];
+                    html += "<option value=\"" + province.code + "\">" + province.name + "</option>"
+                }
+                $("#province").html(html)
+            }
+        })
+
+        // 只要change一发生，就发送ajax请求
+        $("#province").change(function () {
+            // alert("发送ajax请求")
+            // this就是当前选中的option元素
+            // alert(this.value)
+            // 发送ajax请求
+            $.ajax({
+                type: "get",
+                url: "/ajax/listArea",
+                data: "t=" + new Date().getTime() + "&pcode=" + this.value,
+                async: true,
+                success: function (json) {
+                    var html = "<option value=''>请选择市</option>"
+                    for (var i = 0; i < json.length; i++) {
+                        var city = json[i];
+                        html += "<option value=\"" + city.code + "\">" + city.name + "</option>"
+                    }
+                    $("#city").html(html)
+                }
+            })
+        })
+    })
+</script>
+
+<select id="province">
+    <!--<option value="">请选择省份</option>
+    <option value="001">河北省</option>
+    <option value="002">河南省</option>-->
+</select>
+
+<select id="city">
+
+</select>
+
+</body>
+</html>

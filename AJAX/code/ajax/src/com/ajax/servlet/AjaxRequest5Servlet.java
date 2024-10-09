@@ -1,5 +1,7 @@
 package com.ajax.servlet;
 
+import com.ajax.beans.Student;
+import com.alibaba.fastjson.JSON;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,6 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/ajaxrequest5")
 public class AjaxRequest5Servlet extends HttpServlet {
@@ -50,8 +54,10 @@ public class AjaxRequest5Servlet extends HttpServlet {
         PreparedStatement ps = null;
         ResultSet rs = null;
         // 准备StringBuilder拼接json
-        StringBuilder jsonStr = new StringBuilder();
-        jsonStr.append("[");
+        /*StringBuilder jsonStr = new StringBuilder();*/
+        /*jsonStr.append("[");*/
+        List<Student> studentList = new ArrayList<>();
+        String jsonStr = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/exam", "root", "1234");
@@ -64,14 +70,19 @@ public class AjaxRequest5Servlet extends HttpServlet {
                 String age = rs.getString("age");
                 String addr = rs.getString("addr");
                 // {"name": "    李四   ", "age":    18    , "addr": "   北京丰台区  "},
-                jsonStr.append("{\"name\": \"");
+                /*jsonStr.append("{\"name\": \"");
                 jsonStr.append(name);
                 jsonStr.append("\", \"age\": ");
                 jsonStr.append(age);
                 jsonStr.append(", \"addr\": \"");
                 jsonStr.append(addr);
-                jsonStr.append("\"},");
+                jsonStr.append("\"},");*/
+
+                Student s = new Student(name, Integer.parseInt(age), addr);
+                studentList.add(s);
             }
+            // 将List集合转换成json字符串
+            jsonStr = JSON.toJSONString(studentList);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -98,10 +109,10 @@ public class AjaxRequest5Servlet extends HttpServlet {
             }
         }
         // 裁掉多余的","号
-        if (jsonStr.charAt(jsonStr.length() - 1) == ',') {
+        /*if (jsonStr.charAt(jsonStr.length() - 1) == ',') {
             jsonStr.deleteCharAt(jsonStr.length() - 1);
         }
-        jsonStr.append("]");
+        jsonStr.append("]");*/
 
         out.print(jsonStr);
     }

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>手动封装JS库JQuery</title>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    /*封装一个函数，通过这个函数可以获取到html页面中的节点，这个函数给他起一个名字JQuery*/
+    /*根据id获取元素：document.getElementById("btn")*/
+    function jQuery(selector) {
+        /*selector可能是#id，也可能是其他的选择器，例如类选择器: .class*/
+        if (typeof selector == "string") {
+            if (selector.charAt(0) === '#') {
+                // selector是一个id选择器
+                // return document.getElementById(selector.substring(1)); // 这里返回的是dom对象domObj
+                domObj = document.getElementById(selector.substring(1)); // 去掉var定义的是一个全局变量
+                return new jQuery()
+            }
+        }
+
+        if (typeof selector == "function") {
+            window.onload = selector
+        }
+
+        // 定义一个html(htmlStr)函数，代替：domObj.innerHTML = "htmlStr"
+        this.html = function (htmlStr) {
+            domObj.innerHTML = htmlStr
+        }
+
+        // 定义一个click(func)函数, 代替：domObj.onclick = func
+        this.click = function (func) {
+            domObj.onclick = func
+        }
+
+        this.focus = function (func) {
+            domObj.onfocus = func
+        }
+        this.blur = function (func) {
+            domObj.onblur = func
+        }
+        this.change = function (func) {
+            domObj.onchange = func
+        }
+        /*this.val = function (){
+            return domObj.value
+        }*/
+        /*this.setValue = function (val){
+            domObj.value = val
+        }*/
+        // 不给函数传参时，val是undefined
+        this.val = function (val) {
+            if (val === undefined) {
+                return domObj.value
+            } else {
+                domObj.value = val
+            }
+        }
+    }
+
+    $ = jQuery
+
+    /*window.onload = function () {
+        // document.getElementById("btn").onclick = function (){
+        //     document.getElementById("div1").innerHTML = "<font color='red'>用户名不可用</font>"
+        // }
+
+        // jQuery("#btn").onclick = function (){
+        //     jQuery("#div1").innerHTML = "<font color='red'>用户名不可用......</font>"
+        // }
+
+        $("#btn").onclick = function () {
+            $("#div1").innerHTML = "<font color='red'>......用户名不可用......</font>"
+        }
+    }*/
+
+    // $(function(){}) 作用是什么？
+    // 页面加载完毕之后，执行里面的回调函数
+    // $(function(){
+    //     $("#btn").onclick = function () {
+    //         $("#div1").innerHTML = "<font color='red'>..%%%%%....用户名不可用......</font>"
+    //     }
+    // })
+
+    $(function () {
+        $("#btn").click(function () {
+            $("#div1").html("<font color='red'>..------....用户名不可用......</font>")
+
+            // 获取到文本框中的用户名
+            /*var username = document.getElementById("username").value;
+            alert(username)*/
+            var username = $("#username").val()
+            alert(username)
+
+            // 修改文本框的用户名
+            // document.getElementById("username").value = "hehe"
+            // $("#username").setValue("haha")
+            $("#username").val("哈哈哈")
+        })
+    })
+</script>
+
+用户名：<input type="text" id="username">
+
+<button id="btn">显示信息</button>
+<div id="div1"></div>
+
+<span class="myclass"></span>
+<span class="myclass"></span>
+<span class="myclass"></span>
+<span class="myclass"></span>
+
+<input type="checkbox" name="hobby">
+<input type="checkbox" name="hobby">
+
+</body>
+</html>

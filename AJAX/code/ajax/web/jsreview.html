@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>回顾js知识</title>
+</head>
+<body>
+<script type="text/javascript">
+    // 在JS当中怎么定义一个类
+    function User(usercode, username){
+        // 属性
+        this.usercode = usercode
+        this.username = username
+        // 实例方法
+        this.doSome = function () {
+            console.log(username + " doSome...")
+        }
+        // 静态方法
+        User.doOther = function (){
+            console.log("User doOther。。。")
+        }
+    }
+
+    // User.doOther is not a function
+    // 虽然静态方法不需要对象来调用，但是如果没有new对象，静态方法不生效，因此在调用静态方法之前需要new对象
+    User.doOther()
+
+    // 创建对象，访问对象的属性，访问对象的方法，访问静态方法
+    // User()直接这样调用，只会把他当成一个普通函数执行，不会创建对象，在堆中没有这个对象
+    // new User(); 这样是调用该类的构造方法，创建对象
+    var user = new User("111", "zhangsan");
+    // 访问属性
+    alert(user.usercode + "," + user.username)
+    // 调用方法
+    user.doSome()
+    // 调用静态方法
+    User.doOther()
+
+    // 后期给这个类型扩展方法，使用prototype属性 (扩展实例方法)
+    User.prototype.getUsername = function(){
+        return this.username
+    }
+    // 扩展静态方法
+    User.eat = function (){
+        console.log("user eat...")
+    }
+
+    var username = user.getUsername();
+    console.log(username)
+    User.eat()
+</script>
+</body>
+</html>

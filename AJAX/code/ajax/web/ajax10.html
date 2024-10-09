@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>封装AJAX代码到jQuery库当中</title>
+</head>
+<body>
+<script type="text/javascript" src="/ajax/js/jQuery-1.0.0.js"></script>
+<script type="text/javascript">
+    window.onload = function (){
+        document.getElementById("btn").onclick = function () {
+            /*
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(this.readyState === 4){
+                    if (this.status === 200) {
+                        // 假设服务器返回的都是json格式的字符串。
+                        var jsonObj = JSON.parse(this.responseText)
+                        document.getElementById("mydiv").innerHTML = jsonObj.uname
+                    }
+                }
+            }
+            xhr.open("POST", "/ajax/ajaxrequest9", true)
+            xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+            var username = document.getElementById("username").value;
+            xhr.send("username=" + username)
+             */
+
+            var username = document.getElementById("username").value;
+            $.ajax({
+                type: "POST",
+                url: "/ajax/ajaxrequest9",
+                data: "username=" + username,
+                async: true,
+                // 程序响应回来之后，对于客户端来说要拿到响应的数据，然后解析这个数据，展示到页面上
+                success: function (jsonObj) {
+                    document.getElementById("mydiv").innerHTML = jsonObj.uname
+                }
+            })
+        }
+    }
+</script>
+<button id="btn">发送ajax请求</button><br>
+用户名：<input type="text" id="username"><br>
+<div id="mydiv"></div>
+</body>
+</html>

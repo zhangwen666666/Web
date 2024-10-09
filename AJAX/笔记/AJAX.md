@@ -587,43 +587,112 @@
 
 - 接下来，手动封装一个工具类，这个工具类我们可以把它看做是一个JS的库。我们把这个JS库起一个名字，叫做jQuery。（我这里封装的jQuery只是一个前端的库，和后端的java没有关系，只是为了方便web前端代码的编写，提高WEB前端的开发效率）
 
-- 手动开发jQuery，源代码
+- 回顾JS中类的定义，对象的创建，属性以及方法的访问
 
-  ```javascript
-  function jQuery(selector){
-      if (typeof selector == "string") {
-          if (selector.charAt(0) == "#") {
-              domObj = document.getElementById(selector.substring(1))
-              return new jQuery()
+  ```js
+  <script type="text/javascript">
+      // 在JS当中怎么定义一个类
+      function User(usercode, username){
+          // 属性
+          this.usercode = usercode
+          this.username = username
+          // 实例方法
+          this.doSome = function () {
+              console.log(username + " doSome...")
           }
-      }
-      if (typeof selector == "function") {
-          window.onload = selector
-      }
-      this.html = function(htmlStr){
-          domObj.innerHTML = htmlStr
-      }
-      this.click = function(fun){
-          domObj.onclick = fun
-      }
-      this.focus = function (fun){
-          domObj.onfocus = fun
-      }
-      this.blur = function(fun) {
-          domObj.onblur = fun
-      }
-      this.change = function (fun){
-          domObj.onchange = fun
-      }
-      this.val = function(v){
-          if (v == undefined) {
-              return domObj.value
-          }else{
-              domObj.value = v
+          // 静态方法
+          User.doOther = function (){
+              console.log("User doOther。。。")
           }
       }
   
-      // 静态的方法，发送ajax请求
+      // User.doOther is not a function
+      // 虽然静态方法不需要对象来调用，但是如果没有new对象，静态方法不生效，因此在调用静态方法之前需要new对象
+      User.doOther()
+  
+      // 创建对象，访问对象的属性，访问对象的方法，访问静态方法
+      // User()直接这样调用，只会把他当成一个普通函数执行，不会创建对象，在堆中没有这个对象
+      // new User(); 这样是调用该类的构造方法，创建对象
+      var user = new User("111", "zhangsan");
+      // 访问属性
+      alert(user.usercode + "," + user.username)
+      // 调用方法
+      user.doSome()
+      // 调用静态方法
+      User.doOther()
+  
+      // 后期给这个类型扩展方法，使用prototype属性 (扩展实例方法)
+      User.prototype.getUsername = function(){
+          return this.username
+      }
+      // 扩展静态方法
+      User.eat = function (){
+          console.log("user eat...")
+      }
+  
+      var username = user.getUsername();
+      console.log(username)
+      User.eat()
+  </script>
+  ```
+
+- 手动开发jQuery，源代码
+
+  ```javascript
+  /*封装一个函数，通过这个函数可以获取到html页面中的节点，这个函数给他起一个名字JQuery*/
+  /*根据id获取元素：document.getElementById("btn")*/
+  function jQuery(selector) {
+      /*selector可能是#id，也可能是其他的选择器，例如类选择器: .class*/
+      if (typeof selector == "string") {
+          if (selector.charAt(0) === '#') {
+              // selector是一个id选择器
+              // return document.getElementById(selector.substring(1)); // 这里返回的是dom对象domObj
+              domObj = document.getElementById(selector.substring(1)); // 去掉var定义的是一个全局变量
+              return new jQuery()
+          }
+      }
+  
+      if (typeof selector == "function") {
+          window.onload = selector
+      }
+  
+      // 定义一个html(htmlStr)函数，代替：domObj.innerHTML = "htmlStr"
+      this.html = function (htmlStr) {
+          domObj.innerHTML = htmlStr
+      }
+  
+      // 定义一个click(func)函数, 代替：domObj.onclick = func
+      this.click = function (func) {
+          domObj.onclick = func
+      }
+  
+      this.focus = function (func) {
+          domObj.onfocus = func
+      }
+      this.blur = function (func) {
+          domObj.onblur = func
+      }
+      this.change = function (func) {
+          domObj.onchange = func
+      }
+  
+      /*this.val = function (){
+          return domObj.value
+      }*/
+      /*this.setValue = function (val){
+          domObj.value = val
+      }*/
+  
+      // 不给函数传参时，val是undefined
+      this.val = function (val) {
+          if (val === undefined) {
+              return domObj.value
+          } else {
+              domObj.value = val
+          }
+      }
+  
+      // 静态方法，发送ajax请求
       /**
        * 分析：使用ajax函数发送ajax请求的时候，需要程序员给我们传过来什么？
        *      请求的方式(type)：GET/POST
@@ -631,65 +700,85 @@
        *      请求时提交的数据(data)：data
        *      请求时发送异步请求还是同步请求(async)：true表示异步，false表示同步。
        */
-      jQuery.ajax = function(jsonArgs){
-          // 1.
+      jQuery.ajax = function (jsonArgs) {
+          // alert(111)
           var xhr = new XMLHttpRequest();
-          // 2.
           xhr.onreadystatechange = function(){
-              if (this.readyState == 4) {
-                  if (this.status == 200) {
-                      // 我们这个工具类在封装的时候，先不考虑那么多，假设服务器返回的都是json格式的字符串。
+              if(this.readyState === 4){
+                  if (this.status === 200) {
+                      // 假设服务器返回的都是json格式的字符串。
                       var jsonObj = JSON.parse(this.responseText)
+                      // document.getElementById("mydiv").innerHTML = jsonObj.uname
                       // 调用函数
                       jsonArgs.success(jsonObj)
                   }
               }
           }
-  
-          if (jsonArgs.type.toUpperCase() == "POST") {
-              // 3.
+          if (jsonArgs.type.toUpperCase() === "POST"){
               xhr.open("POST", jsonArgs.url, jsonArgs.async)
-              // 4.
-              xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+              xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
               xhr.send(jsonArgs.data)
-          }
-  
-          if (jsonArgs.type.toUpperCase() == "GET") {
+          }else if(jsonArgs.type.toUpperCase() === "GET"){
               xhr.open("GET", jsonArgs.url + "?" + jsonArgs.data, jsonArgs.async)
               xhr.send()
           }
   
       }
   }
+  
   $ = jQuery
-  
-  // 这里有个细节，执行这个目的是为了让静态方法ajax生效。
+  // 为了使静态方法生效
   new jQuery()
-  
-  
   ```
 
 - 使用以上库，怎么用？
 
   ```html
+  <body>
+  <!--引入我们自己的jQuery库-->
   <script type="text/javascript" src="/ajax/js/jQuery-1.0.0.js"></script>
+  
   <script type="text/javascript">
-      $(function(){
-          $("#btn1").click(function(){
+      $(function () {
+          $("#btn1").click(function () {
+              // 发送ajax请求
               $.ajax({
-                  type : "POST",
-                  url : "/ajax/ajaxrequest11",
-                  data : "username=" + $("#username").val(),
-                  async : true,
-                  success : function(json){
+                  type: "GET",
+                  url: "/ajax/ajaxrequest10",
+                  data: "username=" + $("#username").val(),
+                  async: true,
+                  success: function (json) {
                       $("#div1").html(json.uname)
+                  }
+              })
+          })
+  
+          $("#btn2").click(function () {
+              // 发送ajax请求
+              $.ajax({
+                  type: "POST",
+                  url: "/ajax/ajaxrequest11",
+                  data: "username=" + $("#username").val(),
+                  async: false,
+                  success: function (json) {
+                      $("#div2").html(json.uname)
                   }
               })
           })
       })
   </script>
+  
+  用户名：<input type="text" id="username"><br>
+  <button id="btn1">发送ajax get请求</button>
+  <br>
+  <div id="div1"></div>
+  
+  <button id="btn2">发送ajax post请求</button>
+  <br>
+  <div id="div2"></div>
+  
+  </body>
   ```
-
   
 
 ## AJAX实现省市联动
@@ -727,7 +816,8 @@
 ### 跨域
 
 - 跨域是指从一个域名的网页去请求另一个域名的资源。比如从百度(https://baidu.com)页面去请求京东(https://www.jd.com)的资源。
-- 通过超链接或者form表单提交或者window.location.href的方式进行跨域是不存在问题的（**大家可以编写程序测试一下**）。但在一个域名的网页中的一段js代码发送ajax请求去访问另一个域名中的资源，由于同源策略的存在导致无法跨域访问，那么ajax就存在这种跨域问题。
+- 通过超链接、或者form表单提交、或者window.location.href、或者使用script标签可以加载js文件(加载其他站点的js文件)、加载其他站点的图片的方式进行跨域是不存在问题的（**大家可以编写程序测试一下**）。
+- 但在一个域名的网页中的一段js代码发送ajax请求去访问另一个域名中的资源，由于同源策略的存在导致无法跨域访问，那么ajax就存在这种跨域问题。
 - 同源策略是指一段脚本只能读取来自同一来源的窗口和文档的属性，同源就是协议、域名和端口都相同。
 - 同源策略有什么用？如果你刚刚在网银输入账号密码，查看了自己还有1万块钱，紧接着访问一些不规矩的网站，这个网站可以访问刚刚的网银站点，并且获取账号密码，那后果可想而知。所以，从安全的角度来讲，同源策略是有利于保护网站信息的。
 - 有一些情况下，我们是需要使用ajax进行跨域访问的。比如某公司的A页面(a.bjpowernode.com)有可能需要获取B页面(b.bjpowernode.com)。
