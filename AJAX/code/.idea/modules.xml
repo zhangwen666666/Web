@@ -4,10 +4,12 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/a/a.iml" filepath="$PROJECT_DIR$/a/a.iml" />
       <module fileurl="file://$PROJECT_DIR$/ajax/ajax.iml" filepath="$PROJECT_DIR$/ajax/ajax.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ajax-autocomplete/ajax-autocomplete.iml" filepath="$PROJECT_DIR$/ajax-autocomplete/ajax-autocomplete.iml" />
       <module fileurl="file://$PROJECT_DIR$/b/b.iml" filepath="$PROJECT_DIR$/b/b.iml" />
       <module fileurl="file://$PROJECT_DIR$/code.iml" filepath="$PROJECT_DIR$/code.iml" />
       <module fileurl="file://$PROJECT_DIR$/fastjson/fastjson.iml" filepath="$PROJECT_DIR$/fastjson/fastjson.iml" />
       <module fileurl="file://$PROJECT_DIR$/old-request/old-request.iml" filepath="$PROJECT_DIR$/old-request/old-request.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testHttpclient/testHttpclient.iml" filepath="$PROJECT_DIR$/testHttpclient/testHttpclient.iml" />
     </modules>
   </component>
 </project>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jsonp实现跨域</title>
+</head>
+<body>
+<script>
+    function sayHello(data) {
+        // alert("hello word!!!!!!")
+        alert("hello " + data.name)
+    }
+
+    function sum() {
+        alert("sum。。。。")
+    }
+</script>
+<!--为什么不使用超链接？因为超链接点击之后会跳转页面，无法做到页面局部刷新效果-->
+<!--script标签是可以跨域的，src属性可以是xxx.js文件，也可以是一个servlet路径-->
+<script type="text/javascript" src="http://localhost:8081/b/jsonp1?fun=sum"></script>
+</body>
+</html>

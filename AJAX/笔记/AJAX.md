@@ -816,8 +816,8 @@
 ### 跨域
 
 - 跨域是指从一个域名的网页去请求另一个域名的资源。比如从百度(https://baidu.com)页面去请求京东(https://www.jd.com)的资源。
-- 通过超链接、或者form表单提交、或者window.location.href、或者使用script标签可以加载js文件(加载其他站点的js文件)、加载其他站点的图片的方式进行跨域是不存在问题的（**大家可以编写程序测试一下**）。
-- 但在一个域名的网页中的一段js代码发送ajax请求去访问另一个域名中的资源，由于同源策略的存在导致无法跨域访问，那么ajax就存在这种跨域问题。
+- 通过超链接、或者form表单提交、或者window.location.href、或者使用script标签可以加载js文件(加载其他站点的js文件)、加载其他站点的图片(img标签)的方式进行跨域是不存在问题的（**大家可以编写程序测试一下**）。
+- 但在一个域名的网页中的一段js代码发送ajax请求去访问另一个域名中的资源，由于同源策略的存在导致无法跨域访问，那么ajax就存在这种跨域问题。**出现这个错误的根本原因：跨域的时候不允许共享同一个XMLHttpRequest对象，因为共享同一个XMLHttpRequest对象是不安全的**。同源策略是浏览器的一种安全策略。
 - 同源策略是指一段脚本只能读取来自同一来源的窗口和文档的属性，同源就是协议、域名和端口都相同。
 - 同源策略有什么用？如果你刚刚在网银输入账号密码，查看了自己还有1万块钱，紧接着访问一些不规矩的网站，这个网站可以访问刚刚的网银站点，并且获取账号密码，那后果可想而知。所以，从安全的角度来讲，同源策略是有利于保护网站信息的。
 - 有一些情况下，我们是需要使用ajax进行跨域访问的。比如某公司的A页面(a.bjpowernode.com)有可能需要获取B页面(b.bjpowernode.com)。
@@ -845,7 +845,7 @@
 
 ### AJAX跨域解决方案
 
-#### 方案1：设置响应头
+#### 方案1：设置响应头(在需要访问的页面中设置)
 
 - 核心原理：跨域访问的资源允许你跨域访问。
 
@@ -863,6 +863,99 @@
 - jsonp不是ajax请求，但是可以完成局部刷新的效果，并且可以解决跨域问题。
 - 注意：jsonp解决跨域的时候，只支持GET请求。不支持post请求。
 
+前端代码
+
+```js
+<script>
+    function sayHello(data) {
+        // alert("hello word!!!!!!")
+        alert("hello " + data.name)
+    }
+
+    function sum() {
+        alert("sum。。。。")
+    }
+</script>
+<!--为什么不使用超链接？因为超链接点击之后会跳转页面，无法做到页面局部刷新效果-->
+<!--script标签是可以跨域的，src属性可以是xxx.js文件，也可以是一个servlet路径-->
+<script type="text/javascript" src="http://localhost:8081/b/jsonp1?fun=sum"></script>
+```
+
+后端代码
+
+```java
+@WebServlet("/jsonp1")
+public class JSONPServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // System.out.println("jsonp完成跨域访问");
+        // 向前端响应一段js代码
+        PrintWriter out = response.getWriter();
+        // out.print("alert(123)");
+        // out.print("sayHello()");
+        // 响应一段js代码，传一个json数据给前端
+        // out.print("sayHello({\"name\":\"jackson\"})");
+        // 动态获取前端传过来的函数名
+        String fun = request.getParameter("fun");
+        out.print(fun + "({\"name\":\"jackson\"})");
+    }
+}
+```
+
+* 使用jsonp完成页面局部刷新
+
+前端代码
+
+```js
+<body>
+
+<!--<script type="text/javascript" src="http://localhost:8081/b/jsonp1?fun=sum"></script>-->
+
+<script type="text/javascript">
+    // 自定义的函数
+    function sayHello(data) {
+        document.getElementById("mydiv").innerHTML = data.username
+    }
+
+    window.onload = () => {
+        document.getElementById("btn").onclick = () => {
+            // 加载script元素
+            let htmlScriptElement = document.createElement("script"); // 创建元素
+            // 设置script的type属性
+            htmlScriptElement.type = "text/javascript"
+            // 设置script的src属性
+            htmlScriptElement.src = "http://localhost:8081/b/jsonp2?fun=sayHello"
+            // 加载script
+            document.getElementsByTagName("body")[0].appendChild(htmlScriptElement)
+        }
+    }
+</script>
+
+<button id="btn">jsonp解决跨域问题，达到局部刷新效果</button>
+
+<div id="mydiv"></div>
+
+</body>
+```
+
+后端代码
+
+```java
+@WebServlet("/jsonp2")
+public class JSONPServlet2 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // 获取函数名
+        String fun = request.getParameter("fun");
+        // 响应一段js代码
+        PrintWriter out = response.getWriter();
+        out.print(fun + "({\"username\": \"张三\"})");
+    }
+}
+```
+
 #### 方案3：jQuery封装的jsonp
 
 - 牛人们写的jQuery库，已经对jsonp进行了封装。大家可以直接拿来用。
@@ -873,21 +966,108 @@
 
 - 核心代码
 
-  - ```javascript
-    $.ajax({
-        type : "GET",
-        url : "跨域的url",
-        dataType : "jsonp", // 指定数据类型
-        jsonp : "fun", // 指定参数名（不设置的时候，默认是："callback"）
-        jsonpCallback : "sayHello" // 指定回调函数的名字
-    							   // （不设置的时候，jQuery会自动生成一个随机的回调函数，
-        						   //并且这个回调函数还会自动调用success的回调函数。）
-    })
-    ```
+  前端
+  
+  ```js
+  <body>
+  <!--引入jQuery库-->
+  <script type="text/javascript" src="/a/js/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript">
+      // 这个函数不需要你写，jQuery自动生成
+      // function jQuery360004291783322431475_1728528102992(json){
+      //     自动生成的这个函数会调用success函数
+      //     success()
+      // }
+  
+      $(function () {
+          $("#btn").click(function () {
+              // 发送所谓的ajax请求，本质上不是ajax请求
+              $.ajax({
+                  type: "GET",
+                  // 虽然我们写的url是这个，但是实际上发送的请求是：
+                  // /b/jsonp3?callback=jQuery360004291783322431475_1728528102992&_=1728528102993
+                  // callback就是我们之前写的fun，
+                  // jQuery360004291783322431475_1728528102992是我们之前写的sayHello，这个名字是jQuery自动为我们生成的
+                  url: "http://localhost:8081/b/jsonp3",
+                  dataType: "jsonp", // 指定数据类型是jsonp形式 (最关键的是它)
+                  success: function (data){ // data变量用来接收服务器的响应
+                      $("#mydiv").html("欢迎你" + data.username)
+                  }
+  
+              })
+          })
+      })
+  </script>
+  
+  <button id="btn">jQuery封装的jsonp</button>
+  <div id="mydiv"></div>
+  
+  </body>
+  ```
+  
+  后端
+  
+  ```java
+  @WebServlet("/jsonp3")
+  public class JSONPServlet3 extends HttpServlet {
+      @Override
+      protected void doGet(HttpServletRequest request, HttpServletResponse response)
+              throws ServletException, IOException {
+          // 获取函数名
+          String callback = request.getParameter("callback");
+          // 响应一段js代码
+          PrintWriter out = response.getWriter();
+          // out.print("({\"username\": \"张三\"})");
+          out.print(callback + "({\"username\": \"张三\"})");
+      }
+  }
+  ```
 
-    
+* 或者前端这样
+
+  ```js
+  <script type="text/javascript">
+      function sayHello(data) {
+          $("#mydiv").html("欢迎你" + data.username + "访问页面")
+      }
+  
+      $(function () {
+          $("#btn").click(function () {
+              // 发送所谓的ajax请求，本质上不是ajax请求
+              $.ajax({
+                  type: "GET",
+                  url: "http://localhost:8081/b/jsonp3",
+                  dataType: "jsonp", // 指定数据类型是jsonp形式 (最关键的是它)
+                  jsonp: "fun", // 用来指定参数的名字 (不设置的时候默认是callback)
+                  jsonpCallback: "sayHello" // 指定回调函数的名字，不采用系统默认的函数，使用自己的函数(不设置的时候会自动生成一个随机的回调函数，并且这个回调函数还会自动调用success的回调函数)
+              })
+          })
+      })
+  </script>
+  ```
+
+  后端
+
+  ```java
+  @WebServlet("/jsonp3")
+  public class JSONPServlet3 extends HttpServlet {
+      @Override
+      protected void doGet(HttpServletRequest request, HttpServletResponse response)
+              throws ServletException, IOException {
+          // 获取函数名
+          String fun = request.getParameter("fun");
+          // 响应一段js代码
+          PrintWriter out = response.getWriter();
+          out.print(fun + "({\"username\": \"张三\"})");
+      }
+  }
+  ```
+
+
 
 #### 方案4：代理机制（httpclient）
+
+![image-20241010110701271](C:\Users\PC\AppData\Roaming\Typora\typora-user-images\image-20241010110701271.png)
 
 - 使用Java程序怎么去发送get/post请求呢？【GET和POST请求就是HTTP请求。】
   - 第一种方案：使用JDK内置的API（java.net.URL.....），这些API是可以发送HTTP请求的。

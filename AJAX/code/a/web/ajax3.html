@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jsonp跨域</title>
+</head>
+<body>
+
+<!--<script type="text/javascript" src="http://localhost:8081/b/jsonp1?fun=sum"></script>-->
+
+<script type="text/javascript">
+    // 自定义的函数
+    function sayHello(data) {
+        document.getElementById("mydiv").innerHTML = data.username
+    }
+
+    window.onload = () => {
+        document.getElementById("btn").onclick = () => {
+            // 加载script元素
+            let htmlScriptElement = document.createElement("script"); // 创建元素
+            // 设置script的type属性
+            htmlScriptElement.type = "text/javascript"
+            // 设置script的src属性
+            htmlScriptElement.src = "http://localhost:8081/b/jsonp2?fun=sayHello"
+            // 加载script
+            document.getElementsByTagName("body")[0].appendChild(htmlScriptElement)
+        }
+    }
+</script>
+
+<button id="btn">jsonp解决跨域问题，达到局部刷新效果</button>
+
+<div id="mydiv"></div>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery库的jsonp封装解决ajax跨域问题</title>
+</head>
+<body>
+
+<!--引入jQuery库-->
+<script type="text/javascript" src="/a/js/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript">
+    // 这个函数不需要你写，jQuery自动生成
+    // function jQuery360004291783322431475_1728528102992(json){
+    //     自动生成的这个函数会调用success函数
+    //     success()
+    // }
+
+    function sayHello(data) {
+        // $("#mydiv").html("欢迎你" + data.username + "访问页面")
+        $("#mydiv").html("/...." + data + "...")
+    }
+
+    $(function () {
+        $("#btn").click(function () {
+            // 发送所谓的ajax请求，本质上不是ajax请求
+            $.ajax({
+                type: "GET",
+                // 虽然我们写的url是这个，但是实际上发送的请求是：
+                // /b/jsonp3?callback=jQuery360004291783322431475_1728528102992&_=1728528102993
+                // callback就是我们之前写的fun，
+                // jQuery360004291783322431475_1728528102992是我们之前写的sayHello，这个名字是jQuery自动为我们生成的
+                url: "http://localhost:8081/b/jsonp3",
+                dataType: "jsonp", // 指定数据类型是jsonp形式 (最关键的是它)
+                /*success: function (data){ // data变量用来接收服务器的响应
+                    $("#mydiv").html("欢迎你" + data.username)
+                }*/
+                jsonp: "fun", // 用来指定参数的名字 (不设置的)
+                jsonpCallback: "sayHello" // 不采用系统默认的函数，使用自己的函数
+            })
+        })
+    })
+</script>
+
+<button id="btn">jQuery封装的jsonp</button>
+<div id="mydiv"></div>
+
+</body>
+</html>

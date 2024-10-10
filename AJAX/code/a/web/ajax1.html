@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试：ajax跨域访问</title>
+</head>
+<body>
+<script>
+    /*
+    默认情况下，发送ajax跨域请求的时候会出现以下错误：
+    Access to XMLHttpRequest at 'http://localhost:8081/b/hello' from origin 'http://localhost:8080'
+    has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the
+    requested resource.
+    被CORS策略(同源策略)阻止
+     */
+    window.onload = function(){
+        document.getElementById("btn").onclick = function () {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        document.getElementById("mydiv").innerHTML = xhr.responseText
+                    }
+                }
+            }
+            xhr.open("get", "http://localhost:8081/b/hello", true);
+            xhr.send();
+        }
+    }
+</script>
+
+<button id="btn">发送ajax跨域请求</button>
+<div id="mydiv"></div>
+</body>
+</html>

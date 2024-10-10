@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax实现搜索联想和自动补全</title>
+    <style>
+        .userInput {
+            width: 300px;
+            height: 25px;
+            font-size: 20px;
+            padding-left: 5px;
+        }
+
+        .showDataDiv {
+            width: 310px;
+            border: 1px solid lightgray;
+            background-color: bisque;
+            display: none;
+        }
+
+        .showDataDiv p {
+            padding-left: 5px;
+            /*background-color: aliceblue;*/
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+
+        .showDataDiv p:hover {
+            cursor: pointer;
+            border: 1px solid blue;
+            background-color: aliceblue;
+        }
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+    window.onload = function () {
+        document.getElementById("keywords").onkeyup = function () {
+            if(this.value.trim() == ""){
+                document.getElementById("myDateDiv").style.display = "none"
+            }else{
+                // console.log(this.value)
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            var json = JSON.parse(xhr.responseText);
+                            // 假设返回的是 [{"content": "java"},{"content": "java123"}]
+                            var html = ""
+                            for (let i = 0; i < json.length; i++) {
+                                var keyword = json[i].content;
+                                html += "<p onclick='setInput(\""+keyword+"\")'>" + keyword + "</p>"
+                            }
+                            document.getElementById("myDateDiv").innerHTML = html
+                            document.getElementById("myDateDiv").style.display = "block"
+                        }
+                    }
+                }
+                xhr.open("GET", "/ajax-autocomplete/query?keywords=" + this.value.trim(), true)
+                xhr.send()
+            }
+        }
+    }
+
+    function setInput(data) {
+        // alert(data)
+        document.getElementById("keywords").value = data
+        document.getElementById("myDateDiv").style.display = "none"
+    }
+</script>
+
+<input type="text" class="userInput" id="keywords">
+<div class="showDataDiv" id="myDateDiv">
+    <p>北京疫情最新情况</p>
+    <p>北京天气</p>
+    <p>北京时间</p>
+</div>
+</body>
+</html>

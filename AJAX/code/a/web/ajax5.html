@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使用代理机制完成ajax跨域访问</title>
+</head>
+<body>
+<script src="/a/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#btn").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "/a/proxy",
+                async: true,
+                data: "username=" + $("#username").val() + "&t=" + new Date().getTime(),
+                success: function (jsonStr) {
+                    var jsonObj = JSON.parse(jsonStr);
+                    $("#mydiv").html(jsonObj.username)
+                }
+            })
+        })
+    })
+</script>
+<button id="btn">使用代理机制解决ajax跨域访问</button>
+<br>
+<input type="text" id="username">
+<div id="mydiv"></div>
+</body>
+</html>
