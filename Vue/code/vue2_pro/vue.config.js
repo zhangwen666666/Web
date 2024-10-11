@@ -8,5 +8,30 @@ module.exports = defineConfig({
       // 程序的入口main.js
       entry: 'src/main.js'
     }
-  }
+  },
+
+  /* 代理机制简单开启 */
+  /* devServer: {
+    proxy: 'http://localhost:8000'
+  } */
+
+    /* 代理机制高级开启 */
+  /*   devServer: {
+      proxy: {
+        // 凡是请求路径以 /api开始的，都走这个代理
+        '/api': {
+          target: 'http://localhost:8000',
+          pathRewrite:{'^/api':''},
+          ws: true,
+          changeOrigin: true
+        },
+
+        '/abc': {
+          target: 'http://localhost:8001',
+          pathRewrite:{'^/abc':''},
+          ws: true,
+          changeOrigin: true
+        },
+      }
+    } */
 })

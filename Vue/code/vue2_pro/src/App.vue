@@ -1,48 +1,39 @@
 <template>
-    <div>
-        <MyHeader/>
-        <router-link to="/shanxi" active-class="selected">山西省</router-link><br>
-        <router-link to="/hebei" active-class="selected">河北省</router-link><br>
-
-        <button @click="forward">前进一步</button>
-        <button @click="forwardTwo">前进两步</button>
-        <button @click="back">后退一步</button>
-        <button @click="backTwo">后退两步</button>
-
-        <router-view></router-view>
-    </div>
+  <div class="card">
+    <Search/>
+    <Weather/>
+  </div>
 </template>
 
 <script>
-    import MyHeader from './components/MyHeader.vue'
-    export default {
-        name: 'App',
-        components: {MyHeader},
-        methods:{
-            forward(){
-                this.$router.forward()
-            },
-            forwardTwo(){
-                this.$router.go(2)
-            },
-            back(){
-                this.$router.back()
-            },
-            backTwo(){
-                this.$router.go(-2)
-            }
-        }
-    }
+import Search from './components/Search.vue'
+import Weather from './components/Weather.vue'
+export default {
+  name: "App",
+  components:{Search, Weather}
+}
 </script>
 
-<style>
-    .s1{
-        margin-left: 50px;
-    }
-    .selected{
-        background-color: aqua;
-    }
-    .s2{
-        margin-left: 100px;
-    }
+<style lang="css">
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background : #222;
+}
+
+.card {
+    width: 70%;
+    max-width: 470px;
+    background: linear-gradient(135deg, #00feba, #5b548a);
+    color: #fff;
+    margin: 100px auto 0;
+    border-radius: 20px;
+    padding: 40px 35px;
+    text-align: center;
+}
 </style>
